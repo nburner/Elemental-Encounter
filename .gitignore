@@ -73,3 +73,13 @@ Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+# These were added by Daryl to clean up Visual Studio compile stuff
+*.pdb
+*.ilk
+*.iobj
+*.ipdb
+*.idb
+*.ilk
+*.tlog
+*.log

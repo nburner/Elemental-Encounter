@@ -1,0 +1,400 @@
+Move: 0
+b b b b b b b b 
+b b b b b b b b 
+- - - - - - - - 
+- - - - - - - - 
+- - - - - - - - 
+- - - - - - - - 
+w w w w w w w w 
+w w w w w w w w 
+
+Move: 1
+b b b b b b b b 
+b b b b b b b b 
+- - - - - - - - 
+- - - - - - - - 
+- - - - - - - - 
+- - - - - w - - 
+w w w w w w - w 
+w w w w w w w w 
+
+Move: 2
+b b b b b b b b 
+b - b b b b b b 
+b - - - - - - - 
+- - - - - - - - 
+- - - - - - - - 
+- - - - - w - - 
+w w w w w w - w 
+w w w w w w w w 
+
+Move: 3
+b b b b b b b b 
+b - b b b b b b 
+b - - - - - - - 
+- - - - - - - - 
+- - - - - - - - 
+- - w - - w - - 
+w - w w w w - w 
+w w w w w w w w 
+
+Move: 4
+b b b b b b b b 
+b - b b - b b b 
+b - - - b - - - 
+- - - - - - - - 
+- - - - - - - - 
+- - w - - w - - 
+w - w w w w - w 
+w w w w w w w w 
+
+Move: 5
+b b b b b b b b 
+b - b b - b b b 
+b - - - b - - - 
+- - - - - - - - 
+- - - - - - - - 
+- - w - w w - - 
+w - w w w - - w 
+w w w w w w w w 
+
+Move: 6
+b b b b b b b b 
+b - b b - b b - 
+b - - - b - b - 
+- - - - - - - - 
+- - - - - - - - 
+- - w - w w - - 
+w - w w w - - w 
+w w w w w w w w 
+
+Move: 7
+b b b b b b b b 
+b - b b - b b - 
+b - - - b - b - 
+- - - - - - - - 
+- - - - - - - - 
+- - w - w w - - 
+w w w w w - - w 
+w w - w w w w w 
+
+Move: 8
+b b b b b b - b 
+b - b b - b b b 
+b - - - b - b - 
+- - - - - - - - 
+- - - - - - - - 
+- - w - w w - - 
+w w w w w - - w 
+w w - w w w w w 
+
+Move: 9
+b b b b b b - b 
+b - b b - b b b 
+b - - - b - b - 
+- - - - - - - - 
+- - - - w - - - 
+- - w - - w - - 
+w w w w w - - w 
+w w - w w w w w 
+
+Move: 10
+b b b b b - - b 
+b - b b b b b b 
+b - - - b - b - 
+- - - - - - - - 
+- - - - w - - - 
+- - w - - w - - 
+w w w w w - - w 
+w w - w w w w w 
+
+Move: 11
+b b b b b - - b 
+b - b b b b b b 
+b - - - b - b - 
+- - - w - - - - 
+- - - - - - - - 
+- - w - - w - - 
+w w w w w - - w 
+w w - w w w w w 
+
+Move: 12
+b b b b b - - b 
+b - b b b b b b 
+b - - - - - b - 
+- - - b - - - - 
+- - - - - - - - 
+- - w - - w - - 
+w w w w w - - w 
+w w - w w w w w 
+
+Move: 13
+b b b b b - - b 
+b - b b b b b b 
+b - - - - - b - 
+- - - b - - - - 
+- - - w - - - - 
+- - - - - w - - 
+w w w w w - - w 
+w w - w w w w w 
+
+Move: 14
+b b b b b - - b 
+b - b b - b b b 
+b - - - - b b - 
+- - - b - - - - 
+- - - w - - - - 
+- - - - - w - - 
+w w w w w - - w 
+w w - w w w w w 
+
+Move: 15
+b b b b b - - b 
+b - b b - b b b 
+b - - - - b b - 
+- - - b - - - - 
+- - - w - - - - 
+- - - - w w - - 
+w w w w - - - w 
+w w - w w w w w 
+
+Move: 16
+b b b b b - - b 
+b - b b - b b b 
+b - - - - b - - 
+- - - b - - - b 
+- - - w - - - - 
+- - - - w w - - 
+w w w w - - - w 
+w w - w w w w w 
+
+Move: 17
+b b b b b - - b 
+b - b b - b b b 
+b - - - - b - - 
+- - - b - - - b 
+- - - w w - - - 
+- - - - - w - - 
+w w w w - - - w 
+w w - w w w w w 
+
+Move: 18
+b b b b b - - b 
+b - b b - b b b 
+b - - - - b - - 
+- - - - - - - b 
+- - - w b - - - 
+- - - - - w - - 
+w w w w - - - w 
+w w - w w w w w 
+
+Move: 19
+b b b b b - - b 
+b - b b - b b b 
+b - - - - b - - 
+- - - - - - - b 
+- - - w w - - - 
+- - - - - - - - 
+w w w w - - - w 
+w w - w w w w w 
+
+Move: 20
+b b b b b - - b 
+b - b b - - b b 
+b - - - b b - - 
+- - - - - - - b 
+- - - w w - - - 
+- - - - - - - - 
+w w w w - - - w 
+w w - w w w w w 
+
+Move: 21
+b b b b b - - b 
+b - b b - - b b 
+b - - - b b - - 
+- - - - w - - b 
+- - - - w - - - 
+- - - - - - - - 
+w w w w - - - w 
+w w - w w w w w 
+
+Move: 22
+b b b b b - - b 
+b - b b - - b b 
+b - - - b - - - 
+- - - - b - - b 
+- - - - w - - - 
+- - - - - - - - 
+w w w w - - - w 
+w w - w w w w w 
+
+Move: 23
+b b b b b - - b 
+b - b b - - b b 
+b - - - b - - - 
+- - - - b - - b 
+- - - - w - - - 
+- - - - - - w - 
+w w w w - - - - 
+w w - w w w w w 
+
+Move: 24
+- b b b b - - b 
+b b b b - - b b 
+b - - - b - - - 
+- - - - b - - b 
+- - - - w - - - 
+- - - - - - w - 
+w w w w - - - - 
+w w - w w w w w 
+
+Move: 25
+- b b b b - - b 
+b b b b - - b b 
+b - - - b - - - 
+- - - - b - - b 
+- - - - w - - - 
+- - - - - - w - 
+w w w w - w - - 
+w w - w w - w w 
+
+Move: 26
+- b b b b - - b 
+b b b b - - - b 
+b - - - b - b - 
+- - - - b - - b 
+- - - - w - - - 
+- - - - - - w - 
+w w w w - w - - 
+w w - w w - w w 
+
+Move: 27
+- b b b b - - b 
+b b b b - - - b 
+b - - - b - b - 
+- - - - b - - b 
+- - - - w - - - 
+- w - - - - w - 
+- w w w - w - - 
+w w - w w - w w 
+
+Move: 28
+- b b b b - - - 
+b b b b - - b b 
+b - - - b - b - 
+- - - - b - - b 
+- - - - w - - - 
+- w - - - - w - 
+- w w w - w - - 
+w w - w w - w w 
+
+Move: 29
+- b b b b - - - 
+b b b b - - b b 
+b - - - b - b - 
+- - - - b - - b 
+- - - - w - - - 
+- w - - - - w - 
+w w w w - w - - 
+w - - w w - w w 
+
+Move: 30
+- b b b b - - - 
+b b - b - - b b 
+b - b - b - b - 
+- - - - b - - b 
+- - - - w - - - 
+- w - - - - w - 
+w w w w - w - - 
+w - - w w - w w 
+
+Move: 31
+- b b b b - - - 
+b b - b - - b b 
+b - b - b - b - 
+- - - - b - - b 
+- - - - w - w - 
+- w - - - - - - 
+w w w w - w - - 
+w - - w w - w w 
+
+Move: 32
+- b b b b - - - 
+b b - b - - b b 
+b - b - b - b - 
+- - - - b - - - 
+- - - - w - b - 
+- w - - - - - - 
+w w w w - w - - 
+w - - w w - w w 
+
+Move: 33
+- b b b b - - - 
+b b - b - - b b 
+b - b - b - b - 
+- - - w b - - - 
+- - - - - - b - 
+- w - - - - - - 
+w w w w - w - - 
+w - - w w - w w 
+
+Move: 34
+- b b b b - - - 
+b b - b - - b b 
+b - - - b - b - 
+- - - b b - - - 
+- - - - - - b - 
+- w - - - - - - 
+w w w w - w - - 
+w - - w w - w w 
+
+Move: 35
+- b b b b - - - 
+b b - b - - b b 
+b - - - b - b - 
+- - - b b - - - 
+- - - - - - b - 
+- w - w - - - - 
+w w - w - w - - 
+w - - w w - w w 
+
+Move: 36
+- b b b b - - - 
+b b - b - - b b 
+b - - - b - b - 
+- - - b - - - - 
+- - - - b - b - 
+- w - w - - - - 
+w w - w - w - - 
+w - - w w - w w 
+
+Move: 37
+- b b b b - - - 
+b b - b - - b b 
+b - - - b - b - 
+- - - b - - - - 
+- - - - w - b - 
+- w - - - - - - 
+w w - w - w - - 
+w - - w w - w w 
+
+Move: 38
+- b b b b - - - 
+b b - b - - b b 
+b - - - b - b - 
+- - - - - - - - 
+- - - - b - b - 
+- w - - - - - - 
+w w - w - w - - 
+w - - w w - w w 
+
+Move: 39
+- b b b b - - - 
+b b - b - - b b 
+b - - - b - b - 
+- - - - - - - - 
+- - - - b - b - 
+- w - - - - - - 
+w w - w - w w - 
+w - - w w - w - 
+
