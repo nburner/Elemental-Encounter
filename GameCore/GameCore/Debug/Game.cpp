@@ -23,6 +23,16 @@ bool Game::checkForWin()
 {
 	bool Victory = false;
 
+	if (pTurn % 2 == 1) 
+	{
+		Victory = checkLastRow('W');
+		//Victory = checkForPieces('B');
+	} 
+	else
+	{
+		Victory = checkLastRow('B');
+		//Victory = checkForPieces('W');
+	}
 
 	return Victory;
 }
@@ -79,8 +89,23 @@ bool Game::getMove(int player)
 	return true;
 }
 
-bool Game::checkMove(string, string)
+int Game::getTurn()
 {
+	return pTurn;
+}
+
+void Game::nextTurn()
+{
+	pTurn++;
+}
+
+bool Game::checkMove(string from, string to)
+{
+	// check to see if moving backwards
+	// check to see if moving sideways 
+	// check to see if moving your piece
+	// check to see if a piece is where you want to move
+
 	return false;
 }
 
@@ -126,6 +151,39 @@ int Game::getNumber(char c)
 	}
 
 	return num;
+}
+
+bool Game::checkLastRow(char piece)
+{
+	bool playerWon = false;
+
+	if (piece == 'W')
+	{
+		for (int i = 0; i < 9; i++) 
+		{
+			if (getGameBoard()->space[0][i] == piece)
+			{
+				playerWon = true;
+			}
+		}
+	} 
+	else if (piece == 'B')
+	{
+		for (int i = 0; i < 9; i++) 
+		{
+			if (getGameBoard()->space[7][i] == piece)
+			{
+				playerWon = true;
+			}
+		}
+	}
+
+	return playerWon;
+}
+
+bool Game::checkForPieces(char)
+{
+	return false;
 }
 
 bool Game::updateBoard(string from, string to, int player) 

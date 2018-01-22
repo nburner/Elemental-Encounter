@@ -11,7 +11,6 @@ void main()
 	const bool GAMENOTWON = false;
 	int Player1 = 1; 
 	int Player2 = 2;
-	int turn = 1;
 
 	Game game;
 
@@ -21,19 +20,34 @@ void main()
 
 	bool keepPlaying = true;
 
-	while (game.checkForWin() == false && keepPlaying == true)
+	do
 	{
-		if (turn % 2 == 1)
+		game.nextTurn();
+		if (game.getTurn() % 2 == 1)
 		{
 			keepPlaying = game.getMove(Player1);
+			
 		}
 		else
 		{
 			keepPlaying = game.getMove(Player2);
+			
 		}
 		printBoard(game);
-		turn++;
+
+		
+
+	} while (!game.checkForWin() && keepPlaying);
+
+	if (game.getTurn() % 2 == 1)
+	{
+		cout << "Player 1 Win's!!" << endl;
+	} 
+	else
+	{
+		cout << "player 2 Win's!!!" << endl;
 	}
+	
 }
 
 void printBoard(const Game & game) 

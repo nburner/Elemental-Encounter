@@ -11,6 +11,8 @@ public:
 	void newGame();
 	bool checkForWin();
 	bool getMove(int);
+	int getTurn();
+	void nextTurn();
 	
 	GameBoard* getGameBoard() const;
 	string getMoveFrom() { return moveFrom; };
@@ -22,6 +24,10 @@ private:
 	string moveFrom;
 	string moveTo;
 	int getNumber(char);
+	int pTurn = 0;
+
+	bool checkLastRow(char);
+	bool checkForPieces(char);
 
 	bool updateBoard(string, string, int);
 
