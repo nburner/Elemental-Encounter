@@ -1,0 +1,12 @@
+GameCore/GameCore/Debug/vc141.pdb
+*.obj
+GameCore/GameCore/Debug/vc141.idb
+*.tlog
+*.log
+GameCore/Debug/GameCore.pdb
+*.ilk
+*.ipch
+*.exe
+*.db
+GameCore/.vs/GameCore/v15/Browse.VC.opendb
+*.suo
