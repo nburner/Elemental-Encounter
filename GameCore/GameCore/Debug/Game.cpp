@@ -84,6 +84,8 @@ bool Game::getMove(int player)
 	if (moveFrom == "exit" || moveTo == "exit")
 		return false;
 
+	//checkMove(moveFrom, moveTo);
+
 	updateBoard(moveFrom, moveTo, player);
 
 	return true;
@@ -99,21 +101,101 @@ void Game::nextTurn()
 	pTurn++;
 }
 
-bool Game::checkMove(string from, string to)
+void Game::checkMove(string from, string to)
 {
 	// check to see if moving backwards
-	// check to see if moving sideways 
-	// check to see if moving your piece
-	// check to see if a piece is where you want to move
+	// check to see if moving sideways
+	if (((tolower(from[0]) >= 97) && (tolower(from[0]) <= 104)) && ((from[1] >= 1) && (from[1] <= 8)))
+	{
+		if ((tolower(to[0]) >= 97 && tolower(to[0]) <= 104) && (to[1] >= 1 && to[1] <= 8))
+		{
+			int fromR = getNumber(from[0]);
+			int fromC = getNumber(from[1]);
 
-	return false;
+			int toR = getNumber(to[0]);
+			int toC = getNumber(to[1]);
+
+			if (getTurn() % 2 == 1)
+			{
+				// check to see if piece is Player One's
+				if (getGameBoard()->space[fromC][fromR] == 'W')
+				{
+					//check to see if there is a piece in front of the player
+					if (toR == fromR && (toC + 1) == fromC && (getGameBoard()->space[toC][toR] != ' ' && getGameBoard()->space[toC][toR] != '219'))
+					{
+						cout << "There is a piece in that space, you cannot move there. Please make a valid move selection" << endl;
+						getMove(getTurn());
+					}
+					//check to see if the piece is moving forward and only moving forward one space
+					else if (((toC + 1) != fromC) || (toC + 1) == fromC && ((toR != (fromR + 1)) && (toR != fromR) && (toR != (fromR - 1))))
+					{
+						cout << "You may only move forward one space. Please make a valid move selection." << endl;
+						getMove(getTurn());
+					}
+					else
+					{
+						return;
+					}
+				}
+				else
+				{
+					cout << "That is not your piece. Please make a valid selection" << endl;
+					getMove(getTurn());
+				}
+
+
+			}
+			else
+			{
+				// check to see if piece is Player Two's
+				if (getGameBoard()->space[fromC][fromR] == 'B')
+				{
+					//check to see if there is a piece in front of the player
+					if (toR == fromR && (toC - 1) == fromC && (getGameBoard()->space[toC][toR] != ' ' && getGameBoard()->space[toC][toR] != '219'))
+					{
+						cout << "There is a piece in that space, you cannot move there. Please make a valid move selection" << endl;
+						getMove(getTurn());
+					}
+					//check to see if the piece is moving forward and only moving forward one space
+					else if (((toC - 1) != fromC) || (toC - 1) == fromC && ((toR != (fromR + 1)) && (toR != fromR) && (toR != (fromR - 1))))
+					{
+						cout << "You may only move forward one space. Please make a valid move selection." << endl;
+						getMove(getTurn());
+					}
+					else
+					{
+						return;
+					}
+				}
+				else
+				{
+					cout << "That is not your piece. Please make a valid selection" << endl;
+					getMove(getTurn());
+				}
+			}
+
+			// check to see if a piece is where you want to move
+		}
+		else
+		{
+			cout << "Please make a Valid Move." << endl;
+			getMove(getTurn());
+		}
+	}
+	else
+	{
+		cout << "Please make a Valid Move." << endl;
+		getMove(getTurn());
+	}
 }
+	
 
 
 
 int Game::getNumber(char c)
 {
 	int num = 7;
+	c = tolower(c);
 
 	switch (c) {
 	case 'a': num = 0;

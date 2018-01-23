@@ -25,11 +25,13 @@ private:
 	string moveTo;
 	int getNumber(char);
 	int pTurn = 0;
+	int player1Pieces = 16;
+	int player2Pieces = 16;
 
 	bool checkLastRow(char);
 	bool checkForPieces(char);
 
 	bool updateBoard(string, string, int);
 
-	bool checkMove(string, string);
+	void checkMove(string, string);
 };

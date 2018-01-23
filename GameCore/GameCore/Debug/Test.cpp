@@ -25,13 +25,11 @@ void main()
 		game.nextTurn();
 		if (game.getTurn() % 2 == 1)
 		{
-			keepPlaying = game.getMove(Player1);
-			
+			keepPlaying = game.getMove(Player1);			
 		}
 		else
 		{
 			keepPlaying = game.getMove(Player2);
-			
 		}
 		printBoard(game);
 
