@@ -2,6 +2,7 @@
 #include <intrin.h>
 #include <algorithm>
 
+using namespace AI;
 using namespace CommonBitboards;
 using namespace BoardHelpers;
 
@@ -21,7 +22,7 @@ Board::Board(const Board& b, bool flipTurn)
 #pragma endregion
 
 #pragma region Operator Overloads
-std::ostream & operator<<(std::ostream& out, const Board& board)
+std::ostream & AI::operator<<(std::ostream& out, const Board& board)
 {
 	std::bitset<64> white(board.bb[WHITE]);
 	std::bitset<64> black(board.bb[BLACK]);
@@ -38,7 +39,7 @@ std::ostream & operator<<(std::ostream& out, const Board& board)
 	return out;
 }
 
-bool operator<(Board const & a, Board const & b)
+bool AI::operator<(Board const & a, Board const & b)
 {
 	if (std::min(a.bb[WHITE], a.bb[BLACK]) < std::min(b.bb[WHITE], b.bb[BLACK])) return true;
 	else if (std::min(a.bb[WHITE], a.bb[BLACK]) == std::min(b.bb[WHITE], b.bb[BLACK]) && std::max(a.bb[WHITE], a.bb[BLACK]) < std::max(b.bb[WHITE], b.bb[BLACK])) return true;

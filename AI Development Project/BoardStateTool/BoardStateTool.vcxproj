@@ -124,7 +124,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AI.cpp" />
+    <ClCompile Include="BasicDefense.cpp" />
+    <ClCompile Include="BasicOffense.cpp" />
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Pet.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>

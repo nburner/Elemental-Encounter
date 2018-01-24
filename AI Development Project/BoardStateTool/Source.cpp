@@ -1,10 +1,10 @@
-#include"Board.h"
+#include"AI.h"
 #include<iostream>
 #include<set>
 #include<queue>
 #include<time.h>
 #include<intrin.h>   
-using namespace std;
+using namespace AI;
 using std::cout; using std::endl; using std::set; using std::queue;
 
 inline int random(int count) {
@@ -67,8 +67,8 @@ int main() {
 	//cout << "Total number of Board States: " << usefulBoards.size();
 	*/
 
-	Board myBoard;
-	for (int i = 0; i < 40; i++) {
+	/*Board myBoard;
+	for (int i = 0; i < 161; i++) {
 		cout << "Move: " << i << endl << myBoard << endl;
 
 		auto attacks = myBoard.validAttackBoards();
@@ -78,7 +78,9 @@ int main() {
 			if (moves.empty()) break;
 			else myBoard = moves[random(moves.size())];
 		}		
-	}
+	}*/
+
+	auto ai = AIEngine::start(AIEngine::AIType::PET);
 
 	//system("pause");
 }
