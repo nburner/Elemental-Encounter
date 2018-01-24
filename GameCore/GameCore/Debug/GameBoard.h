@@ -12,7 +12,7 @@ So A1 is 0, and H8 is 63, and it counts from left to right, bottom to top
 32 33 34 35 36 37 38 39
 24 25 26 27 28 29 30 31
 16 17 18 19 20 21 22 23
-8  9 10 11 12 13 14 15
+8  9  10 11 12 13 14 15
 0  1  2  3  4  5  6  7
 
 */
@@ -56,11 +56,13 @@ public:
 	~GameBoard(); 
 	static GameBoard* getInstance();
 	bool hasOwnPiece(string area);
-	char & operator [](int i) { return space[i]; }
-	//char operator [](int i) const { return space[i]; }
+	char& operator[](Square i) { return space[i]; }
+	char operator[](Square i) const { return space[i]; }
+	void updateBoard(move, Turn);
 private:
 	char space[64];
 	GameBoard();
+	GameBoard(GameBoard&);
 	static GameBoard* instance;
 };
 

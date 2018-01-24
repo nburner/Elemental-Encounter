@@ -15,11 +15,11 @@ Player::~Player()
 //This is meant to replace checkMove
 //However it may not be identical to the original as I'm not sure exactly what the original was doing
 //I'm going off of the comments and printed messages, and adding things that may have been missed
-bool Human::isValidMove(move move)
+bool Human::isValidMove(const move move) const
 {
 	Square from = move.first;
 	Square to = move.second;
-	GameBoard board = *GameBoard::getInstance();
+	GameBoard * board = GameBoard::getInstance();
 
 	char myPiece = myColor == WHITE ? 'W' : 'B';
 	Direction myForward = myColor == WHITE ? NORTH : SOUTH;
@@ -27,19 +27,19 @@ bool Human::isValidMove(move move)
 	Direction myRight = Direction(myForward + EAST);
 	
 	// check to see if selected piece is your own
-	if (board[from] != myPiece) {
+	if ((*board)[from] != myPiece) {
 		cout << "That is not your piece. Please make a valid move selection." << endl;
 		return false;
 	}
 
 	//check to see if there is a piece in front of the player
-	if (from + myForward == to && (board[to] == 'W' || board[to] == 'B')){
+	if (from + myForward == to && ((*board)[to] == 'W' || (*board)[to] == 'B')){
 		cout << "There is a piece in that space, you cannot move there. Please make a valid move selection" << endl;
 		return false;
 	}
 
 	//check to see if there is the player's piece diagonal of the player
-	if ((from + myLeft == to || from + myRight == to) && board[to] == myPiece) {
+	if ((from + myLeft == to || from + myRight == to) && (*board)[to] == myPiece) {
 		cout << "There is a piece in that space, you cannot move there. Please make a valid move selection" << endl;
 		return false;
 	}

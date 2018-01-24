@@ -34,4 +34,10 @@ bool GameBoard::hasOwnPiece(string space)
 	return true;
 }
 
+void GameBoard::updateBoard(move move, Turn t)
+{
+	space[move.first] = ((move.first / 8 + move.first) % 2 == 0 ? 219 : ' ');
+	space[move.second] = (t == 0 ? 'W' : 'B');
+}
+
 GameBoard* GameBoard::instance = NULL;

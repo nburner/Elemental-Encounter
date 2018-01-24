@@ -12,7 +12,7 @@ public:
 };
 
 class Human : public Player {
-	bool isValidMove(move);
+	bool isValidMove(const move) const;
 public:
 	virtual ::move getMove(GameBoard * gp = NULL);
 };

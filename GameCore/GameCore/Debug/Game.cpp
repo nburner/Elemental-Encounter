@@ -265,12 +265,12 @@ bool Game::checkLastRow(char piece)
 {
 	if (piece == 'W')						//If piece is 'W'
 		for (int i = A8; i <= H8; i++)		//Loop through the back row
-			if (getGameBoard()[i] == 'W')	//Check if one is 'W'	
+			if (getGameBoard()[(Square)i] == 'W')	//Check if one is 'W'	
 				return true;				//Return true if it is
 		
 	if (piece == 'B')						//Do the same thing for black
 		for (int i = A1; i <= H1; i++)		//But check the other side
-			if (getGameBoard()[i] == 'B')
+			if (getGameBoard()[(Square)i] == 'B')
 				return  true;
 
 	return false;							//Both failed to find it or invalid piece
@@ -285,9 +285,8 @@ bool Game::updateBoard(move move)
 {
 	if (getGameBoard()[move.second] == 'W') pieces[WHITE]--;
 	if (getGameBoard()[move.second] == 'B') pieces[BLACK]--;
- 
-	getGameBoard()[move.first] = move.first % 2 == 0 ? 219 : ' ';
-	getGameBoard()[move.second] = pTurn % 2 == 0 ? 'W' : 'B';
+
+	getGameBoard().updateBoard(move, Turn(pTurn % 2));
 
 	/*int fromR = getNumber(from[0]);
 	int fromC = getNumber(from[1]);
@@ -316,7 +315,7 @@ void Game::printBoard()
 	
 		for (int c = 0; c < 8; c++)
 		{
-			cout << (*GameBoard::getInstance())[r * 8 + c] << "|";
+			cout << (*GameBoard::getInstance())[Square(r * 8 + c)] << "|";
 		}
 		cout << endl;
 	}
