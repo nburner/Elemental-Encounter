@@ -22,15 +22,13 @@ bool Game::checkForWin()
 {
 	bool Victory = false;
 
-	if (pTurn % 2 == 1) 
+	if (playerTurn == WHITE) 
 	{
-		Victory = checkLastRow('W');
-		//Victory = checkForPieces('B');
+		Victory = checkLastRow('W') || checkForPieces('B');
 	} 
 	else
 	{
-		Victory = checkLastRow('B');
-		//Victory = checkForPieces('W');
+		Victory = checkLastRow('B') || checkForPieces('W');
 	}
 
 	return Victory;
@@ -50,26 +48,21 @@ void Game::newGame(Player * white, Player * black)
 
 int Game::getTurn()
 {
-	return pTurn;
+	return playerTurn;
 }
 
 Turn Game::getColorTurn()
 {
-	return Turn(pTurn % 2);
-}
-
-void Game::nextTurn()
-{
-	pTurn++;
+	return Turn(playerTurn % 2);
 }
 
 void Game::startGameLoop()
 {
 	do
 	{	//May need to cath that 0 (or whateveer) I was throwing here
-		updateBoard(players[pTurn % 2]->getMove());
+		updateBoard(players[playerTurn]->getMove());
 		printBoard();
-		pTurn++;
+		playerTurn = !playerTurn;
 	} while (!checkForWin());
 }
 
@@ -89,9 +82,17 @@ bool Game::checkLastRow(char piece)
 	return false;							//Both failed to find it or invalid piece
 }
 
-bool Game::checkForPieces(char)
+bool Game::checkForPieces(char piece)
 {
-	return !pieces[WHITE] || !pieces[BLACK];
+
+	if (piece == 'W')
+	{
+		return !pieces[BLACK];
+	}
+	else
+	{
+		return !pieces[WHITE];
+	}
 }
 
 bool Game::updateBoard(move move) 
@@ -99,7 +100,7 @@ bool Game::updateBoard(move move)
 	if (getGameBoard()[move.second] == 'W') pieces[WHITE]--;
 	if (getGameBoard()[move.second] == 'B') pieces[BLACK]--;
 	
-	getGameBoard().updateBoard(move, Turn(pTurn % 2));
+	getGameBoard().updateBoard(move, Turn(playerTurn));
 	
 	//I don't need to return a value though....
 	return true;

@@ -19,13 +19,12 @@ public:
 private:
 	Player * players[2];
 	GameBoard * gameBoard;
-	int pTurn = 0;
+	bool playerTurn = 0;
 	int pieces[2] = { 16,16 };
 
 	bool checkLastRow(char);
 	bool checkForPieces(char);
 	bool updateBoard(move move);
-	void checkMove(move);
 	void startGameLoop();
 	void printBoard();
 };
