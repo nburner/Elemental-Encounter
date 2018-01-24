@@ -139,12 +139,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\AI Development Project\BoardStateTool\AI.cpp" />
+    <ClCompile Include="..\..\AI Development Project\BoardStateTool\BasicDefense.cpp" />
+    <ClCompile Include="..\..\AI Development Project\BoardStateTool\BasicOffense.cpp" />
+    <ClCompile Include="..\..\AI Development Project\BoardStateTool\Board.cpp" />
+    <ClCompile Include="..\..\AI Development Project\BoardStateTool\Pet.cpp" />
     <ClCompile Include="Debug\Game.cpp" />
     <ClCompile Include="Debug\GameBoard.cpp" />
     <ClCompile Include="Debug\Player.cpp" />
     <ClCompile Include="Debug\Test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\AI Development Project\BoardStateTool\AI.h" />
+    <ClInclude Include="..\..\AI Development Project\BoardStateTool\Board.h" />
     <ClInclude Include="Debug\Game.h" />
     <ClInclude Include="Debug\GameBoard.h" />
     <ClInclude Include="Debug\Player.h" />

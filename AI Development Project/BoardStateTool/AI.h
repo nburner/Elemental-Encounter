@@ -1,5 +1,6 @@
 #pragma once
-#include"Board.h"
+#include "Board.h"
+#include "..\..\GameCore\GameCore\Debug\Player.h"
 #include <algorithm>
 #include <vector>
 
@@ -15,7 +16,7 @@ namespace AI {
 			B_OFFENSE, B_DEFENSE, PET
 		};
 
-		class AI {
+		class AI : public Player {
 		protected:
 			enum BoardFeature {					//NOTE - THE BELOW COMMENTS MAY BE BIASED TOWARDS WHITE
 				ROW_2_THREATENED,				//number of threatened squares in row 2 (0-8)
@@ -57,21 +58,22 @@ namespace AI {
 			};
 
 		public:
-			virtual string operator()(const Board) const = 0;
+			virtual ::move getMove(GameBoard * gp = NULL);
+			virtual move operator()(const Board) const = 0;
 		};
 
 		class BasicOffense : public AI {
 			friend AIEngine;
 			BasicOffense();
 		public:
-			virtual string operator()(const Board b) const;
+			virtual move operator()(const Board b) const;
 		};
 
 		class BasicDefense : public AI {
 			friend AIEngine;
 			BasicDefense();
 		public:
-			virtual string operator()(const Board b) const;
+			virtual move operator()(const Board b) const;
 		};
 
 		class Pet : public AI {
@@ -80,7 +82,7 @@ namespace AI {
 			int evaluate(Board);
 			signed char weights[NULL_FEATURE][NULL_FEATURE];
 		public:
-			virtual string operator()(const Board b) const;
+			virtual move operator()(const Board b) const;
 		};
 
 		static AI* start(AIType type);

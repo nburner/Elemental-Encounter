@@ -2,6 +2,8 @@
 #include <iostream>
 using std::string;
  
+typedef uint64_t bitboard;
+
 /*Arranged the squares to look like the board
 Below is a picture of the board for my own sake
 So A1 is 0, and H8 is 63, and it counts from left to right, bottom to top
@@ -59,6 +61,7 @@ public:
 	char& operator[](Square i) { return space[i]; }
 	char operator[](Square i) const { return space[i]; }
 	void updateBoard(move, Turn);
+	Turn justTaken;
 private:
 	char space[64];
 	GameBoard();

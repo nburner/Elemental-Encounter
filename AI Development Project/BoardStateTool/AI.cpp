@@ -33,3 +33,8 @@ AIEngine::AI* AIEngine::start(AIType type) {
 	_generatedAIs.push_back(result);
 	return result;
 }
+
+::move AI::AIEngine::AI::getMove(GameBoard * gp)
+{
+	return (*this)(*gp);;
+}

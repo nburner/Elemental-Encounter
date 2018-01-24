@@ -19,6 +19,17 @@ Board::Board(const Board& b, bool flipTurn)
 	bb[BLACK] = b.bb[BLACK];
 	turn = Turn((flipTurn + b.turn) % 2);
 }
+
+AI::Board::Board(const GameBoard & gb)
+{
+	bb[WHITE] = 0;
+	bb[BLACK] = 0;
+	for (int i = 0; i < 64; i++) {
+		if (gb[Square(i)] == 'W') set(bb[WHITE], i);
+		if (gb[Square(i)] == 'B') set(bb[BLACK], i);
+	}
+	turn = Turn(!gb.justTaken);
+}
 #pragma endregion
 
 #pragma region Operator Overloads

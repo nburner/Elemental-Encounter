@@ -21,7 +21,7 @@ int AI::AIEngine::Pet::evaluate(Board board)
 	return 0;
 }
 
-string AI::AIEngine::Pet::operator()(const Board b) const
+move AI::AIEngine::Pet::operator()(const Board b) const
 {
-	return string();
+	return move();
 }
