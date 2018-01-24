@@ -1,5 +1,5 @@
 #include "Game.h"
-
+using std::cin; using std::cout; using std::endl;
 
 
 Game::Game()
@@ -37,8 +37,11 @@ bool Game::checkForWin()
 	return Victory;
 }
 
-void Game::newGame() 
+void Game::newGame(Player * white, Player * black) 
 {
+	this->white = white;
+	this->black = black;
+
 	bool flip = 0;
 	int bar = 219;
 

@@ -13,8 +13,10 @@ void main()
 	int Player2 = 2;
 
 	Game game;
-
-	game.newGame();
+	Human * player1 = NULL;
+	Human * player2 = NULL;
+	
+	game.newGame(player1, player2);
 	
 	printBoard(game);
 

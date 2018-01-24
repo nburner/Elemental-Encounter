@@ -141,11 +141,13 @@
   <ItemGroup>
     <ClCompile Include="Debug\Game.cpp" />
     <ClCompile Include="Debug\GameBoard.cpp" />
+    <ClCompile Include="Debug\Player.cpp" />
     <ClCompile Include="Debug\Test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug\Game.h" />
     <ClInclude Include="Debug\GameBoard.h" />
+    <ClInclude Include="Debug\Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
