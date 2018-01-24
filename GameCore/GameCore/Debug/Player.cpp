@@ -99,9 +99,5 @@ move Human::getMove(GameBoard * gp)
 
 	} while (!isValidMove(result));
 
-	//checkMove(moveFrom, moveTo);
-
-	//updateBoard(moveFrom, moveTo, player);
-
 	return result;
 }
