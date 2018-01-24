@@ -13,9 +13,9 @@ Game::~Game(){
 	gameBoard = NULL;
 }
 
-GameBoard* Game::getGameBoard() const
+GameBoard& Game::getGameBoard() const
 {
-	return gameBoard;
+	return *gameBoard;
 }
 
 
@@ -39,12 +39,16 @@ bool Game::checkForWin()
 
 void Game::newGame(Player * white, Player * black) 
 {
-	this->white = white;
-	this->black = black;
+	players[WHITE] = white;
+	players[BLACK] = black;
 
-	bool flip = 0;
-	int bar = 219;
+	white->myColor = WHITE;
+	black->myColor = BLACK;
 
+	printBoard();
+	startGameLoop();
+
+	/*bool flip = 0;
 	for (int r = 0; r < 8; r++)
 	{
 		for (int c = 0; c < 8; c++)
@@ -73,25 +77,28 @@ void Game::newGame(Player * white, Player * black)
 		}
 
 		flip = !flip;
-	}
+	}*/
 }
 
+//Obsolete
 bool Game::getMove(int player)
 {
-	cout << "Player " << player <<"'s move" << endl;
-	cout << "Move From: ";
-	cin >> moveFrom;
-	cout << "Move To: ";
-	cin >> moveTo;
+	//cout << "Player " << player <<"'s move" << endl;
+	//cout << "Move From: ";
+	//cin >> moveFrom;
+	//cout << "Move To: ";
+	//cin >> moveTo;
 
-	if (moveFrom == "exit" || moveTo == "exit")
-		return false;
+	//if (moveFrom == "exit" || moveTo == "exit")
+	//	return false;
 
-	//checkMove(moveFrom, moveTo);
+	////checkMove(moveFrom, moveTo);
 
-	updateBoard(moveFrom, moveTo, player);
+	//updateBoard(moveFrom, moveTo, player);
 
-	return true;
+	//return true;
+
+	return false;
 }
 
 int Game::getTurn()
@@ -99,97 +106,113 @@ int Game::getTurn()
 	return pTurn;
 }
 
+Turn Game::getColorTurn()
+{
+	return Turn(pTurn % 2);
+}
+
 void Game::nextTurn()
 {
 	pTurn++;
 }
 
-void Game::checkMove(string from, string to)
+//Obsolete - see Human::validateMove
+void Game::checkMove(move move)
 {
-	// check to see if moving backwards
-	// check to see if moving sideways
-	if (((tolower(from[0]) >= 97) && (tolower(from[0]) <= 104)) && ((from[1] >= 1) && (from[1] <= 8)))
-	{
-		if ((tolower(to[0]) >= 97 && tolower(to[0]) <= 104) && (to[1] >= 1 && to[1] <= 8))
-		{
-			int fromR = getNumber(from[0]);
-			int fromC = getNumber(from[1]);
+	//// check to see if moving backwards
+	//// check to see if moving sideways
+	//if (((tolower(from[0]) >= 97) && (tolower(from[0]) <= 104)) && ((from[1] >= 1) && (from[1] <= 8)))
+	//{
+	//	if ((tolower(to[0]) >= 97 && tolower(to[0]) <= 104) && (to[1] >= 1 && to[1] <= 8))
+	//	{
+	//		int fromR = getNumber(from[0]);
+	//		int fromC = getNumber(from[1]);
 
-			int toR = getNumber(to[0]);
-			int toC = getNumber(to[1]);
+	//		int toR = getNumber(to[0]);
+	//		int toC = getNumber(to[1]);
 
-			if (getTurn() % 2 == 1)
-			{
-				// check to see if piece is Player One's
-				if (getGameBoard()->space[fromC][fromR] == 'W')
-				{
-					//check to see if there is a piece in front of the player
-					if (toR == fromR && (toC + 1) == fromC && (getGameBoard()->space[toC][toR] != ' ' && getGameBoard()->space[toC][toR] != '219'))
-					{
-						cout << "There is a piece in that space, you cannot move there. Please make a valid move selection" << endl;
-						getMove(getTurn());
-					}
-					//check to see if the piece is moving forward and only moving forward one space
-					else if (((toC + 1) != fromC) || (toC + 1) == fromC && ((toR != (fromR + 1)) && (toR != fromR) && (toR != (fromR - 1))))
-					{
-						cout << "You may only move forward one space. Please make a valid move selection." << endl;
-						getMove(getTurn());
-					}
-					else
-					{
-						return;
-					}
-				}
-				else
-				{
-					cout << "That is not your piece. Please make a valid selection" << endl;
-					getMove(getTurn());
-				}
+	//		if (getTurn() % 2 == 1)
+	//		{
+	//			// check to see if piece is Player One's
+	//			if (getGameBoard()->space[fromC][fromR] == 'W')
+	//			{
+	//				//check to see if there is a piece in front of the player
+	//				if (toR == fromR && (toC + 1) == fromC && (getGameBoard()->space[toC][toR] != ' ' && getGameBoard()->space[toC][toR] != '219'))
+	//				{
+	//					cout << "There is a piece in that space, you cannot move there. Please make a valid move selection" << endl;
+	//					getMove(getTurn());
+	//				}
+	//				//check to see if the piece is moving forward and only moving forward one space
+	//				else if (((toC + 1) != fromC) || (toC + 1) == fromC && ((toR != (fromR + 1)) && (toR != fromR) && (toR != (fromR - 1))))
+	//				{
+	//					cout << "You may only move forward one space. Please make a valid move selection." << endl;
+	//					getMove(getTurn());
+	//				}
+	//				else
+	//				{
+	//					return;
+	//				}
+	//			}
+	//			else
+	//			{
+	//				cout << "That is not your piece. Please make a valid selection" << endl;
+	//				getMove(getTurn());
+	//			}
 
 
-			}
-			else
-			{
-				// check to see if piece is Player Two's
-				if (getGameBoard()->space[fromC][fromR] == 'B')
-				{
-					//check to see if there is a piece in front of the player
-					if (toR == fromR && (toC - 1) == fromC && (getGameBoard()->space[toC][toR] != ' ' && getGameBoard()->space[toC][toR] != '219'))
-					{
-						cout << "There is a piece in that space, you cannot move there. Please make a valid move selection" << endl;
-						getMove(getTurn());
-					}
-					//check to see if the piece is moving forward and only moving forward one space
-					else if (((toC - 1) != fromC) || (toC - 1) == fromC && ((toR != (fromR + 1)) && (toR != fromR) && (toR != (fromR - 1))))
-					{
-						cout << "You may only move forward one space. Please make a valid move selection." << endl;
-						getMove(getTurn());
-					}
-					else
-					{
-						return;
-					}
-				}
-				else
-				{
-					cout << "That is not your piece. Please make a valid selection" << endl;
-					getMove(getTurn());
-				}
-			}
+	//		}
+	//		else
+	//		{
+	//			// check to see if piece is Player Two's
+	//			if (getGameBoard()->space[fromC][fromR] == 'B')
+	//			{
+	//				//check to see if there is a piece in front of the player
+	//				if (toR == fromR && (toC - 1) == fromC && (getGameBoard()->space[toC][toR] != ' ' && getGameBoard()->space[toC][toR] != '219'))
+	//				{
+	//					cout << "There is a piece in that space, you cannot move there. Please make a valid move selection" << endl;
+	//					getMove(getTurn());
+	//				}
+	//				//check to see if the piece is moving forward and only moving forward one space
+	//				else if (((toC - 1) != fromC) || (toC - 1) == fromC && ((toR != (fromR + 1)) && (toR != fromR) && (toR != (fromR - 1))))
+	//				{
+	//					cout << "You may only move forward one space. Please make a valid move selection." << endl;
+	//					getMove(getTurn());
+	//				}
+	//				else
+	//				{
+	//					return;
+	//				}
+	//			}
+	//			else
+	//			{
+	//				cout << "That is not your piece. Please make a valid selection" << endl;
+	//				getMove(getTurn());
+	//			}
+	//		}
 
-			// check to see if a piece is where you want to move
-		}
-		else
-		{
-			cout << "Please make a Valid Move." << endl;
-			getMove(getTurn());
-		}
-	}
-	else
-	{
-		cout << "Please make a Valid Move." << endl;
-		getMove(getTurn());
-	}
+	//		// check to see if a piece is where you want to move
+	//	}
+	//	else
+	//	{
+	//		cout << "Please make a Valid Move." << endl;
+	//		getMove(getTurn());
+	//	}
+	//}
+	//else
+	//{
+	//	cout << "Please make a Valid Move." << endl;
+	//	getMove(getTurn());
+	//}
+}
+
+void Game::startGameLoop()
+{
+	do
+	{	//May need to cath that 0 (or whateveer) I was throwing here
+		updateBoard(players[pTurn % 2]->getMove());
+		printBoard();
+		pTurn++;
+	} while (!checkForWin());
 }
 	
 
@@ -240,41 +263,33 @@ int Game::getNumber(char c)
 
 bool Game::checkLastRow(char piece)
 {
-	bool playerWon = false;
+	if (piece == 'W')						//If piece is 'W'
+		for (int i = A8; i <= H8; i++)		//Loop through the back row
+			if (getGameBoard()[i] == 'W')	//Check if one is 'W'	
+				return true;				//Return true if it is
+		
+	if (piece == 'B')						//Do the same thing for black
+		for (int i = A1; i <= H1; i++)		//But check the other side
+			if (getGameBoard()[i] == 'B')
+				return  true;
 
-	if (piece == 'W')
-	{
-		for (int i = 0; i < 9; i++) 
-		{
-			if (getGameBoard()->space[0][i] == piece)
-			{
-				playerWon = true;
-			}
-		}
-	} 
-	else if (piece == 'B')
-	{
-		for (int i = 0; i < 9; i++) 
-		{
-			if (getGameBoard()->space[7][i] == piece)
-			{
-				playerWon = true;
-			}
-		}
-	}
-
-	return playerWon;
+	return false;							//Both failed to find it or invalid piece
 }
 
 bool Game::checkForPieces(char)
 {
-	return false;
+	return !pieces[WHITE] || !pieces[BLACK];
 }
 
-bool Game::updateBoard(string from, string to, int player) 
+bool Game::updateBoard(move move) 
 {
-	
-	int fromR = getNumber(from[0]);
+	if (getGameBoard()[move.second] == 'W') pieces[WHITE]--;
+	if (getGameBoard()[move.second] == 'B') pieces[BLACK]--;
+ 
+	getGameBoard()[move.first] = move.first % 2 == 0 ? 219 : ' ';
+	getGameBoard()[move.second] = pTurn % 2 == 0 ? 'W' : 'B';
+
+	/*int fromR = getNumber(from[0]);
 	int fromC = getNumber(from[1]);
 
 	int toR = getNumber(to[0]);
@@ -287,6 +302,24 @@ bool Game::updateBoard(string from, string to, int player)
 	else 
 		getGameBoard()->space[toC][toR] = 'B';
 
-	return true;
+	return true;*/
 	
+	//I don't need to return a value though....
+	return true;
+}
+
+void Game::printBoard()
+{
+	for (int r = 7; r >= 0; r--)
+	{
+		cout << r+1 <<"|";
+	
+		for (int c = 0; c < 8; c++)
+		{
+			cout << (*GameBoard::getInstance())[r * 8 + c] << "|";
+		}
+		cout << endl;
+	}
+
+	cout << "  A B C D E F G H" << endl << "-----------------------------" << endl;
 }

@@ -13,28 +13,30 @@ public:
 	bool checkForWin();
 	bool getMove(int);
 	int getTurn();
+	Turn getColorTurn();
 	void nextTurn();
 	
-	GameBoard* getGameBoard() const;
+	GameBoard& getGameBoard() const;
 	string getMoveFrom() { return moveFrom; };
 	string getMoveTo() { return moveTo; };
 
 	
 private:
-	Player * white;
-	Player * black;
+	Player * players[2];
 	GameBoard * gameBoard;
 	string moveFrom;
 	string moveTo;
 	int getNumber(char);
 	int pTurn = 0;
-	int player1Pieces = 16;
-	int player2Pieces = 16;
+	int pieces[2] = { 16,16 };
 
 	bool checkLastRow(char);
 	bool checkForPieces(char);
 
-	bool updateBoard(string, string, int);
+	bool updateBoard(move move);
 
-	void checkMove(string, string);
+	void checkMove(move);
+
+	void startGameLoop();
+	void printBoard();
 };

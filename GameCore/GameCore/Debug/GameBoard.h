@@ -55,10 +55,11 @@ class GameBoard
 public:
 	~GameBoard(); 
 	static GameBoard* getInstance();
-	char space[8][8];
 	bool hasOwnPiece(string area);
-
+	char & operator [](int i) { return space[i]; }
+	//char operator [](int i) const { return space[i]; }
 private:
+	char space[64];
 	GameBoard();
 	static GameBoard* instance;
 };
