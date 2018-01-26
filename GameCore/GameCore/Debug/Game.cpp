@@ -24,11 +24,11 @@ bool Game::checkForWin()
 
 	if (playerTurn == WHITE) 
 	{
-		Victory = checkLastRow('W') || checkForPieces('B');
+		Victory = checkLastRow('B') || checkForPieces('B');
 	} 
 	else
 	{
-		Victory = checkLastRow('B') || checkForPieces('W');
+		Victory = checkLastRow('W') || checkForPieces('W');
 	}
 
 	return Victory;

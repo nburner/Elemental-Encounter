@@ -12,9 +12,11 @@ void main()
 	Human * player2 = new Human();
 	
 	AI::AIEngine::AI * def = AI::AIEngine::start(AI::AIEngine::AIType::B_DEFENSE);
+	AI::AIEngine::AI * def2 = AI::AIEngine::start(AI::AIEngine::AIType::B_DEFENSE);
 	AI::AIEngine::AI * off = AI::AIEngine::start(AI::AIEngine::AIType::B_OFFENSE);
+	AI::AIEngine::AI * off2 = AI::AIEngine::start(AI::AIEngine::AIType::B_OFFENSE);
 	
-	game.newGame(def, off);
+	game.newGame(def, def2);
 	
 	if (game.getTurn() % 2 == 1)
 	{
