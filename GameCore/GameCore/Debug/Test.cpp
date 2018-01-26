@@ -1,8 +1,8 @@
 #include "Game.h"
 #include "..\..\..\AI Development Project\BoardStateTool\AI.h"
 #include <iostream>
-using namespace std;
-
+//using namespace std;
+using std::cout; using std::endl;
 
 void main()
 {
@@ -11,9 +11,10 @@ void main()
 	Human * player1 = new Human();
 	Human * player2 = new Human();
 	
-	AI::AIEngine::AI * ai = AI::AIEngine::start(AI::AIEngine::AIType::B_OFFENSE);
+	AI::AIEngine::AI * def = AI::AIEngine::start(AI::AIEngine::AIType::B_DEFENSE);
+	AI::AIEngine::AI * off = AI::AIEngine::start(AI::AIEngine::AIType::B_OFFENSE);
 	
-	game.newGame(player1, ai);
+	game.newGame(def, off);
 	
 	if (game.getTurn() % 2 == 1)
 	{

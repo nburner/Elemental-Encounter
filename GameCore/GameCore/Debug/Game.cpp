@@ -60,7 +60,10 @@ void Game::startGameLoop()
 {
 	do
 	{	//May need to cath that 0 (or whateveer) I was throwing here
-		updateBoard(players[playerTurn]->getMove());
+		updateBoard(players[playerTurn]->getMove(gameBoard));
+		//auto move = players[playerTurn]->getMove(gameBoard);
+		//cout << "Move: " << move.first << " - " << move.second << endl;
+		//updateBoard(move);
 		printBoard();
 		playerTurn = !playerTurn;
 	} while (!checkForWin());

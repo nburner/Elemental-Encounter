@@ -60,7 +60,7 @@ public:
 	bool hasOwnPiece(string area);
 	char& operator[](Square i) { return space[i]; }
 	char operator[](Square i) const { return space[i]; }
-	void updateBoard(move, Turn);
+	void updateBoard(::move, Turn);
 	Turn justTaken;
 private:
 	char space[64];
