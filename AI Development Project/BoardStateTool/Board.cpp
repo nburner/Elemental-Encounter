@@ -18,6 +18,8 @@ Board::Board(const Board& b, bool flipTurn)
 	bb[WHITE] = b.bb[WHITE];
 	bb[BLACK] = b.bb[BLACK];
 	turn = Turn((flipTurn + b.turn) % 2);
+
+	lastMove = b.lastMove;
 }
 
 AI::Board::Board(const GameBoard & gb)
@@ -77,7 +79,7 @@ std::vector<Board> Board::validNextBoards() const
 
 		set(newBoard.bb[turn], to);
 		reset(newBoard.bb[turn], to - forward);
-		newBoard.lastMove = move(Square(to), Square(to - forward));
+		newBoard.lastMove = move(Square(to - forward), Square(to));
 		result.push_back(newBoard);
 
 		reset(possibleUps, to);
@@ -91,7 +93,7 @@ std::vector<Board> Board::validNextBoards() const
 		set(newBoard.bb[turn], to);
 		reset(newBoard.bb[newBoard.turn], to);
 		reset(newBoard.bb[turn], to - right);
-		newBoard.lastMove = move(Square(to), Square(to - right));
+		newBoard.lastMove = move(Square(to - right), Square(to));
 		result.push_back(newBoard);
 
 		reset(possibleRights, to);
@@ -105,7 +107,7 @@ std::vector<Board> Board::validNextBoards() const
 		set(newBoard.bb[turn], to);
 		reset(newBoard.bb[newBoard.turn], to);
 		reset(newBoard.bb[turn], to - left);
-		newBoard.lastMove = move(Square(to), Square(to - left));
+		newBoard.lastMove = move(Square(to - left), Square(to));
 		result.push_back(newBoard);
 
 		reset(possibleLefts, to);
@@ -134,7 +136,7 @@ std::vector<Board> Board::validAttackBoards() const
 		set(newBoard.bb[turn], to);
 		reset(newBoard.bb[newBoard.turn], to);
 		reset(newBoard.bb[turn], to - right);
-		newBoard.lastMove = move(Square(to), Square(to - right));
+		newBoard.lastMove = move(Square(to - right), Square(to));
 		result.push_back(newBoard);
 
 		reset(possibleRights, to);
@@ -148,7 +150,7 @@ std::vector<Board> Board::validAttackBoards() const
 		set(newBoard.bb[turn], to);
 		reset(newBoard.bb[newBoard.turn], to);
 		reset(newBoard.bb[turn], to - left);
-		newBoard.lastMove = move(Square(to), Square(to - left));
+		newBoard.lastMove = move(Square(to - left), Square(to));
 		result.push_back(newBoard);
 
 		reset(possibleLefts, to);
