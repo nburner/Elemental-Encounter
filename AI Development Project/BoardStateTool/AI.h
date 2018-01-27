@@ -81,6 +81,7 @@ namespace AI {
 			Pet();
 			int evaluate(Board);
 			signed char weights[NULL_FEATURE][NULL_FEATURE];
+			static int(*featureCalculators[NULL_FEATURE])(Board);
 		public:
 			virtual move operator()(const Board b) const;
 		};
