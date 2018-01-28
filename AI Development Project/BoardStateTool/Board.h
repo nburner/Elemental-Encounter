@@ -216,6 +216,7 @@ namespace AI {
 	public:
 		friend std::ostream& operator<<(std::ostream&, const Board&);
 		friend bool operator<(Board const& a, Board const& b);
+		friend class FeatureFunctions;
 
 		std::vector<Board> validNextBoards() const;
 		std::vector<Board> validAttackBoards() const;

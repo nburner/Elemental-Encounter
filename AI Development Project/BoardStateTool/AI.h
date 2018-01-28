@@ -1,5 +1,6 @@
 #pragma once
 #include "Board.h"
+#include "FeatureFunctions.h"
 #include "..\..\GameCore\GameCore\Debug\Player.h"
 #include <algorithm>
 #include <vector>
@@ -8,6 +9,7 @@ using std::vector;
 using std::string;
 
 namespace AI {
+	
 	class AIEngine {
 	public:
 		AIEngine();
@@ -79,9 +81,9 @@ namespace AI {
 		class Pet : public AI {
 			friend AIEngine;
 			Pet();
-			int evaluate(Board);
+			int evaluate(Board) const;
 			signed char weights[NULL_FEATURE][NULL_FEATURE];
-			static int(*featureCalculators[NULL_FEATURE])(Board);
+			static FeatureFunc featureCalculators[NULL_FEATURE];
 		public:
 			virtual move operator()(const Board b) const;
 		};

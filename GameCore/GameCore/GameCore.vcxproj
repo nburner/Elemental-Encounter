@@ -143,6 +143,7 @@
     <ClCompile Include="..\..\AI Development Project\BoardStateTool\BasicDefense.cpp" />
     <ClCompile Include="..\..\AI Development Project\BoardStateTool\BasicOffense.cpp" />
     <ClCompile Include="..\..\AI Development Project\BoardStateTool\Board.cpp" />
+    <ClCompile Include="..\..\AI Development Project\BoardStateTool\FeatureFunctions.cpp" />
     <ClCompile Include="..\..\AI Development Project\BoardStateTool\Pet.cpp" />
     <ClCompile Include="Debug\Game.cpp" />
     <ClCompile Include="Debug\GameBoard.cpp" />
@@ -152,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\AI Development Project\BoardStateTool\AI.h" />
     <ClInclude Include="..\..\AI Development Project\BoardStateTool\Board.h" />
+    <ClInclude Include="..\..\AI Development Project\BoardStateTool\FeatureFunctions.h" />
     <ClInclude Include="Debug\Game.h" />
     <ClInclude Include="Debug\GameBoard.h" />
     <ClInclude Include="Debug\Player.h" />

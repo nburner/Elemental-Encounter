@@ -15,8 +15,9 @@ void main()
 	AI::AIEngine::AI * def2 = AI::AIEngine::start(AI::AIEngine::AIType::B_DEFENSE);
 	AI::AIEngine::AI * off = AI::AIEngine::start(AI::AIEngine::AIType::B_OFFENSE);
 	AI::AIEngine::AI * off2 = AI::AIEngine::start(AI::AIEngine::AIType::B_OFFENSE);
+	AI::AIEngine::AI * pet = AI::AIEngine::start(AI::AIEngine::AIType::PET);
 	
-	game.newGame(def, def2);
+	game.newGame(pet, def2);
 	
 	if (game.getTurn() % 2 == 1)
 	{
