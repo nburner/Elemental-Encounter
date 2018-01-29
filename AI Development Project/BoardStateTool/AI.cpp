@@ -27,6 +27,9 @@ AIEngine::AI* AIEngine::start(AIType type) {
 	case AIEngine::PET:
 		result = new Pet();
 		break;
+	case AIEngine::DARYLS_PET:
+		result = new Pet(0);
+		break;
 	default:
 		break;
 	}

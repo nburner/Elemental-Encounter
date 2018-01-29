@@ -169,9 +169,9 @@ namespace AI {
 		const bitboard row8 = bitboard(0xff00000000000000);
 	}
 
-	const string const _SquaresStr[64]{ "A1", "B1", "C1", "D1", "E1", "F1", "G1", "H1", "A2", "B2", "C2", "D2", "E2", "F2", "G2", "H2", "A3", "B3", "C3", "D3", "E3", "F3", "G3", "H3", "A4", "B4", "C4", "D4", "E4", "F4", "G4", "H4", "A5", "B5", "C5", "D5", "E5", "F5", "G5", "H5", "A6", "B6", "C6", "D6", "E6", "F6", "G6", "H6", "A7", "B7", "C7", "D7", "E7", "F7", "G7", "H7", "A8", "B8", "C8", "D8", "E8", "F8", "G8", "H8" };
-
 	namespace BoardHelpers {
+		const string const _SquaresStr[64]{ "A1", "B1", "C1", "D1", "E1", "F1", "G1", "H1", "A2", "B2", "C2", "D2", "E2", "F2", "G2", "H2", "A3", "B3", "C3", "D3", "E3", "F3", "G3", "H3", "A4", "B4", "C4", "D4", "E4", "F4", "G4", "H4", "A5", "B5", "C5", "D5", "E5", "F5", "G5", "H5", "A6", "B6", "C6", "D6", "E6", "F6", "G6", "H6", "A7", "B7", "C7", "D7", "E7", "F7", "G7", "H7", "A8", "B8", "C8", "D8", "E8", "F8", "G8", "H8" };
+		
 		inline string to_string(Square s) {
 			_ASSERT(s < 64);
 			return _SquaresStr[s];
@@ -186,6 +186,11 @@ namespace AI {
 			return d > 0 ? b << d : b >> (-d);
 		}
 
+		//This takes a bitboard and a forward direction and returns a bitboard of the squares threatened by those pieces
+		inline bitboard threatens(const bitboard b, Direction forward) {
+			return (shift(b, Direction(forward+WEST)) & ~CommonBitboards::colH) | (shift(b, Direction(forward + EAST)) & ~CommonBitboards::colA);
+		}
+
 		//This sets one bit (to 1) of a bitboard and returns said bitboard
 		inline bitboard set(bitboard& b, int i) {
 			b |= CommonBitboards::onePiece[i];
@@ -196,6 +201,10 @@ namespace AI {
 		inline bitboard reset(bitboard& b, int i) {
 			b &= ~CommonBitboards::onePiece[i];
 			return b;
+		}
+
+		inline int count(const bitboard& b) {
+			return __popcnt64(b);
 		}
 
 		//This function takes a turn and returns the other turn
@@ -220,12 +229,14 @@ namespace AI {
 
 		std::vector<Board> validNextBoards() const;
 		std::vector<Board> validAttackBoards() const;
+		int gameOver() const;
 		inline bool whiteTurn() const { return !turn; }
 		inline bool blackTurn() const { return turn; }
 
 		::move lastMove;
 		int beta = INT16_MAX;
 		int alpha = INT16_MIN;
+		int val = 0;
 
 		Board();
 		Board(const Board&, bool = false);

@@ -15,7 +15,7 @@ namespace AI {
 		AIEngine();
 
 		enum AIType {
-			B_OFFENSE, B_DEFENSE, PET
+			B_OFFENSE, B_DEFENSE, PET, DARYLS_PET
 		};
 
 		class AI : public Player {
@@ -32,13 +32,13 @@ namespace AI {
 				PIECE_ADVANTAGE,				//your pawn count minus their pawn count
 				PIECE_ADVANTAGE_B,				//1 if you have more pawns, -1 if they have more pawns, 0 otherwise
 				A_FILE,							//number of pawns in file A
-				A_FILE_B,						//1 if you have no pawns in file A, 0 otherwise
+				A_FILE_B,						//1 if you have pawns in file A, 0 otherwise
 				H_FILE,							//number of pawns in file H
-				H_FILE_B,						//1 if you have no pawns in file H, 0 otherwise
+				H_FILE_B,						//1 if you have pawns in file H, 0 otherwise
 				DISPERSION,						//the absolute value of the average number of pawns per column, minus 2
-				THREATENED_DEFENDED,			//number of pieces that are threatened but defended
+				THREATENED_DEFENDED,			//number of your pieces that are threatened but defended
 				THREATENED_DEFENDED_B,			//1 if you have at least one pawn that is threatened but defended, 0 otherwise
-				THREATENED_UNDEFENDED,			//number of pieces that are threatened and not defended
+				THREATENED_UNDEFENDED,			//number of your pieces that are threatened and not defended
 				THREATENED_UNDEFENDED_B,		//1 if you have at least one pawn that is threatened and undefended, 0 otherwise
 				THREATEN_DEFENDED,				//number of pieces you threaten that are defended
 				THREATEN_DEFENDED_B,			//1 if you threaten a defended piece, 0 otherwise
@@ -50,10 +50,14 @@ namespace AI {
 				FURTHEST_PIECE_UNTHREATENED,	//row of your furthest forward not threatened pawn, minus 2
 				CLOSEST_PIECE_DEFENDED,			//row of their closest defended pawn, minus 2
 				CLOSEST_PIECE_UNDEFENDED,		//row of their closest undefended pawn, minus 2
-				PUSH_ADVANTAGE,					//difference of your number of rows forward and their number of rows close
-				PUSH_ADVANTAGE_B,				//1 if your furthestpiece is farther than their closest piece, 0 otherwise
+				CLOSEST_PIECE_THREATENED,		//row of their closest threatened pawn, minus 2
+				CLOSEST_PIECE_UNTHREATENED,		//row of their closest unthreatened pawn, minus 2
+				PUSH_ADVANTAGE,					//difference of your number of **DEFENDED** rows forward and their number of rows close
+				PUSH_ADVANTAGE_B,				//1 if your furthest **DEFENDED** piece is farther than their closest piece, 0 otherwise
 				UNTHREATENED_UNDEFENDED,		//number of pieces you have that are neither defended nor threatened
 				UNTHREATENED_UNDEFENDED_B,		//1 if you have a piece that is neither defended nor threatened
+				UNTHREATEN_UNDEFENDED,			//number of pieces they have that are neither defended nor threatened
+				UNTHREATEN_UNDEFENDED_B,		//1 if they have a piece that is neither defended nor threatened
 				THREATENED_SQUARES,				//number of squares you threaten
 
 				NULL_FEATURE					//Gives me the count and a place to stop for-loops
@@ -81,11 +85,14 @@ namespace AI {
 		class Pet : public AI {
 			friend AIEngine;
 			Pet();
+			Pet(int);
 			int evaluate(Board) const;
 			signed char weights[NULL_FEATURE][NULL_FEATURE];
 			static FeatureFunc featureCalculators[NULL_FEATURE];
+			void setFeatureCalculators();
 		public:
 			virtual move operator()(const Board b) const;
+			void debug();
 		};
 
 		static AI* start(AIType type);

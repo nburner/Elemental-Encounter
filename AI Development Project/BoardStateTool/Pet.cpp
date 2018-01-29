@@ -1,4 +1,5 @@
 #include "AI.h"
+#include "Board.h"
 #include <random>
 
 using namespace AI;
@@ -6,11 +7,50 @@ using namespace AI;
 const int MAX_WEIGHT = 12;
 
 std::default_random_engine generator;
-//std::uniform_int_distribution<int> distribution(1, 6);
 std::binomial_distribution<int> distribution(2 * MAX_WEIGHT, 0.5);
-//int dice_roll = distribution(generator);  // generates number in the range 1..6 
 
-FeatureFunc AI::AIEngine::Pet::featureCalculators[AI::BoardFeature::NULL_FEATURE] = { NULL };
+FeatureFunc AIEngine::Pet::featureCalculators[AI::BoardFeature::NULL_FEATURE] = { NULL };
+
+void AIEngine::Pet::setFeatureCalculators() {
+	AIEngine::Pet::featureCalculators[ROW_2_THREATENED] = FeatureFunctions::row_2_threatened;
+	AIEngine::Pet::featureCalculators[ROW_2_THREATENED_B] = FeatureFunctions::row_2_threatened_b;
+	AIEngine::Pet::featureCalculators[ROW_3_THREATENED] = FeatureFunctions::row_3_threatened;
+	AIEngine::Pet::featureCalculators[ROW_3_THREATENED_B] = FeatureFunctions::row_3_threatened_b;
+	AIEngine::Pet::featureCalculators[ROW_4_THREATENED] = FeatureFunctions::row_4_threatened;
+	AIEngine::Pet::featureCalculators[ROW_4_THREATENED_B] = FeatureFunctions::row_4_threatened_b;
+	AIEngine::Pet::featureCalculators[MY_PAWN_COUNT] = FeatureFunctions::my_pawn_count;
+	AIEngine::Pet::featureCalculators[THEIR_PAWN_COUNT] = FeatureFunctions::their_pawn_count;
+	AIEngine::Pet::featureCalculators[PIECE_ADVANTAGE] = FeatureFunctions::piece_advantage;
+	AIEngine::Pet::featureCalculators[PIECE_ADVANTAGE_B] = FeatureFunctions::piece_advantage_b;
+	AIEngine::Pet::featureCalculators[A_FILE] = FeatureFunctions::a_file;
+	AIEngine::Pet::featureCalculators[A_FILE_B] = FeatureFunctions::a_file_b;
+	AIEngine::Pet::featureCalculators[H_FILE] = FeatureFunctions::h_file;
+	AIEngine::Pet::featureCalculators[H_FILE_B] = FeatureFunctions::h_file_b;
+	AIEngine::Pet::featureCalculators[DISPERSION] = FeatureFunctions::dispersion;
+	AIEngine::Pet::featureCalculators[THREATENED_DEFENDED] = FeatureFunctions::threatened_defended;
+	AIEngine::Pet::featureCalculators[THREATENED_DEFENDED_B] = FeatureFunctions::threatened_defended_b;
+	AIEngine::Pet::featureCalculators[THREATENED_UNDEFENDED] = FeatureFunctions::threatened_undefended;
+	AIEngine::Pet::featureCalculators[THREATENED_UNDEFENDED_B] = FeatureFunctions::threatened_undefended_b;
+	AIEngine::Pet::featureCalculators[THREATEN_DEFENDED] = FeatureFunctions::threaten_defended;
+	AIEngine::Pet::featureCalculators[THREATEN_DEFENDED_B] = FeatureFunctions::threaten_defended_b;
+	AIEngine::Pet::featureCalculators[THREATEN_UNDEFENDED] = FeatureFunctions::threaten_undefended;
+	AIEngine::Pet::featureCalculators[THREATEN_UNDEFENDED_B] = FeatureFunctions::threaten_undefended_b;
+	AIEngine::Pet::featureCalculators[FURTHEST_PIECE_DEFENDED] = FeatureFunctions::furthest_piece_defended;
+	AIEngine::Pet::featureCalculators[FURTHEST_PIECE_UNDEFENDED] = FeatureFunctions::furthest_piece_undefended;
+	AIEngine::Pet::featureCalculators[FURTHEST_PIECE_THREATENED] = FeatureFunctions::furthest_piece_threatened;
+	AIEngine::Pet::featureCalculators[FURTHEST_PIECE_UNTHREATENED] = FeatureFunctions::furthest_piece_unthreatened;
+	AIEngine::Pet::featureCalculators[CLOSEST_PIECE_DEFENDED] = FeatureFunctions::closest_piece_defended;
+	AIEngine::Pet::featureCalculators[CLOSEST_PIECE_UNDEFENDED] = FeatureFunctions::closest_piece_undefended;
+	AIEngine::Pet::featureCalculators[CLOSEST_PIECE_THREATENED] = FeatureFunctions::closest_piece_threatened;
+	AIEngine::Pet::featureCalculators[CLOSEST_PIECE_UNTHREATENED] = FeatureFunctions::closest_piece_unthreatened;
+	AIEngine::Pet::featureCalculators[PUSH_ADVANTAGE] = FeatureFunctions::push_advantage;
+	AIEngine::Pet::featureCalculators[PUSH_ADVANTAGE_B] = FeatureFunctions::push_advantage_b;
+	AIEngine::Pet::featureCalculators[UNTHREATENED_UNDEFENDED] = FeatureFunctions::unthreatened_undefended;
+	AIEngine::Pet::featureCalculators[UNTHREATENED_UNDEFENDED_B] = FeatureFunctions::unthreatened_undefended_b;
+	AIEngine::Pet::featureCalculators[UNTHREATEN_UNDEFENDED] = FeatureFunctions::unthreaten_undefended;
+	AIEngine::Pet::featureCalculators[UNTHREATEN_UNDEFENDED_B] = FeatureFunctions::unthreaten_undefended_b;
+	AIEngine::Pet::featureCalculators[THREATENED_SQUARES] = FeatureFunctions::threatened_squares;
+}
 
 AIEngine::Pet::Pet() {
 	for (int bf1 = 0; bf1 < NULL_FEATURE; bf1++) {
@@ -19,49 +59,106 @@ AIEngine::Pet::Pet() {
 		}
 	}
 
-		featureCalculators[ROW_2_THREATENED] = FeatureFunctions::row_2_threatened;
-		featureCalculators[ROW_2_THREATENED_B] = FeatureFunctions::row_2_threatened_b;
-		featureCalculators[ROW_3_THREATENED] = FeatureFunctions::row_3_threatened;
-		featureCalculators[ROW_3_THREATENED_B] = FeatureFunctions::row_3_threatened_b;
-		featureCalculators[ROW_4_THREATENED] = FeatureFunctions::row_4_threatened;
-		featureCalculators[ROW_4_THREATENED_B] = FeatureFunctions::row_4_threatened_b;
-		featureCalculators[MY_PAWN_COUNT] = FeatureFunctions::my_pawn_count;
-		featureCalculators[THEIR_PAWN_COUNT] = FeatureFunctions::their_pawn_count;
-		featureCalculators[PIECE_ADVANTAGE] = FeatureFunctions::piece_advantage;
-		featureCalculators[PIECE_ADVANTAGE_B] = FeatureFunctions::piece_advantage_b;
-		featureCalculators[A_FILE] = FeatureFunctions::a_file;
-		featureCalculators[A_FILE_B] = FeatureFunctions::a_file_b;
-		featureCalculators[H_FILE] = FeatureFunctions::h_file;
-		featureCalculators[H_FILE_B] = FeatureFunctions::h_file_b;
-		featureCalculators[DISPERSION] = FeatureFunctions::dispersion;
-		featureCalculators[THREATENED_DEFENDED] = FeatureFunctions::threatened_defended;
-		featureCalculators[THREATENED_DEFENDED_B] = FeatureFunctions::threatened_defended_b;
-		featureCalculators[THREATENED_UNDEFENDED] = FeatureFunctions::threatened_undefended;
-		featureCalculators[THREATENED_UNDEFENDED_B] = FeatureFunctions::threatened_undefended_b;
-		featureCalculators[THREATEN_DEFENDED] = FeatureFunctions::threaten_defended;
-		featureCalculators[THREATEN_DEFENDED_B] = FeatureFunctions::threaten_defended_b;
-		featureCalculators[THREATEN_UNDEFENDED] = FeatureFunctions::threaten_undefended;
-		featureCalculators[THREATEN_UNDEFENDED_B] = FeatureFunctions::threaten_undefended_b;
-		featureCalculators[FURTHEST_PIECE_DEFENDED] = FeatureFunctions::furthest_piece_defended;
-		featureCalculators[FURTHEST_PIECE_UNDEFENDED] = FeatureFunctions::furthest_piece_undefended;
-		featureCalculators[FURTHEST_PIECE_THREATENED] = FeatureFunctions::furthest_piece_threatened;
-		featureCalculators[FURTHEST_PIECE_UNTHREATENED] = FeatureFunctions::furthest_piece_unthreatened;
-		featureCalculators[CLOSEST_PIECE_DEFENDED] = FeatureFunctions::closest_piece_defended;
-		featureCalculators[CLOSEST_PIECE_UNDEFENDED] = FeatureFunctions::closest_piece_undefended;
-		featureCalculators[PUSH_ADVANTAGE] = FeatureFunctions::push_advantage;
-		featureCalculators[PUSH_ADVANTAGE_B] = FeatureFunctions::push_advantage_b;
-		featureCalculators[UNTHREATENED_UNDEFENDED] = FeatureFunctions::unthreatened_undefended;
-		featureCalculators[UNTHREATENED_UNDEFENDED_B] = FeatureFunctions::unthreatened_undefended_b;
-		featureCalculators[THREATENED_SQUARES] = FeatureFunctions::threatened_squares;
+	setFeatureCalculators();
+}
+
+AI::AIEngine::Pet::Pet(int)
+{
+	for (int bf1 = 0; bf1 < NULL_FEATURE; bf1++) {
+		for (int bf2 = 0; bf2 < NULL_FEATURE; bf2++) {
+			weights[bf1][bf2] = 0;
+		}
+	}
+
+	weights[ROW_2_THREATENED][ROW_2_THREATENED] = 0;
+	weights[ROW_2_THREATENED_B][ROW_2_THREATENED_B] = 127;
+	weights[ROW_3_THREATENED][ROW_3_THREATENED] = 0;
+	weights[ROW_3_THREATENED_B][ROW_3_THREATENED_B] = 0;
+	weights[ROW_4_THREATENED][ROW_4_THREATENED] = 10;
+	weights[ROW_4_THREATENED_B][ROW_4_THREATENED_B] = 0;
+	weights[MY_PAWN_COUNT][MY_PAWN_COUNT] = 5;
+	weights[THEIR_PAWN_COUNT][THEIR_PAWN_COUNT] = -5;
+	weights[PIECE_ADVANTAGE][PIECE_ADVANTAGE] = 50;
+	weights[PIECE_ADVANTAGE_B][PIECE_ADVANTAGE_B] = 100;
+	weights[A_FILE][A_FILE] = -10;
+	weights[A_FILE_B][A_FILE_B] = 0;
+	weights[H_FILE][H_FILE] = -10;
+	weights[H_FILE_B][H_FILE_B] = 0;
+	weights[DISPERSION][DISPERSION] = -1;
+	weights[THREATENED_DEFENDED][THREATENED_DEFENDED] = 0;
+	weights[THREATENED_DEFENDED_B][THREATENED_DEFENDED_B] = 0;
+	weights[THREATENED_UNDEFENDED][THREATENED_UNDEFENDED] = -20;
+	weights[THREATENED_UNDEFENDED_B][THREATENED_UNDEFENDED_B] = -50;
+	weights[THREATEN_DEFENDED][THREATEN_DEFENDED] = 0;
+	weights[THREATEN_DEFENDED_B][THREATEN_DEFENDED_B] = 0;
+	weights[THREATEN_UNDEFENDED][THREATEN_UNDEFENDED] = -10;
+	weights[THREATEN_UNDEFENDED_B][THREATEN_UNDEFENDED_B] = -50;
+	weights[FURTHEST_PIECE_DEFENDED][FURTHEST_PIECE_DEFENDED] = 20;
+	weights[FURTHEST_PIECE_UNDEFENDED][FURTHEST_PIECE_UNDEFENDED] = 0;
+	weights[FURTHEST_PIECE_THREATENED][FURTHEST_PIECE_THREATENED] = 0;
+	weights[FURTHEST_PIECE_UNTHREATENED][FURTHEST_PIECE_UNTHREATENED] = 15;
+	weights[CLOSEST_PIECE_DEFENDED][CLOSEST_PIECE_DEFENDED] = -5;
+	weights[CLOSEST_PIECE_UNDEFENDED][CLOSEST_PIECE_UNDEFENDED] = -15;
+	weights[CLOSEST_PIECE_THREATENED][CLOSEST_PIECE_THREATENED] = -20;
+	weights[CLOSEST_PIECE_UNTHREATENED][CLOSEST_PIECE_UNTHREATENED] = -10;
+	weights[PUSH_ADVANTAGE][PUSH_ADVANTAGE] = 0;
+	weights[PUSH_ADVANTAGE_B][PUSH_ADVANTAGE_B] = 5;
+	weights[UNTHREATENED_UNDEFENDED][UNTHREATENED_UNDEFENDED] = 0;
+	weights[UNTHREATENED_UNDEFENDED_B][UNTHREATENED_UNDEFENDED_B] = 0;
+	weights[UNTHREATEN_UNDEFENDED][UNTHREATEN_UNDEFENDED] = 0;
+	weights[UNTHREATEN_UNDEFENDED_B][UNTHREATEN_UNDEFENDED_B] = 0;
+	weights[THREATENED_SQUARES][THREATENED_SQUARES] = 10;
+
+
+	setFeatureCalculators();
 }
 
 int AI::AIEngine::Pet::evaluate(const Board board) const
 {
-	return (*featureCalculators[0])(board);
+	if (board.gameOver()) return board.gameOver();
+
+	int result = 0;
+
+	for (int i = 0; i < NULL_FEATURE; i++) {
+		for (int j = 0; j < NULL_FEATURE; j++) if (weights[i][j]) {
+			if (i < j) result += weights[i][j] * ((*featureCalculators[i])(board) + (*featureCalculators[j])(board) - 1);
+			if (i > j) result += weights[i][j] * ((*featureCalculators[i])(board) - (*featureCalculators[j])(board));
+			else result += weights[i][j] * (*featureCalculators[i])(board);
+		}
+	}
+	return result;
 }
 
 move AI::AIEngine::Pet::operator()(const Board b) const
 {
-	return b.validNextBoards()[evaluate(b)].lastMove;
+	auto boards = b.validNextBoards();
+	
+	move result; int bestVal = INT_MIN;
+
+	for (int i = 0; i < boards.size(); i++) {
+		boards[i].val = evaluate(boards[i]);
+		if (boards[i].val > bestVal) {
+			bestVal = boards[i].val;
+			result = boards[i].lastMove;
+		}
+	}
+
+	/*std::sort(boards.begin(), boards.end(), [](Board& a, Board& b) {
+		return a.val > b.val;
+	});*/
+
+	return result;
+}
+
+void AI::AIEngine::Pet::debug()
+{
+	cout << Board() << endl;
+	auto b = Board().validNextBoards();
+	do {
+		cout << b[0] << evaluate(b[0]) << endl << endl;
+		b = b[0].validNextBoards();
+	} while (!b.empty());
+
+	//cout << INT_MIN << " TO " << INT_MAX << endl;
 }
 

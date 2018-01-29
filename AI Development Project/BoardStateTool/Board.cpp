@@ -158,3 +158,11 @@ std::vector<Board> Board::validAttackBoards() const
 
 	return result;
 }
+
+//returns INT_MAX if the current player won, INT_MIN if the current player lost, 0 otherwise
+int Board::gameOver() const
+{
+	if (bb[WHITE] & row8 || bb[BLACK] & row1 || !bb[WHITE] || !bb[BLACK]) return INT_MAX;
+
+	return 0;
+}
