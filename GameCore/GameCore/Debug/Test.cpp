@@ -34,7 +34,7 @@ void main()
 	//This code will let me (Daryl) test the hardware on the computer. I tested my own PC and it worked.
 	//I need to ensure that the __popcnt instruction is supported by the processor.
 
-	/*
+	
 	unsigned short us[3] = { 0, 0xFF, 0xFFFF };
 	unsigned short usr;
 	unsigned int   ui[4] = { 0, 0xFF, 0xFFFF, 0xFFFFFFFF };
@@ -49,6 +49,6 @@ void main()
 		uir = __popcnt(ui[i]);
 		cout << "__popcnt(0x" << std::hex << ui[i] << ") = " << std::dec << uir << endl;
 	}
-	*/
+	
 }
 
