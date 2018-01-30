@@ -3,7 +3,7 @@
 
 GameBoard::GameBoard()
 {
-	char bar = 219;
+	unsigned char bar = 219;
 
 	for (int i = 0; i < 64; i++) {
 		if ((i / 8 + i) % 2 == 0) space[i] = bar;
@@ -41,5 +41,9 @@ void GameBoard::updateBoard(move move, Turn t)
 	space[move.second] = (t == 0 ? 'W' : 'B');
 	justTaken = t;
 }
+
+//void GameBoard::createGameBoard() {
+//	
+//}
 
 GameBoard* GameBoard::instance = NULL;

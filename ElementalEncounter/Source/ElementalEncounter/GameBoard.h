@@ -57,7 +57,7 @@ enum Direction : __int8 {
 //Useful because you can make an array and use white or black as the subscript
 enum Turn : bool { WHITE, BLACK };
 
-UClass(Blueprintable);
+//UClass(Blueprintable);
 class ELEMENTALENCOUNTER_API GameBoard
 {
 public:

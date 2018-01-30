@@ -34,4 +34,3 @@ private:
 	void startGameLoop();
 	void printBoard();
 };
-};
