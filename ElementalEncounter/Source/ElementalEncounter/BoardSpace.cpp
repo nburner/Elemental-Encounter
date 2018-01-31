@@ -11,17 +11,17 @@ ABoardSpace::ABoardSpace()
 
 }
 
-// Called when the game starts or when spawned
-void ABoardSpace::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void ABoardSpace::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
+//// Called when the game starts or when spawned
+//void ABoardSpace::BeginPlay()
+//{
+//	Super::BeginPlay();
+//	
+//}
+//
+//// Called every frame
+//void ABoardSpace::Tick(float DeltaTime)
+//{
+//	Super::Tick(DeltaTime);
+//
+//}
 
