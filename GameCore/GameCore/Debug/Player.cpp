@@ -44,6 +44,12 @@ bool Human::isValidMove(const move move) const
 		return false;
 	}
 
+	//check to see not moving
+	if (to == from) {
+		cout << "You must move. Please make a valid move selection." << endl;
+		return false;
+	}
+
 	//check to see if the piece is moving forward and only moving forward one space
 	if (to - from % 8 == 0 && (to - from) * myForward > 0)	{
 		cout << "You may only move forward one space. Please make a valid move selection." << endl;
@@ -62,9 +68,9 @@ bool Human::isValidMove(const move move) const
 		return false;
 	}
 
-	//check to see not moving
-	if (to == from)	{
-		cout << "You must move. Please make a valid move selection." << endl;
+	//check to see wrapping
+	if ((from + myRight == to && to % 8 == 0) || (from + myLeft == to && to % 8 == 7)) {
+		cout << "You may not wrap around the board. Please make a valid move selection." << endl;
 		return false;
 	}
 
