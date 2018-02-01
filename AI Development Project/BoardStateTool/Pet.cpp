@@ -130,6 +130,22 @@ int AI::AIEngine::Pet::evaluate(const Board board) const
 	return result;
 }
 
+int AI::AIEngine::Pet::minmax(const Board board, int currentPly) const {
+	auto boards = board.validNextBoards();
+	int bestVal = INT_MIN;
+
+	if (boards.empty() || currentPly == this->PLY_COUNT) return evaluate(board);
+
+	for (int i = 0; i < boards.size(); i++) {
+		boards[i].val = minmax(boards[i], currentPly + 1);
+		if (boards[i].val > bestVal) {
+			bestVal = boards[i].val;
+		}
+	}
+	
+	return bestVal;
+}
+
 move AI::AIEngine::Pet::operator()(const Board b) const
 {
 	auto boards = b.validNextBoards();
@@ -137,7 +153,7 @@ move AI::AIEngine::Pet::operator()(const Board b) const
 	move result; int bestVal = INT_MIN;
 
 	for (int i = 0; i < boards.size(); i++) {
-		boards[i].val = evaluate(boards[i]);
+		boards[i].val = minmax(boards[i], 0);
 		if (boards[i].val > bestVal) {
 			bestVal = boards[i].val;
 			result = boards[i].lastMove;

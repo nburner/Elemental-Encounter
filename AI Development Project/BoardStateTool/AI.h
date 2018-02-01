@@ -86,10 +86,14 @@ namespace AI {
 			friend AIEngine;
 			Pet();
 			Pet(int);
-			int evaluate(Board) const;
+			void setFeatureCalculators();
+
+			const int PLY_COUNT = 2;
 			signed char weights[NULL_FEATURE][NULL_FEATURE];
 			static FeatureFunc featureCalculators[NULL_FEATURE];
-			void setFeatureCalculators();
+			
+			int evaluate(const Board) const;
+			int minmax(const Board, int) const;
 		public:
 			virtual move operator()(const Board b) const;
 			void debug();
