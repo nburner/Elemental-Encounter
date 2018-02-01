@@ -42,8 +42,10 @@ void GameBoard::updateBoard(move move, Turn t)
 	justTaken = t;
 }
 
-//void GameBoard::createGameBoard() {
-//	
-//}
+void GameBoard::createGameBoard() {
+	for (int i = 0; i < 63; i++) {
+
+	}
+}
 
 GameBoard* GameBoard::instance = NULL;

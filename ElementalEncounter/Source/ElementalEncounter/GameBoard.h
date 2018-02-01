@@ -6,6 +6,7 @@
 
 #pragma once
 #include <iostream>
+#include <BoardSpace.h>
 using std::string;
 
 typedef uint64_t bitboard;
@@ -68,9 +69,13 @@ public:
 	char operator[](Square i) const { return space[i]; }
 	void updateBoard(::move, Turn);
 	Turn justTaken;
+
+	void createGameBoard();
 private:
 	char space[64];
 	GameBoard();
 	GameBoard(GameBoard&);
 	static GameBoard* instance;
+	ABoardSpace boardSpace;
+
 };
