@@ -1,13 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Game.h"
-
+#include <iostream>
 using std::cin; using std::cout; using std::endl;
 
 
 Game::Game()
 {
-	gameBoard = GameBoard::getInstance();
+	gameBoard = ABoard::getInstance();
 }
 
 
@@ -16,7 +16,7 @@ Game::~Game() {
 	gameBoard = NULL;
 }
 
-GameBoard& Game::getGameBoard() const
+ABoard& Game::getGameBoard() const
 {
 	return *gameBoard;
 }
@@ -120,7 +120,7 @@ void Game::printBoard()
 
 		for (int c = 0; c < 8; c++)
 		{
-			cout << (*GameBoard::getInstance())[Square(r * 8 + c)] << "|";
+			cout << (*ABoard::getInstance())[Square(r * 8 + c)] << "|";
 		}
 		cout << endl;
 	}

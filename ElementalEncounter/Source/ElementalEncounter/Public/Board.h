@@ -65,7 +65,7 @@ class ELEMENTALENCOUNTER_API ABoard : public AActor
 	
 public:	
 	// Sets default values for this actor's properties
-	virtual void Tick(float DeltaTime) override;
+	//virtual void Tick(float DeltaTime) override;
 	~ABoard();
 	static ABoard* getInstance();
 	bool hasOwnPiece(string area);
@@ -80,12 +80,9 @@ public:
 	
 protected:
 	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	//virtual void BeginPlay() override;
 	ABoard();
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	char space[64];
-
-	ABoard(ABoard&);
+	//ABoard(ABoard&);
 	static ABoard* instance;
 };

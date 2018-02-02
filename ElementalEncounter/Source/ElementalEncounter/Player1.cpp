@@ -4,6 +4,7 @@
 
 #include "Player1.h"
 #include <string>
+#include <iostream>
 using std::cin; using std::cout; using std::endl;
 
 Player::Player()
@@ -22,7 +23,7 @@ bool Human::isValidMove(const move move) const
 {
 	Square from = move.first;
 	Square to = move.second;
-	GameBoard * board = GameBoard::getInstance();
+	ABoard * board = ABoard::getInstance();
 
 	char myPiece = myColor == WHITE ? 'W' : 'B';
 	Direction myForward = myColor == WHITE ? NORTH : SOUTH;
@@ -80,7 +81,7 @@ bool Human::isValidMove(const move move) const
 	return true;
 }
 
-move Human::getMove(GameBoard * gp)
+move Human::getMove(ABoard * gp)
 {
 	move result = move();
 	string moveFrom, moveTo;

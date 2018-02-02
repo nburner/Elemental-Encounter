@@ -2,15 +2,6 @@
 
 #include "Board.h"
 
-
-// Sets default values
-ABoard::ABoard()
-{
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
-}
-
 // Called when the game starts or when spawned
 //void ABoard::BeginPlay()
 //{
@@ -38,6 +29,8 @@ ABoard::ABoard()
 	for (int i = A1; i <= H2; i++) space[i] = 'W';
 
 	for (int i = A7; i <= H8; i++) space[i] = 'B';
+
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 ABoard::~ABoard()
@@ -48,7 +41,7 @@ ABoard::~ABoard()
 ABoard* ABoard::getInstance()
 {
 	if (instance == NULL) {
-		instance = new ABoard();
+		//instance = new ABoard();
 	}
 
 	return instance;

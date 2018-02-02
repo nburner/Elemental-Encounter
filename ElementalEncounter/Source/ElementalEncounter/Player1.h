@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameBoard.h"
+#include "Board.h"
 
 /**
  * 
@@ -14,12 +14,12 @@ public:
 	Turn myColor;
 	Player();
 	~Player();
-	virtual ::move getMove(GameBoard * gp = NULL) = NULL;
+	virtual ::move getMove(ABoard * gp = NULL) = NULL;
 };
 
 
 class Human : public Player {
 	bool isValidMove(const move) const;
 public:
-	virtual ::move getMove(GameBoard * gp = NULL);
+	virtual ::move getMove(ABoard * gp = NULL);
 };

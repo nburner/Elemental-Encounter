@@ -20,11 +20,11 @@ public:
 	int getTurn();
 	Turn getColorTurn();
 	void nextTurn();
-	GameBoard& getGameBoard() const;
+	ABoard& getGameBoard() const;
 
 private:
 	Player * players[2];
-	GameBoard * gameBoard;
+	ABoard * gameBoard;
 	bool playerTurn = 0;
 	int pieces[2] = { 16,16 };
 
