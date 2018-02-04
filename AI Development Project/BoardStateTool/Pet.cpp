@@ -78,8 +78,8 @@ AI::AIEngine::Pet::Pet(int)
 	weights[ROW_3_THREATENED_B][ROW_3_THREATENED_B] = 40;
 	weights[ROW_4_THREATENED][ROW_4_THREATENED] = 10;
 	weights[ROW_4_THREATENED_B][ROW_4_THREATENED_B] = 40;
-	weights[MY_PAWN_COUNT][MY_PAWN_COUNT] = 5;
-	weights[THEIR_PAWN_COUNT][THEIR_PAWN_COUNT] = -5;
+	weights[MY_PAWN_COUNT][MY_PAWN_COUNT] = 25;
+	weights[THEIR_PAWN_COUNT][THEIR_PAWN_COUNT] = -25;
 	weights[PIECE_ADVANTAGE][PIECE_ADVANTAGE] = 70;
 	weights[PIECE_ADVANTAGE_B][PIECE_ADVANTAGE_B] = 100;
 	weights[A_FILE][A_FILE] = -10;
@@ -171,7 +171,9 @@ move AI::AIEngine::Pet::operator()(const Board b) const
 	move result; int bestVal = INT_MIN;
 
 	for (int i = 0; i < boards.size(); i++) {
-		boards[i].val = minmax(boards[i], 0);
+		evaluate(boards[i]);
+		boards[i].val /= 2;
+		boards[i].val += minmax(boards[i], 0)/2;
 		if (boards[i].val > bestVal) {
 			bestVal = boards[i].val;
 			result = boards[i].lastMove;
