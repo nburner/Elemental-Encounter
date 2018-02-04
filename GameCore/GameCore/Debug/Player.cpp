@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <string>
+#include <conio.h>
 using std::cin; using std::cout; using std::endl;
 
 
@@ -103,6 +104,33 @@ move Human::getMove(GameBoard * gp)
 		result.first = Square((toupper(moveFrom[0]) - 'A')  + (moveFrom[1] - '1') * 8);
 		result.second = Square((toupper(moveTo[0]) - 'A')  + (moveTo[1] - '1') * 8);
 
+	} while (!isValidMove(result));
+
+	return result;
+}
+
+::move Daryl::getMove(GameBoard * gp)
+{
+	move result = move();
+	char movefromletter, movefromnumber, movetoletter;
+
+	do {
+		cout << "Move From: ";
+		do {
+			movefromletter = _getch();
+		} while (toupper(movefromletter) < 'A' || toupper(movefromletter) > 'H');
+		cout << movefromletter;
+		do {
+			movefromnumber = _getch();
+		} while (movefromnumber < '1' || movefromnumber > '8');
+		cout << movefromnumber << endl << "Move To: ";
+		do {
+			movetoletter = _getch();
+		} while (toupper(movefromletter) < 'A' || toupper(movefromletter) > 'H');
+		cout << movetoletter << (char)(movefromnumber+1) << endl;
+
+		result.first = Square((toupper(movefromletter) - 'A') + (movefromnumber - '1') * 8);
+		result.second = Square((toupper(movetoletter) - 'A') + (movefromnumber - '1' + 1) * 8);
 	} while (!isValidMove(result));
 
 	return result;
