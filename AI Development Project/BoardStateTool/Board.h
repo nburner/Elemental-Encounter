@@ -233,10 +233,10 @@ namespace AI {
 		inline bool whiteTurn() const { return !turn; }
 		inline bool blackTurn() const { return turn; }
 
-		::move lastMove;
-		int beta = INT16_MAX;
-		int alpha = INT16_MIN;
-		int val = 0;
+		mutable ::move lastMove;
+		mutable int beta = INT16_MAX;
+		mutable int alpha = INT16_MIN;
+		mutable int val = 0;
 
 		Board();
 		Board(const Board&, bool = false);

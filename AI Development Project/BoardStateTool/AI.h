@@ -59,6 +59,7 @@ namespace AI {
 				UNTHREATEN_UNDEFENDED,			//number of pieces they have that are neither defended nor threatened
 				UNTHREATEN_UNDEFENDED_B,		//1 if they have a piece that is neither defended nor threatened
 				THREATENED_SQUARES,				//number of squares you threaten
+				ABOUT_TO_LOSE,					//1 if enemy canmove a piece forward to win, 0 otherwise 
 
 				NULL_FEATURE					//Gives me the count and a place to stop for-loops
 			};
@@ -92,8 +93,8 @@ namespace AI {
 			signed char weights[NULL_FEATURE][NULL_FEATURE];
 			static FeatureFunc featureCalculators[NULL_FEATURE];
 			
-			int evaluate(const Board) const;
-			int minmax(const Board, int) const;
+			void evaluate(Board&) const;
+			int minmax(Board, int) const;
 		public:
 			virtual move operator()(const Board b) const;
 			void debug();

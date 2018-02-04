@@ -18,6 +18,7 @@ void main()
 	AI::AIEngine::AI * pet = AI::AIEngine::start(AI::AIEngine::AIType::DARYLS_PET);
 		
 	game.newGame(player1, pet);
+	//game.newGame(off, pet);
 	//((AI::AIEngine::Pet*)pet)->debug();
 
 
