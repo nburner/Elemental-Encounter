@@ -1,4 +1,5 @@
 #include"AI.h"
+#include"..\..\GameCore\GameCore\Debug\Game.h"
 #include<iostream>
 #include<set>
 #include<queue>
@@ -7,80 +8,46 @@
 using namespace AI;
 using std::cout; using std::endl; using std::set; using std::queue;
 
+typedef std::pair<AI::AIEngine::AI*, int> organism;
+
 inline int random(int count) {
 	return rand() % count;
 }
 
+bool pairCompare(const organism& firstElem, const organism& secondElem) {
+	return firstElem.second < secondElem.second;
+}
+
 int main() {
 	srand(time(NULL));
+	const int GEN_SIZE = 4;
 
-	/*
-	unsigned short us[3] = { 0, 0xFF, 0xFFFF };
-	unsigned short usr;
-	unsigned int   ui[4] = { 0, 0xFF, 0xFFFF, 0xFFFFFFFF };
-	unsigned int   uir;
-	unsigned long long  ul[8] = { 0, 0xFF, 0xFFFF, 0xFFFFFFFF, 0xFFFFFFFFFF,0xFFFFFFFFFFFF,0xFFFFFFFFFFFFFF,0xFFFFFFFFFFFFFFFF };
-	unsigned long long  ulr;
-
-	for (int i = 0; i<3; i++) {
-		usr = __lzcnt16(us[i]);
-		cout << "__lzcnt16(0x" << hex << us[i] << ") = " << dec << usr << endl;
+	//Get parents
+	organism parents[GEN_SIZE];
+	for (int i = 0; i < GEN_SIZE; i++) {
+		parents[i].first = AIEngine::start(AIEngine::AIType::PET);
+		parents[i].second = 0;
 	}
 
-	for (int i = 0; i < 4; i++) {
-		uir = __lzcnt(ui[i]);
-		cout << "__lzcnt(0x" << hex << ui[i] << ") = " << dec << uir << endl;
+	//Evaluate fitness
+	bool iWon[GEN_SIZE][GEN_SIZE] = { 0 };
+#pragma omp parallel for
+	for (int i = 0; i < GEN_SIZE; i++)
+		for (int j = 0; j < GEN_SIZE; j++) 
+			if (i != j) {
+				Game game;
+				game.newGame(parents[i].first, parents[j].first, false);
+
+				if(game.getColorTurn() == WHITE) iWon[i][j] = true;
 	}
 
-	for (int i = 0; i < 8; i++) {
-		ulr = __lzcnt64(ul[i]);
-		cout << "__lzcnt64(0x" << hex << ul[i] << ") = " << dec << ulr << endl;
-	}
-	*/
+	for (int i = 0; i < GEN_SIZE; i++)
+		for (int j = 0; j < GEN_SIZE; j++)
+			if (i != j) 
+				++(iWon[i][j] ? parents[i].second : parents[j].second);
 
-	/*
-	Board myBoard;
-	queue<Board> validBoards;
-	validBoards.push(myBoard);
+	std::sort(parents, parents + GEN_SIZE, pairCompare);
 
-	set<Board> usefulBoards;
+	for (int i = 0; i < GEN_SIZE; i++) cout << parents[i].second << endl;
 
-	int turn = 0;
-	int statesTillTurnIncreases[181] = { 0 };
-	while (!validBoards.empty() && turn < 3) {
-		auto myset = validBoards.front().validNextBoards();
-		
-		for (auto it = myset.begin(); it != myset.end(); ++it) if (usefulBoards.insert(*it).second) {
-			//cout << *it << endl;
-			validBoards.push(*it);
-			++statesTillTurnIncreases[turn + 1];
-		}
-
-		if (statesTillTurnIncreases[turn]-- == 0) {
-			++turn;
-			cout << "****** TURN " << turn + 1 << " *******" << endl;
-			cout << "Total number of Board States: " << usefulBoards.size() << endl;
-		}
-		validBoards.pop();		
-	}
-
-	//cout << "Total number of Board States: " << usefulBoards.size();
-	*/
-
-	/*Board myBoard;
-	for (int i = 0; i < 161; i++) {
-		cout << "Move: " << i << endl << myBoard << endl;
-
-		auto attacks = myBoard.validAttackBoards();
-		if (!attacks.empty()) myBoard = attacks[random(attacks.size())];
-		else {
-			auto moves = myBoard.validNextBoards();
-			if (moves.empty()) break;
-			else myBoard = moves[random(moves.size())];
-		}		
-	}*/
-
-	auto ai = AIEngine::start(AIEngine::AIType::PET);
-
-	//system("pause");
 }

@@ -184,8 +184,8 @@ move AI::AIEngine::Pet::operator()(const Board b) const
 		return a.val > b.val;
 	});*/
 
-	cout << "AI's Move: " << BoardHelpers::to_string(result.first) << " - " << BoardHelpers::to_string(result.second) << endl;
-	cout << " Best Val: " << bestVal << endl;
+	//cout << "AI's Move: " << BoardHelpers::to_string(result.first) << " - " << BoardHelpers::to_string(result.second) << endl;
+	//cout << " Best Val: " << bestVal << endl;
 	return result;
 }
 

@@ -9,11 +9,10 @@ public:
 	Game(); 
 	~Game();
 	
-	void newGame(Player *, Player *);
+	void newGame(Player *, Player *, bool print = true);
 	bool checkForWin();
 	int getTurn();
 	Turn getColorTurn();
-	void nextTurn();
 	GameBoard& getGameBoard() const;
 
 private:
@@ -25,6 +24,6 @@ private:
 	bool checkLastRow(char);
 	bool checkForPieces(char);
 	bool updateBoard(move move);
-	void startGameLoop();
+	void startGameLoop(bool print = true);
 	void printBoard();
 };

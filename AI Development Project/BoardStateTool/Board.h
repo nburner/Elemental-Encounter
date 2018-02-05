@@ -203,6 +203,7 @@ namespace AI {
 			return b;
 		}
 
+		//This counts the number of bits set on a bitboard
 		inline int count(const bitboard& b) {
 			return __popcnt64(b);
 		}

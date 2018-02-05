@@ -59,7 +59,7 @@ namespace AI {
 				UNTHREATEN_UNDEFENDED,			//number of pieces they have that are neither defended nor threatened
 				UNTHREATEN_UNDEFENDED_B,		//1 if they have a piece that is neither defended nor threatened
 				THREATENED_SQUARES,				//number of squares you threaten
-				ABOUT_TO_LOSE,					//1 if enemy canmove a piece forward to win, 0 otherwise 
+				//ABOUT_TO_LOSE,				//1 if enemy canmove a piece forward to win, 0 otherwise 
 
 				NULL_FEATURE					//Gives me the count and a place to stop for-loops
 			};

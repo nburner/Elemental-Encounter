@@ -17,9 +17,10 @@ void main()
 	AI::AIEngine::AI * off = AI::AIEngine::start(AI::AIEngine::AIType::B_OFFENSE);
 	AI::AIEngine::AI * off2 = AI::AIEngine::start(AI::AIEngine::AIType::B_OFFENSE);
 	AI::AIEngine::AI * pet = AI::AIEngine::start(AI::AIEngine::AIType::DARYLS_PET);
+	AI::AIEngine::AI * pet2 = AI::AIEngine::start(AI::AIEngine::AIType::DARYLS_PET);
 		
-	game.newGame(daryl, pet);
-	//game.newGame(off, pet);
+	//game.newGame(daryl, pet);
+	game.newGame(pet, pet2);
 	//((AI::AIEngine::Pet*)pet)->debug();
 
 
