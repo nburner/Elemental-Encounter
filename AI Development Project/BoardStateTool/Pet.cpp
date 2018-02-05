@@ -1,8 +1,10 @@
 #include "AI.h"
 #include "Board.h"
 #include <random>
+#include <set>
 
 using namespace AI;
+using std::set;
 
 const int MAX_WEIGHT = 12;
 
@@ -71,14 +73,14 @@ AI::AIEngine::Pet::Pet(int)
 	}
 
 	weights[ROW_2_THREATENED][ROW_2_THREATENED] = 0;
-	weights[ROW_2_THREATENED_B][ROW_2_THREATENED_B] = 127;
+	weights[ROW_2_THREATENED_B][ROW_2_THREATENED_B] = 80;
 	weights[ROW_3_THREATENED][ROW_3_THREATENED] = 0;
-	weights[ROW_3_THREATENED_B][ROW_3_THREATENED_B] = 0;
+	weights[ROW_3_THREATENED_B][ROW_3_THREATENED_B] = 40;
 	weights[ROW_4_THREATENED][ROW_4_THREATENED] = 10;
-	weights[ROW_4_THREATENED_B][ROW_4_THREATENED_B] = 0;
-	weights[MY_PAWN_COUNT][MY_PAWN_COUNT] = 5;
-	weights[THEIR_PAWN_COUNT][THEIR_PAWN_COUNT] = -5;
-	weights[PIECE_ADVANTAGE][PIECE_ADVANTAGE] = 50;
+	weights[ROW_4_THREATENED_B][ROW_4_THREATENED_B] = 40;
+	weights[MY_PAWN_COUNT][MY_PAWN_COUNT] = 25;
+	weights[THEIR_PAWN_COUNT][THEIR_PAWN_COUNT] = -25;
+	weights[PIECE_ADVANTAGE][PIECE_ADVANTAGE] = 70;
 	weights[PIECE_ADVANTAGE_B][PIECE_ADVANTAGE_B] = 100;
 	weights[A_FILE][A_FILE] = -10;
 	weights[A_FILE_B][A_FILE_B] = 0;
@@ -87,21 +89,23 @@ AI::AIEngine::Pet::Pet(int)
 	weights[DISPERSION][DISPERSION] = -1;
 	weights[THREATENED_DEFENDED][THREATENED_DEFENDED] = 0;
 	weights[THREATENED_DEFENDED_B][THREATENED_DEFENDED_B] = 0;
-	weights[THREATENED_UNDEFENDED][THREATENED_UNDEFENDED] = -20;
+	weights[THREATENED_UNDEFENDED][THREATENED_UNDEFENDED] = -100;
 	weights[THREATENED_UNDEFENDED_B][THREATENED_UNDEFENDED_B] = -50;
 	weights[THREATEN_DEFENDED][THREATEN_DEFENDED] = 0;
 	weights[THREATEN_DEFENDED_B][THREATEN_DEFENDED_B] = 0;
-	weights[THREATEN_UNDEFENDED][THREATEN_UNDEFENDED] = -10;
+	weights[THREATEN_UNDEFENDED][THREATEN_UNDEFENDED] = -20;
 	weights[THREATEN_UNDEFENDED_B][THREATEN_UNDEFENDED_B] = -50;
 	weights[FURTHEST_PIECE_DEFENDED][FURTHEST_PIECE_DEFENDED] = 20;
 	weights[FURTHEST_PIECE_UNDEFENDED][FURTHEST_PIECE_UNDEFENDED] = 0;
 	weights[FURTHEST_PIECE_THREATENED][FURTHEST_PIECE_THREATENED] = 0;
 	weights[FURTHEST_PIECE_UNTHREATENED][FURTHEST_PIECE_UNTHREATENED] = 35;
 	weights[FURTHEST_PIECE_UNTHREATENED][FURTHEST_PIECE_UNDEFENDED] = 35;
-	weights[CLOSEST_PIECE_DEFENDED][CLOSEST_PIECE_DEFENDED] = -5;
-	weights[CLOSEST_PIECE_UNDEFENDED][CLOSEST_PIECE_UNDEFENDED] = -15;
-	weights[CLOSEST_PIECE_THREATENED][CLOSEST_PIECE_THREATENED] = -20;
-	weights[CLOSEST_PIECE_UNTHREATENED][CLOSEST_PIECE_UNTHREATENED] = -10;
+	weights[CLOSEST_PIECE_DEFENDED][CLOSEST_PIECE_DEFENDED] = -50;
+	weights[CLOSEST_PIECE_UNDEFENDED][CLOSEST_PIECE_UNDEFENDED] = -80;
+	weights[CLOSEST_PIECE_UNTHREATENED][CLOSEST_PIECE_UNDEFENDED] = -127;
+	weights[CLOSEST_PIECE_THREATENED][CLOSEST_PIECE_UNDEFENDED] = -127;
+	weights[CLOSEST_PIECE_THREATENED][CLOSEST_PIECE_THREATENED] = -80;
+	weights[CLOSEST_PIECE_UNTHREATENED][CLOSEST_PIECE_UNTHREATENED] = -60;
 	weights[PUSH_ADVANTAGE][PUSH_ADVANTAGE] = 0;
 	weights[PUSH_ADVANTAGE_B][PUSH_ADVANTAGE_B] = 5;
 	weights[UNTHREATENED_UNDEFENDED][UNTHREATENED_UNDEFENDED] = 0;
@@ -114,30 +118,44 @@ AI::AIEngine::Pet::Pet(int)
 	setFeatureCalculators();
 }
 
-int AI::AIEngine::Pet::evaluate(const Board board) const
+void AI::AIEngine::Pet::evaluate(Board& board) const
 {
-	if (board.gameOver()) return board.gameOver();
+	static set<Board> seenBoards = set<Board>();
+	auto insertionResult = seenBoards.insert(board);
 
-	int result = 0;
+	if (insertionResult.second) {
+		if (board.gameOver()) {
+			insertionResult.first->val = board.gameOver();
+		}
+		else {
+			int result = 0;
 
-	for (int i = 0; i < NULL_FEATURE; i++) {
-		for (int j = 0; j < NULL_FEATURE; j++) if (weights[i][j]) {
-			if (i < j) result += weights[i][j] * ((*featureCalculators[i])(board) + (*featureCalculators[j])(board) - 1);
-			if (i > j) result += weights[i][j] * ((*featureCalculators[i])(board) - (*featureCalculators[j])(board));
-			else result += weights[i][j] * (*featureCalculators[i])(board);
+			for (int i = 0; i < NULL_FEATURE; i++) {
+				for (int j = 0; j < NULL_FEATURE; j++) if (weights[i][j]) {
+					if (i < j) result += weights[i][j] * ((*featureCalculators[i])(board) + (*featureCalculators[j])(board) - 1);
+					if (i > j) result += weights[i][j] * ((*featureCalculators[i])(board) - (*featureCalculators[j])(board));
+					else result += weights[i][j] * (*featureCalculators[i])(board);
+				}
+			}
+
+			insertionResult.first->val = result;
 		}
 	}
-	return result;
+
+	board.val = insertionResult.first->val;
 }
 
-int AI::AIEngine::Pet::minmax(const Board board, int currentPly) const {
+int AI::AIEngine::Pet::minmax(Board board, int currentPly) const {
 	auto boards = board.validNextBoards();
 	int bestVal = INT_MIN;
 
-	if (boards.empty() || currentPly == this->PLY_COUNT) return evaluate(board);
+	if (boards.empty() || currentPly == this->PLY_COUNT) { 
+		evaluate(board); 
+		return board.val;
+	}
 
 	for (int i = 0; i < boards.size(); i++) {
-		boards[i].val = minmax(boards[i], currentPly + 1);
+		boards[i].val = -1 * minmax(boards[i], currentPly + 1);
 		if (boards[i].val > bestVal) {
 			bestVal = boards[i].val;
 		}
@@ -156,7 +174,9 @@ move AI::AIEngine::Pet::operator()(const Board b) const
 	move result; int bestVal = INT_MIN;
 
 	for (int i = 0; i < boards.size(); i++) {
-		boards[i].val = minmax(boards[i], 0);
+		evaluate(boards[i]);
+		boards[i].val /= 2;
+		boards[i].val += minmax(boards[i], 0)/2;
 		if (boards[i].val > bestVal) {
 			bestVal = boards[i].val;
 			result = boards[i].lastMove;
@@ -167,6 +187,8 @@ move AI::AIEngine::Pet::operator()(const Board b) const
 		return a.val > b.val;
 	});*/
 
+	//cout << "AI's Move: " << BoardHelpers::to_string(result.first) << " - " << BoardHelpers::to_string(result.second) << endl;
+	//cout << " Best Val: " << bestVal << endl;
 	return result;
 }
 
@@ -175,7 +197,7 @@ void AI::AIEngine::Pet::debug()
 	cout << Board() << endl;
 	auto b = Board().validNextBoards();
 	do {
-		cout << b[0] << evaluate(b[0]) << endl << endl;
+		//cout << b[0] << evaluate(b[0]) << endl << endl;
 		b = b[0].validNextBoards();
 	} while (!b.empty());
 

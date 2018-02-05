@@ -9,6 +9,7 @@ void main()
 
 	Human * player1 = new Human();
 	Human * player2 = new Human();
+	Daryl * daryl = new Daryl();
 	
 	AI::AIEngine::AI * def = AI::AIEngine::start(AI::AIEngine::AIType::B_DEFENSE);
 	AI::AIEngine::AI * def2 = AI::AIEngine::start(AI::AIEngine::AIType::B_DEFENSE);

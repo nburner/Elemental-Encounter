@@ -53,7 +53,7 @@ int Game::getTurn()
 
 Turn Game::getColorTurn()
 {
-	return Turn(playerTurn % 2);
+	return Turn(playerTurn);
 }
 
 void Game::startGameLoop(bool print)

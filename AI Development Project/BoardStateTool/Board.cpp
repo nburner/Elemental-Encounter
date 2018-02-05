@@ -54,8 +54,8 @@ std::ostream & AI::operator<<(std::ostream& out, const Board& board)
 
 bool AI::operator<(Board const & a, Board const & b)
 {
-	if (std::min(a.bb[WHITE], a.bb[BLACK]) < std::min(b.bb[WHITE], b.bb[BLACK])) return true;
-	else if (std::min(a.bb[WHITE], a.bb[BLACK]) == std::min(b.bb[WHITE], b.bb[BLACK]) && std::max(a.bb[WHITE], a.bb[BLACK]) < std::max(b.bb[WHITE], b.bb[BLACK])) return true;
+	if (a.bb[WHITE] < b.bb[WHITE]) return true;
+	else if (a.bb[WHITE] == b.bb[WHITE] && a.bb[BLACK] < b.bb[BLACK]) return true;
 	else return false;
 }
 #pragma endregion
@@ -219,7 +219,13 @@ std::vector<Board> Board::validWinBoards() const
 //returns INT_MAX if the current player won, INT_MIN if the current player lost, 0 otherwise
 int Board::gameOver() const
 {
-	if (bb[WHITE] & row8 || bb[BLACK] & row1 || !bb[WHITE] || !bb[BLACK]) return INT_MAX;
-
+	if (bb[WHITE] & row8 || !bb[BLACK]) {
+		if (!turn) return INT_MIN;
+		if (turn) return INT_MAX;
+	}
+	if (bb[BLACK] & row1 || !bb[WHITE]) {
+		if (!turn) return INT_MAX;
+		if (turn) return INT_MIN;
+	}
 	return 0;
 }
