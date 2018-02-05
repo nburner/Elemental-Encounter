@@ -15,7 +15,7 @@ namespace AI {
 		AIEngine();
 
 		enum AIType {
-			B_OFFENSE, B_DEFENSE, PET, DARYLS_PET
+			B_OFFENSE, B_DEFENSE, B_RANDOM, RANDOM_PET, DARYLS_PET
 		};
 
 		class AI : public Player {
@@ -66,6 +66,13 @@ namespace AI {
 		public:
 			virtual ::move getMove(GameBoard * gp = NULL);
 			virtual move operator()(const Board) const = 0;
+		};
+
+		class BasicRandom : public AI {
+			friend AIEngine;
+			BasicRandom();
+		public:
+			virtual move operator()(const Board b) const;
 		};
 
 		class BasicOffense : public AI {

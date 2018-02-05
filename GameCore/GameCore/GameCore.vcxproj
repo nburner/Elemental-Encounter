@@ -142,6 +142,7 @@
     <ClCompile Include="..\..\AI Development Project\BoardStateTool\AI.cpp" />
     <ClCompile Include="..\..\AI Development Project\BoardStateTool\BasicDefense.cpp" />
     <ClCompile Include="..\..\AI Development Project\BoardStateTool\BasicOffense.cpp" />
+    <ClCompile Include="..\..\AI Development Project\BoardStateTool\BasicRandom.cpp" />
     <ClCompile Include="..\..\AI Development Project\BoardStateTool\Board.cpp" />
     <ClCompile Include="..\..\AI Development Project\BoardStateTool\FeatureFunctions.cpp" />
     <ClCompile Include="..\..\AI Development Project\BoardStateTool\Pet.cpp" />

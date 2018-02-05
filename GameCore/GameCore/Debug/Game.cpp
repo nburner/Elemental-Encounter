@@ -34,7 +34,7 @@ bool Game::checkForWin()
 	return Victory;
 }
 
-void Game::newGame(Player * white, Player * black) 
+void Game::newGame(Player * white, Player * black, bool print) 
 {
 	players[WHITE] = white;
 	players[BLACK] = black;
@@ -42,8 +42,8 @@ void Game::newGame(Player * white, Player * black)
 	white->myColor = WHITE;
 	black->myColor = BLACK;
 
-	printBoard();
-	startGameLoop();
+	if(print) printBoard();
+	startGameLoop(print);
 }
 
 int Game::getTurn()
@@ -56,7 +56,7 @@ Turn Game::getColorTurn()
 	return Turn(playerTurn % 2);
 }
 
-void Game::startGameLoop()
+void Game::startGameLoop(bool print)
 {
 	do
 	{	//May need to cath that 0 (or whateveer) I was throwing here
@@ -64,7 +64,7 @@ void Game::startGameLoop()
 		//auto move = players[playerTurn]->getMove(gameBoard);
 		//cout << "Move: " << move.first << " - " << move.second << endl;
 		//updateBoard(move);
-		printBoard();
+		if(print) printBoard();
 		playerTurn = !playerTurn;
 	} while (!checkForWin());
 }

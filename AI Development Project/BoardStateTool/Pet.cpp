@@ -148,8 +148,11 @@ int AI::AIEngine::Pet::minmax(const Board board, int currentPly) const {
 
 move AI::AIEngine::Pet::operator()(const Board b) const
 {
-	auto boards = b.validNextBoards();
-	
+	auto boards = b.validWinBoards();
+	if (!boards.empty()) return boards[0].lastMove;
+
+	boards = b.validNextBoards();
+
 	move result; int bestVal = INT_MIN;
 
 	for (int i = 0; i < boards.size(); i++) {

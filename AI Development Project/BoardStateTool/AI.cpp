@@ -23,8 +23,11 @@ AIEngine::AI* AIEngine::start(AIType type) {
 		break;
 	case AIEngine::B_DEFENSE:
 		result = new BasicDefense();
-		break; 
-	case AIEngine::PET:
+		break;
+	case AIEngine::B_RANDOM:
+		result = new BasicRandom();
+		break;
+	case AIEngine::RANDOM_PET:
 		result = new Pet();
 		break;
 	case AIEngine::DARYLS_PET:

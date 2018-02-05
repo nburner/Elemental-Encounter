@@ -9,7 +9,7 @@ public:
 	Game(); 
 	~Game();
 	
-	void newGame(Player *, Player *);
+	void newGame(Player *, Player *, bool print = false);
 	bool checkForWin();
 	int getTurn();
 	Turn getColorTurn();
@@ -25,6 +25,6 @@ private:
 	bool checkLastRow(char);
 	bool checkForPieces(char);
 	bool updateBoard(move move);
-	void startGameLoop();
+	void startGameLoop(bool print = false);
 	void printBoard();
 };

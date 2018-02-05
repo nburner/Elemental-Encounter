@@ -229,6 +229,7 @@ namespace AI {
 
 		std::vector<Board> validNextBoards() const;
 		std::vector<Board> validAttackBoards() const;
+		std::vector<Board> validWinBoards() const;
 		int gameOver() const;
 		inline bool whiteTurn() const { return !turn; }
 		inline bool blackTurn() const { return turn; }
