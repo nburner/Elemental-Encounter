@@ -107,7 +107,8 @@ namespace AI {
 			void debug();
 		};
 
-		static AI* start(AIType type);
+		AI* start(AIType type);
+		void clean();
 
 		~AIEngine();
 

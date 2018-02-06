@@ -8,10 +8,7 @@ AIEngine::AIEngine() {
 }
 
 AIEngine::~AIEngine() {
-	for (int i = 0; i < _generatedAIs.size(); i++) {
-		delete _generatedAIs[i];
-	}
-	_generatedAIs.clear();
+	clean();
 }
 
 AIEngine::AI* AIEngine::start(AIType type) {
@@ -38,6 +35,14 @@ AIEngine::AI* AIEngine::start(AIType type) {
 	}
 	_generatedAIs.push_back(result);
 	return result;
+}
+
+void AI::AIEngine::clean()
+{
+	for (int i = 0; i < _generatedAIs.size(); i++) {
+		delete _generatedAIs[i];
+	}
+	_generatedAIs.clear();
 }
 
 ::move AI::AIEngine::AI::getMove(GameBoard * gp)
