@@ -57,6 +57,9 @@
     <ClCompile Include="Debug\DarylsBoard.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\AI Development Project\BoardStateTool\MemoryPet.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug\Game.h">

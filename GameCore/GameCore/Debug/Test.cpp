@@ -19,14 +19,14 @@ void main()
 	int irandom = 0; int ipet = 0;
 
 //#pragma omp parallel for reduction(+:ipet, irandom)
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 5; i++) {
 		Game * game = new Game(0);
 
 		AI::AIEngine::AI * pet = engine.start(AI::AIEngine::AIType::DARYLS_PET);
 		AI::AIEngine::AI * random = engine.start(AI::AIEngine::AIType::B_RANDOM);
-		AI::AIEngine::AI * randompet = engine.start(AI::AIEngine::AIType::RANDOM_PET);
+		AI::AIEngine::AI * randompet = engine.start(AI::AIEngine::AIType::MEM_PET);
 
-		game->newGame(random, pet, false);
+		/*game->newGame(random, pet, false);
 
 		if (game->getTurn() % 2 == 1) ++irandom;
 		else ++ipet;
@@ -43,7 +43,7 @@ void main()
 		cout << "\r" << "Pet: " << ipet << "\t Random: " << irandom;
 
 		delete game;
-		game = new Game(0);
+		game = new Game(0);*/
 
 		game->newGame(randompet, pet, false);
 
@@ -63,6 +63,7 @@ void main()
 
 		delete game;
 
+		static_cast<AI::AIEngine::MemoryPet*>(randompet)->save(i);
 		engine.clean();
 	}
 }

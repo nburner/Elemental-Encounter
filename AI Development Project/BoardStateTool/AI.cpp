@@ -13,6 +13,7 @@ AIEngine::~AIEngine() {
 
 AIEngine::AI* AIEngine::start(AIType type) {
 	AI * result;
+	static int memorypetcount = 0;
 	switch (type)
 	{
 	case AIEngine::B_OFFENSE:
@@ -29,6 +30,9 @@ AIEngine::AI* AIEngine::start(AIType type) {
 		break;
 	case AIEngine::DARYLS_PET:
 		result = new Pet(0);
+		break;
+	case AIEngine::MEM_PET:
+		result = new MemoryPet(memorypetcount++);
 		break;
 	default:
 		break;

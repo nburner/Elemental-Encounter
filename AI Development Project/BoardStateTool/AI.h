@@ -15,7 +15,7 @@ namespace AI {
 		AIEngine();
 
 		enum AIType {
-			B_OFFENSE, B_DEFENSE, B_RANDOM, RANDOM_PET, DARYLS_PET
+			B_OFFENSE, B_DEFENSE, B_RANDOM, RANDOM_PET, DARYLS_PET, MEM_PET
 		};
 
 		class AI : public Player {
@@ -92,19 +92,29 @@ namespace AI {
 
 		class Pet : public AI {
 			friend AIEngine;
+		protected:
 			Pet();
 			Pet(int);
 			void setFeatureCalculators();
 
 			const int PLY_COUNT = 2;
-			signed char weights[NULL_FEATURE][NULL_FEATURE];
+			__int8 weights[NULL_FEATURE][NULL_FEATURE];
 			static FeatureFunc featureCalculators[NULL_FEATURE];
-			
+
 			void evaluate(Board&) const;
 			int minmax(Board, int) const;
 		public:
 			virtual move operator()(const Board b) const;
 			void debug();
+		};
+
+		class MemoryPet : public Pet{
+			friend AIEngine;
+			MemoryPet(int);
+		public:
+			void save(int);	
+			void tweak();
+			static MemoryPet * mix(MemoryPet*, MemoryPet*);
 		};
 
 		AI* start(AIType type);

@@ -6,10 +6,7 @@
 using namespace AI;
 using std::set;
 
-const int MAX_WEIGHT = 12;
-
-std::default_random_engine generator;
-std::binomial_distribution<int> distribution(2 * MAX_WEIGHT, 0.5);
+const int MAX_WEIGHT = 127;
 
 FeatureFunc AIEngine::Pet::featureCalculators[AI::BoardFeature::NULL_FEATURE] = { NULL };
 
@@ -55,6 +52,9 @@ void AIEngine::Pet::setFeatureCalculators() {
 }
 
 AIEngine::Pet::Pet() {
+	static std::default_random_engine generator;
+	static const std::poisson_distribution<int> distribution(2 * MAX_WEIGHT);
+
 	for (int bf1 = 0; bf1 < NULL_FEATURE; bf1++) {
 		for (int bf2 = 0; bf2 < NULL_FEATURE; bf2++) {
 			weights[bf1][bf2] = distribution(generator) - MAX_WEIGHT;

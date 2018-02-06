@@ -126,18 +126,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\GameCore\GameCore\Debug\DarylsBoard.cpp" />
     <ClCompile Include="..\..\GameCore\GameCore\Debug\Game.cpp" />
     <ClCompile Include="..\..\GameCore\GameCore\Debug\GameBoard.cpp" />
     <ClCompile Include="..\..\GameCore\GameCore\Debug\Player.cpp" />
     <ClCompile Include="AI.cpp" />
     <ClCompile Include="BasicDefense.cpp" />
     <ClCompile Include="BasicOffense.cpp" />
+    <ClCompile Include="BasicRandom.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="FeatureFunctions.cpp" />
+    <ClCompile Include="MemoryPet.cpp" />
     <ClCompile Include="Pet.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\GameCore\GameCore\Debug\DarylsBoard.h" />
     <ClInclude Include="..\..\GameCore\GameCore\Debug\Game.h" />
     <ClInclude Include="..\..\GameCore\GameCore\Debug\GameBoard.h" />
     <ClInclude Include="..\..\GameCore\GameCore\Debug\Player.h" />

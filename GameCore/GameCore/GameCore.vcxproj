@@ -147,6 +147,7 @@
     <ClCompile Include="..\..\AI Development Project\BoardStateTool\BasicRandom.cpp" />
     <ClCompile Include="..\..\AI Development Project\BoardStateTool\Board.cpp" />
     <ClCompile Include="..\..\AI Development Project\BoardStateTool\FeatureFunctions.cpp" />
+    <ClCompile Include="..\..\AI Development Project\BoardStateTool\MemoryPet.cpp" />
     <ClCompile Include="..\..\AI Development Project\BoardStateTool\Pet.cpp" />
     <ClCompile Include="Debug\DarylsBoard.cpp" />
     <ClCompile Include="Debug\Game.cpp" />
