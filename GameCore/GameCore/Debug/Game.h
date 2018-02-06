@@ -6,7 +6,9 @@
 class Game
 {
 public:
-	Game(); 
+	Game();
+	Game(bool);
+
 	~Game();
 	
 	void newGame(Player *, Player *, bool print = true);

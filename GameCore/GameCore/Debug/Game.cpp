@@ -1,12 +1,17 @@
 #include "Game.h"
+#include "DarylsBoard.h"
 using std::cin; using std::cout; using std::endl;
 
 
 Game::Game()
 {
-	gameBoard = GameBoard::getInstance(); 
+	gameBoard = GameBoard::getInstance();
 }
 
+Game::Game(bool nonSingleton)
+{
+	gameBoard = new DarylsBoard();
+}
 
 Game::~Game(){
 	delete gameBoard;
@@ -117,7 +122,7 @@ void Game::printBoard()
 	
 		for (int c = 0; c < 8; c++)
 		{
-			cout << (*GameBoard::getInstance())[Square(r * 8 + c)] << "|";
+			cout << getGameBoard()[Square(r * 8 + c)] << "|";
 		}
 		cout << endl;
 	}

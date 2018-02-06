@@ -62,7 +62,7 @@ public:
 	char operator[](Square i) const { return space[i]; }
 	void updateBoard(::move, Turn);
 	Turn justTaken;
-private:
+protected:
 	char space[64];
 	GameBoard();
 	GameBoard(GameBoard&);

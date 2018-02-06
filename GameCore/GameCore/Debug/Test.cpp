@@ -19,12 +19,12 @@ void main()
 	int irandom = 0; int ipet = 0;
 
 	for (int i = 0; i < 100; i++) {
-		Game * game = new Game();
+		Game * game = new Game(0);
 
 		AI::AIEngine::AI * pet = AI::AIEngine::start(AI::AIEngine::AIType::DARYLS_PET);
 		AI::AIEngine::AI * random = AI::AIEngine::start(AI::AIEngine::AIType::B_RANDOM);
 
-		game->newGame(random, pet);
+		game->newGame(random, pet, false);
 
 		if (game->getTurn() % 2 == 1) ++irandom;
 		else ++ipet;
@@ -32,9 +32,9 @@ void main()
 
 
 		delete game;
-		game = new Game();
+		game = new Game(0);
 
-		game->newGame(pet, random);
+		game->newGame(pet, random, false);
 
 		if (game->getTurn() % 2 == 1) ++ipet;
 		else ++irandom;
