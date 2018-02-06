@@ -18,6 +18,7 @@ void main()
 
 	int irandom = 0; int ipet = 0;
 
+#pragma omp parallel for reduction(+:ipet, irandom)
 	for (int i = 0; i < 100; i++) {
 		Game * game = new Game(0);
 
