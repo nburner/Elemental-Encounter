@@ -45,7 +45,7 @@ void main()
 		delete game;
 		game = new Game(0);*/
 
-		game->newGame(randompet, pet, false);
+		game->newGame(daryl, randompet, true);
 
 		if (game->getTurn() % 2 == 1) ++irandom;
 		else ++ipet;
