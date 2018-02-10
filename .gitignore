@@ -11,3 +11,10 @@ GameCore/Debug/GameCore.pdb
 GameCore/.vs/GameCore/v15/Browse.VC.opendb
 *.suo
 AI Development Project/BoardStateTool/.vs/BoardStateTool/v15/Browse.VC.opendb
+*.opendb
+*.cache
+*.pdb
+*.ide-wal
+*.ide-shm
+*.ide
+*.lock
