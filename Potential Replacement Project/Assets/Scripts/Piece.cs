@@ -9,13 +9,13 @@ public class Piece : Breakman
         bool[,] r = new bool[8, 8];
         Breakman b;
 
-        if(isFire)
+        if(isIce)
         {
             // Diagonal Left
             if (CurrentX != 0 && CurrentY != 7)
             {
                 b = BoardManager.Instance.Breakmans[CurrentX - 1, CurrentY + 1];
-                if (b == null || !b.isFire)
+                if (b == null || !b.isIce)
                 {
                     r[CurrentX - 1, CurrentY + 1] = true;
                 }
@@ -25,7 +25,7 @@ public class Piece : Breakman
             if (CurrentX != 7 && CurrentY != 7)
             {
                 b = BoardManager.Instance.Breakmans[CurrentX + 1, CurrentY + 1];
-                if (b == null || !b.isFire)
+                if (b == null || !b.isIce)
                 {
                     r[CurrentX + 1, CurrentY + 1] = true;
                 }
@@ -47,7 +47,7 @@ public class Piece : Breakman
             if (CurrentX != 0 && CurrentY != 0)
             {
                 b = BoardManager.Instance.Breakmans[CurrentX - 1, CurrentY - 1];
-                if (b == null || b.isFire)
+                if (b == null || b.isIce)
                 {
                     r[CurrentX - 1, CurrentY - 1] = true;
                 }
@@ -57,7 +57,7 @@ public class Piece : Breakman
             if (CurrentX != 7 && CurrentY != 0)
             {
                 b = BoardManager.Instance.Breakmans[CurrentX + 1, CurrentY - 1];
-                if (b == null || b.isFire)
+                if (b == null || b.isIce)
                 {
                     r[CurrentX + 1, CurrentY - 1] = true;
                 }

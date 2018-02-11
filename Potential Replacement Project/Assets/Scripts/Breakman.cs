@@ -6,7 +6,7 @@ public class Breakman : MonoBehaviour
 {
     public int CurrentX { set; get; }
     public int CurrentY { set; get; }
-    public bool isFire;
+    public bool isIce;
 
     public void SetPosition(int x,int y)
     {

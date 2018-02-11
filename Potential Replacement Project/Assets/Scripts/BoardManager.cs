@@ -19,7 +19,7 @@ public class BoardManager : MonoBehaviour
     public List<GameObject> breakmanPrefabs;
     private List<GameObject> activeBreakman;
 
-    public bool isFireTurn = true;
+    public bool isIceTurn = true;
 
     private void Start()
     {
@@ -54,7 +54,7 @@ public class BoardManager : MonoBehaviour
         if (Breakmans[x, y] == null)
             return;
 
-        if (Breakmans[x, y].isFire != isFireTurn)
+        if (Breakmans[x, y].isIce != isIceTurn)
             return;
         allowedMoves = Breakmans[x, y].PossibleMove();
         selectedBreakman = Breakmans[x, y];
@@ -63,13 +63,37 @@ public class BoardManager : MonoBehaviour
 
     private void MoveBreakman(int x, int y)
     {
+        // TODO: Add winning conditions. Make in different functions.
         if (allowedMoves[x, y])
         {
+            Breakman b = Breakmans[x, y];
+            if (b != null && b.isIce && !isIceTurn)
+            {
+                // Capture a piece
+                activeBreakman.Remove(b.gameObject);
+                Destroy(b.gameObject);
+            }
+
+            if (isIceTurn)
+            {
+                if (selectedBreakman.CurrentY + 1 == 7)
+                {
+                    EndGame();
+                }
+            }
+            else
+            {
+                if (selectedBreakman.CurrentY - 1 == 0)
+                {
+                    EndGame();
+                }
+            }
+
             Breakmans[selectedBreakman.CurrentX, selectedBreakman.CurrentY] = null;
             selectedBreakman.transform.position = GetTileCenter(x, y);
             selectedBreakman.SetPosition(x, y);
             Breakmans[x, y] = selectedBreakman;
-            isFireTurn = !isFireTurn;
+            isIceTurn = !isIceTurn;
         }
 
         BoardHighlights.Instance.HideHighlights();
@@ -127,6 +151,7 @@ public class BoardManager : MonoBehaviour
     private void SpawnBreakman(int index, int x , int y)
     {
         GameObject go = Instantiate(breakmanPrefabs[index], GetTileCenter(x,y), Quaternion.identity) as GameObject;
+        Debug.Log(go);
         go.transform.SetParent(transform);
         Breakmans[x, y] = go.GetComponent<Breakman>();
         Breakmans[x, y].SetPosition(x, y);
@@ -145,17 +170,38 @@ public class BoardManager : MonoBehaviour
     {
         activeBreakman = new List<GameObject>();
         Breakmans = new Breakman[8, 8];
-        //spawn Fire team
-        for(int i=0; i < 8; i++)
-        {
-            SpawnBreakman(0,i,0);
-            SpawnBreakman(0,i, 1);
-        }
         //spawn Ice team
+        for(int i = 0; i < 8; i++)
+        {
+            SpawnBreakman(0, i, 0);
+            SpawnBreakman(0, i, 1);
+        }
+        //spawn Fire team
         for (int i = 0; i < 8; i++)
         {
-            SpawnBreakman(1,i, 6);
-            SpawnBreakman(1,i, 7);
+            SpawnBreakman(1, i, 6);
+            SpawnBreakman(1, i, 7);
         }
+    }
+
+    private void EndGame()
+    {
+        if (isIceTurn)
+        {
+            Debug.Log("Fire Wins!");
+        }
+        else
+        {
+            Debug.Log("Ice Wins!");
+        }
+
+        foreach (GameObject go in activeBreakman)
+        {
+            Destroy(go);
+        }
+
+        isIceTurn = !isIceTurn;
+        BoardHighlights.Instance.HideHighlights();
+        SpawnAllBreakPieces();
     }
 }

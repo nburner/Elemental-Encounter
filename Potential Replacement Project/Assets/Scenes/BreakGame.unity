@@ -121,8 +121,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 18783751}
-  - component: {fileID: 18783750}
   - component: {fileID: 18783752}
+  - component: {fileID: 18783750}
   m_Layer: 0
   m_Name: BreakBoard
   m_TagString: Untagged
@@ -142,9 +142,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   breakmanPrefabs:
-  - {fileID: 1596454050834402, guid: 15ca5086d99fdfc4ab801e5d70251585, type: 2}
   - {fileID: 1431556235264618, guid: f59dd648d83b6284d8cfe470a6093e53, type: 2}
-  isFireTurn: 1
+  - {fileID: 100002, guid: f873de477a4a25443948b0c0b4f5af6f, type: 3}
+  isIceTurn: 1
 --- !u!4 &18783751
 Transform:
   m_ObjectHideFlags: 0
@@ -246,13 +246,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 374203863}
-  m_LocalRotation: {x: 0.45009848, y: 0, z: 0, w: 0.89297897}
-  m_LocalPosition: {x: 3.5, y: 7, z: -2}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 3.5, y: 10, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 53.5, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1177560728
 GameObject:
   m_ObjectHideFlags: 0
