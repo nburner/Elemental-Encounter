@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class BoardManager : MonoBehaviour
 {
+    public static BoardManager Instance { set; get; }
+    public bool[,] allowedMoves { set; get; }
+
     public Breakman[,] Breakmans { set; get; }
     private Breakman selectedBreakman;
 
@@ -20,6 +23,7 @@ public class BoardManager : MonoBehaviour
 
     private void Start()
     {
+        Instance = this;
         SpawnAllBreakPieces();
     }
     private void Update()
@@ -52,18 +56,23 @@ public class BoardManager : MonoBehaviour
 
         if (Breakmans[x, y].isFire != isFireTurn)
             return;
+        allowedMoves = Breakmans[x, y].PossibleMove();
         selectedBreakman = Breakmans[x, y];
+        BoardHighlights.Instance.HighlightAllowedMoves(allowedMoves);
     }
 
     private void MoveBreakman(int x, int y)
     {
-        if (selectedBreakman.PossibleMove(x, y))
+        if (allowedMoves[x, y])
         {
             Breakmans[selectedBreakman.CurrentX, selectedBreakman.CurrentY] = null;
             selectedBreakman.transform.position = GetTileCenter(x, y);
+            selectedBreakman.SetPosition(x, y);
             Breakmans[x, y] = selectedBreakman;
             isFireTurn = !isFireTurn;
         }
+
+        BoardHighlights.Instance.HideHighlights();
 
         selectedBreakman = null;
         
