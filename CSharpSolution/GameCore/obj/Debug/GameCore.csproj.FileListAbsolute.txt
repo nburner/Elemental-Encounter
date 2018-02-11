@@ -4,3 +4,4 @@ D:\Users\Daryl\Documents\GitHub\Elemental-Encounter\CSharpSolution\GameCore\bin\
 D:\Users\Daryl\Documents\GitHub\Elemental-Encounter\CSharpSolution\GameCore\obj\Debug\GameCore.csproj.CoreCompileInputs.cache
 D:\Users\Daryl\Documents\GitHub\Elemental-Encounter\CSharpSolution\GameCore\obj\Debug\GameCore.exe
 D:\Users\Daryl\Documents\GitHub\Elemental-Encounter\CSharpSolution\GameCore\obj\Debug\GameCore.pdb
+D:\Users\Daryl\Documents\GitHub\Elemental-Encounter\CSharpSolution\GameCore\obj\Debug\GameCore.csprojResolveAssemblyReference.cache

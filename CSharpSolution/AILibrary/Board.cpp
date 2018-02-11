@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Board.h"
 #include <intrin.h>
 #include <algorithm>
@@ -13,6 +14,12 @@ Board::Board() {
 	turn = WHITE;
 }
 
+Board::Board(bitboard white, bitboard black, Turn t) {
+	bb[WHITE] = white;
+	bb[BLACK] = black;
+	turn = t;
+}
+
 Board::Board(const Board& b, bool flipTurn)
 {
 	bb[WHITE] = b.bb[WHITE];
@@ -22,16 +29,6 @@ Board::Board(const Board& b, bool flipTurn)
 	lastMove = b.lastMove;
 }
 
-AI::Board::Board(const GameBoard & gb)
-{
-	bb[WHITE] = 0;
-	bb[BLACK] = 0;
-	for (int i = 0; i < 64; i++) {
-		if (gb[Square(i)] == 'W') set(bb[WHITE], i);
-		if (gb[Square(i)] == 'B') set(bb[BLACK], i);
-	}
-	turn = Turn(!gb.justTaken);
-}
 #pragma endregion
 
 #pragma region Operator Overloads

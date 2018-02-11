@@ -28,7 +28,7 @@ namespace GameCore.Core
 				{
 					movetoletter = Console.ReadKey().KeyChar;
 				} while (Char.ToUpper(movefromletter) < 'A' || Char.ToUpper(movefromletter) > 'H');
-				Console.WriteLine((char)(movefromnumber + 1));
+				Console.WriteLine((char)(movefromnumber - ((int)myColor * 2 - 1)));
 
 				result = new move( (Square)((Char.ToUpper(movefromletter) - 'A') + (movefromnumber - '1') * 8), (Square)((Char.ToUpper(movetoletter) - 'A') + (movefromnumber - '1' + 1) * 8));
 			} while (!isValidMove(result, gp));

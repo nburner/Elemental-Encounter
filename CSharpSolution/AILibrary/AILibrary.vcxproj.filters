@@ -21,6 +21,15 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Board.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FeatureFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -30,6 +39,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Board.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FeatureFunctions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

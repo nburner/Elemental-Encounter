@@ -27,3 +27,5 @@ CSharpSolution/GameCore/bin/Debug/GameCore.exe.config
 *.dll
 *.lib
 *.exp
+*.ipdb
+*.iobj

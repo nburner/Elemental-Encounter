@@ -68,11 +68,12 @@ namespace GameCore.Core
 		private void startGameLoop(bool print = true)
 		{
 			do
-			{   //May need to catch that 0 (or whatever) I was throwing here
+			{
 				updateBoard(players[(int)PlayerTurn].getMove(Board));
 
 				if (print) printBoard();
-				PlayerTurn = (Turn)((int)(PlayerTurn + 1) % 2);
+				
+				PlayerTurn = (Turn)Convert.ToInt16(!Convert.ToBoolean(PlayerTurn));
 			} while (!GameOver);
 		}
 		private void printBoard()

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "AI.h"
 using namespace AI;
 

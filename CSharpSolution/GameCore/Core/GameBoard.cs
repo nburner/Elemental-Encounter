@@ -14,13 +14,13 @@ namespace GameCore.Core
 		protected char[] space = new char[64];
 		public void updateBoard(move move, Turn t)
 		{
-			this[move.Item1] = ((((int)move.Item1) / 8 + ((int)move.Item1)) % 2 == 0 ? (char)219 : ' ');
+			this[move.Item1] = ((((int)move.Item1) / 8 + ((int)move.Item1)) % 2 == 0 ? (char)9608 : ' ');
 			this[move.Item2] = (t == 0 ? 'W' : 'B');
 			justTaken = t;
 		}
 		public GameBoard()
 		{
-			char bar = (char)219;
+			char bar = (char)9608;
 
 			for (int i = 0; i < 64; i++)
 			{
