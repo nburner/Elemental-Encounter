@@ -12,7 +12,7 @@ namespace GameCore
 			Daryl daryl2 = new Daryl();
 			Human human = new Human();
 			AI ai = new AI(AIType.B_RANDOM);
-			AI ai2 = new AI(AIType.B_RANDOM);
+			AI ai2 = new AI(AIType.DARYLS_PET);
 
 			Game game = new Game();
 			

@@ -15,6 +15,16 @@ namespace GameCore.AIWrapper
 	{
 		[DllImport("AILibrary.dll")]
 		public static extern void BasicRandom(bitboard white, bitboard black, Turn t, ref int from, ref int to);
+		[DllImport("AILibrary.dll")]
+		public static extern void BasicDefense(bitboard white, bitboard black, Turn t, ref int from, ref int to);
+		[DllImport("AILibrary.dll")]
+		public static extern void BasicOffense(bitboard white, bitboard black, Turn t, ref int from, ref int to);
+		[DllImport("AILibrary.dll")]
+		public static extern void DarylsPet(bitboard white, bitboard black, Turn t, ref int from, ref int to);
+		[DllImport("AILibrary.dll")]
+		public static extern void MemPet(bitboard white, bitboard black, Turn t, ref int from, ref int to, int id = 0);
+		[DllImport("AILibrary.dll")]
+		public static extern void RandomPet(bitboard white, bitboard black, Turn t, ref int from, ref int to);
 		public AIType Type { get; private set; }
 
 		public AI(AIType t) { Type = t; }
@@ -34,8 +44,11 @@ namespace GameCore.AIWrapper
 			int from = 0, to = 0;
 
 			if (Type == AIType.B_RANDOM) BasicRandom(white, black, t, ref from, ref to);
-
-			//Console.WriteLine("Don't judge me");
+			if (Type == AIType.B_OFFENSE) BasicOffense(white, black, t, ref from, ref to);
+			if (Type == AIType.B_DEFENSE) BasicDefense(white, black, t, ref from, ref to);
+			if (Type == AIType.DARYLS_PET) DarylsPet(white, black, t, ref from, ref to);
+			if (Type == AIType.MEM_PET) MemPet(white, black, t, ref from, ref to);
+			if (Type == AIType.RANDOM_PET) RandomPet(white, black, t, ref from, ref to);
 
 			return new move((Square)from, (Square)to);
 		}

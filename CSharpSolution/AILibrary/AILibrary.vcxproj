@@ -165,6 +165,8 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="FeatureFunctions.cpp" />
+    <ClCompile Include="MemoryPet.cpp" />
+    <ClCompile Include="Pet.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
