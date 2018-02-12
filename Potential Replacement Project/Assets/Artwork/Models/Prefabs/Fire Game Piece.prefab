@@ -55,6 +55,7 @@ GameObject:
   - component: {fileID: 114138794670545570}
   - component: {fileID: 33324012653143950}
   - component: {fileID: 23552762089473916}
+  - component: {fileID: 111878487979531730}
   m_Layer: 0
   m_Name: Fire Game Piece
   m_TagString: Untagged
@@ -274,6 +275,21 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!111 &111878487979531730
+Animation:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1596454050834402}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: f873de477a4a25443948b0c0b4f5af6f, type: 3}
+  m_Animations:
+  - {fileID: 7400000, guid: f873de477a4a25443948b0c0b4f5af6f, type: 3}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!114 &114138794670545570
 MonoBehaviour:
   m_ObjectHideFlags: 1

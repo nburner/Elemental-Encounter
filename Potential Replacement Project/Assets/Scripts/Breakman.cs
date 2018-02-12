@@ -12,6 +12,7 @@ public class Breakman : MonoBehaviour
     {
         CurrentX = x;
         CurrentY = y;
+        
     }
 
     public virtual bool[,] PossibleMove()

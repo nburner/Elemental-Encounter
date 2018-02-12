@@ -9,6 +9,7 @@ public class BoardManager : MonoBehaviour
 
     public Breakman[,] Breakmans { set; get; }
     private Breakman selectedBreakman;
+    private bool isClicked = false;
 
     private const float TILE_SIZE = 1.0f;
     private const float TILE_OFFSET = 0.5f;
@@ -33,12 +34,13 @@ public class BoardManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            if(selectionX>=0 && selectionY >= 0)
+            if (selectionX >= 0 && selectionY >= 0)
             {
                 if (selectedBreakman == null)
                 {
                     // select the Breakman
                     SelectBreakMan(selectionX, selectionY);
+                    Debug.Log("Selected");
                 }
                 else
                 {
@@ -70,6 +72,14 @@ public class BoardManager : MonoBehaviour
             return;
         selectedBreakman = Breakmans[x, y];
         BoardHighlights.Instance.HighlightAllowedMoves(AllowedMoves);
+
+        if(!isClicked)
+        {
+            selectedBreakman.GetComponent<Animation>().Play();
+            isClicked = !isClicked;
+            Debug.Log("!Clicked");
+        }
+
     }
 
     private void MoveBreakman(int x, int y)
@@ -105,8 +115,15 @@ public class BoardManager : MonoBehaviour
             selectedBreakman.SetPosition(x, y);
             Breakmans[x, y] = selectedBreakman;
             isIceTurn = !isIceTurn;
+            selectedBreakman.GetComponent<Animation>().Stop();
         }
 
+        if (isClicked)
+        {
+            selectedBreakman.GetComponent<Animation>().Stop();
+            isClicked = !isClicked;
+            Debug.Log("Clicked");
+        }
         BoardHighlights.Instance.HideHighlights();
 
         selectedBreakman = null;
@@ -138,11 +155,11 @@ public class BoardManager : MonoBehaviour
         for (int i = 0; i <= 8; i++)
         {
             Vector3 start = Vector3.forward * i;
-            Debug.DrawLine(start, start + widthLine);
+            //Debug.DrawLine(start, start + widthLine);
             for (int j = 0; j <= 8; j++)
             {
                 start = Vector3.right * j;
-                Debug.DrawLine(start, start + heightLine);
+                //Debug.DrawLine(start, start + widthLine);
             }
         }
 
@@ -150,12 +167,12 @@ public class BoardManager : MonoBehaviour
 
         if (selectionX >= 0 && selectionY >= 0)
         {
-            Debug.DrawLine(
-                Vector3.forward * selectionY + Vector3.right * selectionX,
-                Vector3.forward * (selectionY + 1) + Vector3.right * (selectionX + 1));
-            Debug.DrawLine(
-                Vector3.forward * (selectionY+1) + Vector3.right * selectionX,
-                Vector3.forward * selectionY + Vector3.right * (selectionX + 1));
+            //Debug.DrawLine(
+            //    Vector3.forward * selectionY + Vector3.right * selectionX,
+            //    Vector3.forward * (selectionY + 1) + Vector3.right * (selectionX + 1));
+            //Debug.DrawLine(
+            //    Vector3.forward * (selectionY+1) + Vector3.right * selectionX,
+            //    Vector3.forward * selectionY + Vector3.right * (selectionX + 1));
         }
     }
 
