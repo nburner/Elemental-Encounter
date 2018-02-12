@@ -53,6 +53,8 @@ GameObject:
   - component: {fileID: 4532678249900194}
   - component: {fileID: 95372446383014616}
   - component: {fileID: 114138794670545570}
+  - component: {fileID: 33324012653143950}
+  - component: {fileID: 23552762089473916}
   m_Layer: 0
   m_Name: Fire Game Piece
   m_TagString: Untagged
@@ -166,6 +168,40 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!23 &23552762089473916
+MeshRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1596454050834402}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 2100000, guid: 774630b5aa3e2834a878099bcf52cbfe, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
 --- !u!23 &23775440186423728
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -207,6 +243,13 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1920220899499152}
   m_Mesh: {fileID: 4300002, guid: f873de477a4a25443948b0c0b4f5af6f, type: 3}
+--- !u!33 &33324012653143950
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1596454050834402}
+  m_Mesh: {fileID: 0}
 --- !u!33 &33419290862531690
 MeshFilter:
   m_ObjectHideFlags: 1

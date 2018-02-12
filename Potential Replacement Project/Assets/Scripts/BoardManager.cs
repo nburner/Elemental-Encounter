@@ -56,7 +56,18 @@ public class BoardManager : MonoBehaviour
 
         if (Breakmans[x, y].isIce != isIceTurn)
             return;
+        bool hasAtleastOneMove = false;
         AllowedMoves = Breakmans[x, y].PossibleMove();
+        for(int i = 0; i < 8; i++)
+        {
+            for(int j=0; j < 8; j++)
+            {
+                if(AllowedMoves[i,j])
+                    hasAtleastOneMove = true;
+            }
+        }
+        if (!hasAtleastOneMove)
+            return;
         selectedBreakman = Breakmans[x, y];
         BoardHighlights.Instance.HighlightAllowedMoves(AllowedMoves);
     }
@@ -67,7 +78,7 @@ public class BoardManager : MonoBehaviour
         if (AllowedMoves[x, y])
         {
             Breakman b = Breakmans[x, y];
-            if (b != null && b.isIce && !isIceTurn)
+            if (b != null && b.isIce != isIceTurn)
             {
                 // Capture a piece
                 activeBreakman.Remove(b.gameObject);
@@ -150,8 +161,6 @@ public class BoardManager : MonoBehaviour
 
     private void SpawnBreakman(int index, int x , int y)
     {
-        string numberOfPrefab = "Number" + breakmanPrefabs.Capacity;
-        Debug.Log(numberOfPrefab);
         GameObject go = Instantiate(breakmanPrefabs[index], GetTileCenter(x,y), Quaternion.identity) as GameObject;
         go.transform.SetParent(transform);
         Breakmans[x, y] = go.GetComponent<Breakman>();
@@ -189,11 +198,12 @@ public class BoardManager : MonoBehaviour
     {
         if (isIceTurn)
         {
-            Debug.Log("Fire Wins!");
+            Debug.Log("Ice Wins!");
+           
         }
         else
         {
-            Debug.Log("Ice Wins!");
+            Debug.Log("Fire Wins!");
         }
 
         foreach (GameObject go in activeBreakman)
