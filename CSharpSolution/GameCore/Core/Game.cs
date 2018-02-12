@@ -7,10 +7,12 @@ namespace GameCore.Core
 	{
 		public Game()
 		{
-			Board = new GameBoard();
 		}
 		public void newGame(Player white, Player black, bool print = true)
 		{
+			Board = new GameBoard();
+			pieces = new int[]{ 16, 16 };
+
 			players[(int)Turn.WHITE] = white;
 			players[(int)Turn.BLACK] = black;
 
@@ -55,8 +57,7 @@ namespace GameCore.Core
 		private GameBoard Board { get; set; }
 		private int[] pieces = { 16, 16 };
 		public Turn PlayerTurn { get; private set; }
-
-		
+				
 		
 		private void updateBoard(move move)
 		{

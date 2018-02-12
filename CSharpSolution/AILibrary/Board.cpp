@@ -217,12 +217,12 @@ std::vector<Board> Board::validWinBoards() const
 int Board::gameOver() const
 {
 	if (bb[WHITE] & row8 || !bb[BLACK]) {
-		if (!turn) return INT_MIN;
+		if (!turn) return -1*INT_MAX;
 		if (turn) return INT_MAX;
 	}
 	if (bb[BLACK] & row1 || !bb[WHITE]) {
 		if (!turn) return INT_MAX;
-		if (turn) return INT_MIN;
+		if (turn) return -1*INT_MAX;
 	}
 	return 0;
 }

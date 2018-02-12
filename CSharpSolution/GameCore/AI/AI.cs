@@ -8,7 +8,8 @@ namespace GameCore.AIWrapper
 	using move = Tuple<Square, Square>;
 	enum AIType
 	{
-		B_OFFENSE, B_DEFENSE, B_RANDOM, RANDOM_PET, DARYLS_PET, MEM_PET
+		B_OFFENSE, B_DEFENSE, B_RANDOM, RANDOM_PET, DARYLS_PET, MEM_PET, TEST,
+		DARYLS_PRUNE
 	};
 
 	class AI : Player
@@ -25,6 +26,11 @@ namespace GameCore.AIWrapper
 		public static extern void MemPet(bitboard white, bitboard black, Turn t, ref int from, ref int to, int id = 0);
 		[DllImport("AILibrary.dll")]
 		public static extern void RandomPet(bitboard white, bitboard black, Turn t, ref int from, ref int to);
+		[DllImport("AILibrary.dll")]
+		public static extern void Test(bitboard white, bitboard black, Turn t, ref int from, ref int to);
+		[DllImport("AILibrary.dll")]
+		public static extern void DarylsPrune(bitboard white, bitboard black, Turn t, ref int from, ref int to);
+
 		public AIType Type { get; private set; }
 
 		public AI(AIType t) { Type = t; }
@@ -42,15 +48,20 @@ namespace GameCore.AIWrapper
 
 			//Get move from type
 			int from = 0, to = 0;
-
-			if (Type == AIType.B_RANDOM) BasicRandom(white, black, t, ref from, ref to);
-			if (Type == AIType.B_OFFENSE) BasicOffense(white, black, t, ref from, ref to);
-			if (Type == AIType.B_DEFENSE) BasicDefense(white, black, t, ref from, ref to);
-			if (Type == AIType.DARYLS_PET) DarylsPet(white, black, t, ref from, ref to);
-			if (Type == AIType.MEM_PET) MemPet(white, black, t, ref from, ref to);
-			if (Type == AIType.RANDOM_PET) RandomPet(white, black, t, ref from, ref to);
-
+			switch (Type) {
+				case AIType.B_OFFENSE: BasicOffense(white, black, t, ref from, ref to); break;
+				case AIType.B_DEFENSE: BasicDefense(white, black, t, ref from, ref to); break;
+				case AIType.B_RANDOM: BasicRandom(white, black, t, ref from, ref to); break;
+				case AIType.RANDOM_PET: RandomPet(white, black, t, ref from, ref to); break;
+				case AIType.DARYLS_PET: DarylsPet(white, black, t, ref from, ref to); break;
+				case AIType.MEM_PET: MemPet(white, black, t, ref from, ref to); break;
+				case AIType.TEST: Test(white, black, t, ref from, ref to); break;
+				case AIType.DARYLS_PRUNE: DarylsPrune(white, black, t, ref from, ref to); break;
+				default: break;
+			}
+			
 			return new move((Square)from, (Square)to);
 		}
+
 	}
 }

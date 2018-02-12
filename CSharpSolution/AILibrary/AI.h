@@ -53,6 +53,7 @@ namespace AI {
 		NULL_FEATURE					//Gives me the count and a place to stop for-loops
 	};
 
+
 	class Pet {
 	protected:
 		void setFeatureCalculators();
@@ -71,6 +72,17 @@ namespace AI {
 		void debug();
 	};
 
+	class Prune : public Pet {
+	protected:
+		static int PLY_COUNT;
+		int alphabeta(Board board, int currentPly) const;
+		
+	public:
+		Prune();
+		Prune(int);
+		virtual move operator()(const Board b) const;
+	};
+
 	class MemoryPet : public Pet {
 	public:
 		MemoryPet(int);
@@ -78,4 +90,23 @@ namespace AI {
 		void tweak();
 		static MemoryPet * mix(MemoryPet*, MemoryPet*);
 	};
+
+	class TestPet {
+	protected:
+		void setFeatureCalculators();
+
+		const int PLY_COUNT = 2;
+		__int8 weights[NULL_FEATURE][NULL_FEATURE];
+		static FeatureFunc featureCalculators[NULL_FEATURE];
+
+		void evaluate(Board&) const;
+		int minmax(Board, int) const;
+
+	public:
+		TestPet();
+		TestPet(int);
+		virtual move operator()(const Board b) const;
+		void debug();
+	};
+
 }
