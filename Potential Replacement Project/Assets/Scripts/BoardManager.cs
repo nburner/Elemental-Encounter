@@ -18,6 +18,7 @@ public class BoardManager : MonoBehaviour
 
     //List of Gameobject for spawning pieces on the board
     public List<GameObject> breakmanPrefabs;
+    public List<GameObject> boardPrefabs;
     private List<GameObject> activeBreakman;
 
     public bool isIceTurn = true;
@@ -30,7 +31,7 @@ public class BoardManager : MonoBehaviour
     private void Update()
     {
         UpdateSelection();
-        DrawBoard();
+        //DrawBoard();
 
         if (Input.GetMouseButtonDown(0))
         {
