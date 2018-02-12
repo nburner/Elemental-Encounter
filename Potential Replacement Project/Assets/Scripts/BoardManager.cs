@@ -5,7 +5,7 @@ using UnityEngine;
 public class BoardManager : MonoBehaviour
 {
     public static BoardManager Instance { set; get; }
-    public bool[,] allowedMoves { set; get; }
+    public bool[,] AllowedMoves { set; get; }
 
     public Breakman[,] Breakmans { set; get; }
     private Breakman selectedBreakman;
@@ -14,7 +14,7 @@ public class BoardManager : MonoBehaviour
     private const float TILE_OFFSET = 0.5f;
     private int selectionX = -1;
     private int selectionY = -1;
-    
+
     //List of Gameobject for spawning pieces on the board
     public List<GameObject> breakmanPrefabs;
     private List<GameObject> activeBreakman;
@@ -56,15 +56,15 @@ public class BoardManager : MonoBehaviour
 
         if (Breakmans[x, y].isIce != isIceTurn)
             return;
-        allowedMoves = Breakmans[x, y].PossibleMove();
+        AllowedMoves = Breakmans[x, y].PossibleMove();
         selectedBreakman = Breakmans[x, y];
-        BoardHighlights.Instance.HighlightAllowedMoves(allowedMoves);
+        BoardHighlights.Instance.HighlightAllowedMoves(AllowedMoves);
     }
 
     private void MoveBreakman(int x, int y)
     {
         // TODO: Add winning conditions. Make in different functions.
-        if (allowedMoves[x, y])
+        if (AllowedMoves[x, y])
         {
             Breakman b = Breakmans[x, y];
             if (b != null && b.isIce && !isIceTurn)
@@ -150,8 +150,9 @@ public class BoardManager : MonoBehaviour
 
     private void SpawnBreakman(int index, int x , int y)
     {
+        string numberOfPrefab = "Number" + breakmanPrefabs.Capacity;
+        Debug.Log(numberOfPrefab);
         GameObject go = Instantiate(breakmanPrefabs[index], GetTileCenter(x,y), Quaternion.identity) as GameObject;
-        Debug.Log(go);
         go.transform.SetParent(transform);
         Breakmans[x, y] = go.GetComponent<Breakman>();
         Breakmans[x, y].SetPosition(x, y);
@@ -171,7 +172,7 @@ public class BoardManager : MonoBehaviour
         activeBreakman = new List<GameObject>();
         Breakmans = new Breakman[8, 8];
         //spawn Ice team
-        for(int i = 0; i < 8; i++)
+        for (int i = 0; i < 8; i++)
         {
             SpawnBreakman(0, i, 0);
             SpawnBreakman(0, i, 1);

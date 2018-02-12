@@ -143,7 +143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   breakmanPrefabs:
   - {fileID: 1431556235264618, guid: f59dd648d83b6284d8cfe470a6093e53, type: 2}
-  - {fileID: 100002, guid: f873de477a4a25443948b0c0b4f5af6f, type: 3}
+  - {fileID: 1596454050834402, guid: 15ca5086d99fdfc4ab801e5d70251585, type: 2}
   isIceTurn: 1
 --- !u!4 &18783751
 Transform:
