@@ -1,9 +1,13 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.InteropServices;
 using UnityEngine;
+using bitboard = System.UInt64;
 
 public class BoardManager : MonoBehaviour
 {
+    public enum Turn { ICE, FIRE};
     public static BoardManager Instance { set; get; }
     public bool[,] AllowedMoves { set; get; }
 
@@ -23,10 +27,14 @@ public class BoardManager : MonoBehaviour
 
     public bool isIceTurn = true;
 
+    [DllImport("Assets/Plugins/AILibrary.dll")]
+    public static extern void BasicRandom(bitboard white, bitboard black, Turn t, ref int from, ref int to);
+
     private void Start()
     {
         Instance = this;
         SpawnAllBreakPieces();
+
     }
     private void Update()
     {
@@ -54,6 +62,11 @@ public class BoardManager : MonoBehaviour
 
     private void SelectBreakMan(int x, int y)
     {
+
+        int from = 0; int to = 0;
+        BasicRandom(0x000000000000FFFF, 0xFFFF000000000000, Turn.FIRE, ref from, ref to);
+        Debug.Log(from.ToString() + " -> " + to.ToString());
+
         if (Breakmans[x, y] == null)
             return;
 

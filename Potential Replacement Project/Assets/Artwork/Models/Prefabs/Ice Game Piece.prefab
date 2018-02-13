@@ -110,7 +110,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4637738808175164}
   - component: {fileID: 95052479909054134}
-  - component: {fileID: 114830999764949930}
+  - component: {fileID: 114348100579060950}
   - component: {fileID: 111133179796542212}
   m_Layer: 0
   m_Name: Ice Game Piece
@@ -740,7 +740,7 @@ Animation:
   m_PlayAutomatically: 0
   m_AnimatePhysics: 0
   m_CullingType: 1
---- !u!114 &114830999764949930
+--- !u!114 &114348100579060950
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
