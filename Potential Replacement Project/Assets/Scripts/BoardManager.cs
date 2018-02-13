@@ -7,8 +7,8 @@ public class BoardManager : MonoBehaviour
     public static BoardManager Instance { set; get; }
     public bool[,] AllowedMoves { set; get; }
 
-    public Breakman[,] Breakmans { set; get; }
-    private Breakman selectedBreakman;
+    public Piece[,] Breakmans { set; get; }
+    private Piece selectedBreakman;
     private bool isClicked = false;
 
     private const float TILE_SIZE = 1.0f;
@@ -39,13 +39,13 @@ public class BoardManager : MonoBehaviour
             {
                 if (selectedBreakman == null)
                 {
-                    // select the Breakman
+                    // select the Piece
                     SelectBreakMan(selectionX, selectionY);
                     Debug.Log("Selected");
                 }
                 else
                 {
-                    // Move the Breakman
+                    // Move the Piece
                     MoveBreakman(selectionX, selectionY);
                 }
             }
@@ -88,7 +88,7 @@ public class BoardManager : MonoBehaviour
         // TODO: Add winning conditions. Make in different functions.
         if (AllowedMoves[x, y])
         {
-            Breakman b = Breakmans[x, y];
+            Piece b = Breakmans[x, y];
             if (b != null && b.isIce != isIceTurn)
             {
                 // Capture a piece
@@ -181,7 +181,7 @@ public class BoardManager : MonoBehaviour
     {
         GameObject go = Instantiate(breakmanPrefabs[index], GetTileCenter(x,y), Quaternion.identity) as GameObject;
         go.transform.SetParent(transform);
-        Breakmans[x, y] = go.GetComponent<Breakman>();
+        Breakmans[x, y] = go.GetComponent<Piece>();
         Breakmans[x, y].SetPosition(x, y);
         activeBreakman.Add(go);
     }
@@ -197,7 +197,7 @@ public class BoardManager : MonoBehaviour
     private void SpawnAllBreakPieces()
     {
         activeBreakman = new List<GameObject>();
-        Breakmans = new Breakman[8, 8];
+        Breakmans = new Piece[8, 8];
         //spawn Ice team
         for (int i = 0; i < 8; i++)
         {

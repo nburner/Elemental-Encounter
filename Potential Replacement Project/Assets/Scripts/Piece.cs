@@ -2,14 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Piece : Breakman
+public class Piece : MonoBehaviour
 {
-    public override bool[,] PossibleMove()
+    public int CurrentX { set; get; }
+    public int CurrentY { set; get; }
+    public bool isIce;
+
+    public void SetPosition(int x,int y)
+    {
+        CurrentX = x;
+        CurrentY = y;
+        
+    }
+
+    public bool[,] PossibleMove()
     {
         bool[,] r = new bool[8, 8];
-        Breakman b;
+        Piece b;
 
-        if(isIce)
+        if (isIce)
         {
             // Diagonal Left
             if (CurrentX != 0 && CurrentY != 7)
