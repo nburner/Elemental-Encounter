@@ -134,7 +134,9 @@ public class BoardManager : MonoBehaviour
 
         if (isClicked)
         {
+
             selectedBreakman.GetComponent<Animation>().Stop();
+            //selectedBreakman.GetComponent<Animation>().Rewind();
             isClicked = !isClicked;
         }
         BoardHighlights.Instance.HideHighlights();
