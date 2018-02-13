@@ -7,7 +7,7 @@ using bitboard = System.UInt64;
 
 public class BoardManager : MonoBehaviour
 {
-    public enum Turn { ICE, FIRE};
+    public enum Turn { ICE, FIRE };
     public static BoardManager Instance { set; get; }
     public bool[,] AllowedMoves { set; get; }
 
@@ -28,7 +28,7 @@ public class BoardManager : MonoBehaviour
     public bool isIceTurn = true;
 
     [DllImport("Assets/Plugins/AILibrary.dll")]
-    public static extern void BasicRandom(bitboard white, bitboard black, Turn t, ref int from, ref int to);
+    public static extern void DarylsPet(bitboard white, bitboard black, Turn t, ref int from, ref int to);
 
     private void Start()
     {
@@ -62,11 +62,6 @@ public class BoardManager : MonoBehaviour
 
     private void SelectBreakMan(int x, int y)
     {
-
-        int from = 0; int to = 0;
-        BasicRandom(0x000000000000FFFF, 0xFFFF000000000000, Turn.FIRE, ref from, ref to);
-        Debug.Log(from.ToString() + " -> " + to.ToString());
-
         if (Breakmans[x, y] == null)
             return;
 
@@ -74,11 +69,11 @@ public class BoardManager : MonoBehaviour
             return;
         bool hasAtleastOneMove = false;
         AllowedMoves = Breakmans[x, y].PossibleMove();
-        for(int i = 0; i < 8; i++)
+        for (int i = 0; i < 8; i++)
         {
-            for(int j=0; j < 8; j++)
+            for (int j = 0; j < 8; j++)
             {
-                if(AllowedMoves[i,j])
+                if (AllowedMoves[i, j])
                     hasAtleastOneMove = true;
             }
         }
@@ -87,7 +82,7 @@ public class BoardManager : MonoBehaviour
         selectedBreakman = Breakmans[x, y];
         BoardHighlights.Instance.HighlightAllowedMoves(AllowedMoves);
 
-        if(!isClicked)
+        if (!isClicked)
         {
             selectedBreakman.GetComponent<Animation>().Play();
             isClicked = !isClicked;
@@ -128,8 +123,10 @@ public class BoardManager : MonoBehaviour
             selectedBreakman.transform.position = GetTileCenter(x, y);
             selectedBreakman.SetPosition(x, y);
             Breakmans[x, y] = selectedBreakman;
-            isIceTurn = !isIceTurn;
             selectedBreakman.GetComponent<Animation>().Stop();
+            
+            isIceTurn = !isIceTurn;
+            MakeAIMove(isIceTurn ? Turn.ICE : Turn.FIRE);
         }
 
         if (isClicked)
@@ -141,8 +138,51 @@ public class BoardManager : MonoBehaviour
         BoardHighlights.Instance.HideHighlights();
 
         selectedBreakman = null;
-        
+
     }
+
+    private void MakeAIMove(Turn t)
+    {
+        //Convert Gameboard
+        bitboard white = 0;
+        bitboard black = 0;
+        for (int x = 0; x < 8; x++)
+            for (int y = 0; y < 8; y++)
+                if (Breakmans[x, y] != null)
+                {
+                    if (Breakmans[x, y].isIce) { white = AI.Board.set(white, y * 8 + x); }
+                    if (!Breakmans[x, y].isIce) { black = AI.Board.set(black, y * 8 + x); }
+                }
+
+        int from = 48; int to = 41;
+        DarylsPet(white, black, t, ref from, ref to);
+        //Debug.Log(from.ToString() + " -> " + to.ToString());
+
+        int toX = to % 8;
+        int toY = to / 8;
+        int fromX = from % 8;
+        int fromY = from / 8;
+
+        if (Breakmans[toX, toY] != null)
+        {
+            // Capture a piece
+            activeBreakman.Remove(Breakmans[toX, toY].gameObject);
+            Destroy(Breakmans[toX, toY].gameObject);
+        }
+
+        Piece selectedBreakman = Breakmans[fromX, fromY];
+        if ((isIceTurn && Breakmans[fromX, fromY].CurrentY + 1 == 7) || (!isIceTurn && Breakmans[fromX, fromY].CurrentY - 1 == 0)) EndGame();
+
+        Breakmans[fromX, fromY].transform.position = GetTileCenter(toX, toY);
+        Breakmans[fromX, fromY].SetPosition(toX, toY);
+        Breakmans[fromX, fromY].GetComponent<Animation>().Stop();
+
+        Breakmans[toX, toY] = Breakmans[fromX, fromY];
+        Breakmans[fromX, fromY] = null;
+
+        isIceTurn = !isIceTurn;
+    }
+
     private void UpdateSelection()
     {
         if (!Camera.main)
@@ -190,9 +230,9 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    private void SpawnBreakman(int index, int x , int y)
+    private void SpawnBreakman(int index, int x, int y)
     {
-        GameObject go = Instantiate(breakmanPrefabs[index], GetTileCenter(x,y), Quaternion.identity) as GameObject;
+        GameObject go = Instantiate(breakmanPrefabs[index], GetTileCenter(x, y), Quaternion.identity) as GameObject;
         go.transform.SetParent(transform);
         Breakmans[x, y] = go.GetComponent<Piece>();
         Breakmans[x, y].SetPosition(x, y);
@@ -230,7 +270,7 @@ public class BoardManager : MonoBehaviour
         if (isIceTurn)
         {
             Debug.Log("Ice Wins!");
-           
+
         }
         else
         {
