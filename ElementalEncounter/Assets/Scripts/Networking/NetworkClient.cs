@@ -8,11 +8,18 @@ using System.Net.Sockets;
 
 public class NetworkClient : MonoBehaviour
 {
+    public string clientName;
+
     private bool socketReady;
     private TcpClient socket;
     private NetworkStream stream;
     private StreamWriter writer;
     private StreamReader reader;
+
+    void Start()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
 
     public bool ConnectToServer(string host, int port)
     {
