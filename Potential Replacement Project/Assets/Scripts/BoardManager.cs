@@ -319,7 +319,7 @@ public class BoardManager : MonoBehaviour
         }
         
 
-        //isIceTurn = !isIceTurn; //This is provoking an error 
+        isIceTurn = false; //This is provoking an error Needs to have another winning conditions separetely
         BoardHighlights.Instance.HideHighlights();
         SpawnAllBreakPieces();
     }
