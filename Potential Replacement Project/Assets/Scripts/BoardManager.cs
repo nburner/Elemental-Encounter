@@ -175,8 +175,11 @@ public class BoardManager : MonoBehaviour
         }
 
         Piece selectedBreakman = Breakmans[fromX, fromY];
-        if ((isIceTurn && Breakmans[fromX, fromY].CurrentY + 1 == 7) || (!isIceTurn && Breakmans[fromX, fromY].CurrentY - 1 == 0)) EndGame();
-
+        if ((isIceTurn && Breakmans[fromX, fromY].CurrentY + 1 == 7) || (!isIceTurn && Breakmans[fromX, fromY].CurrentY - 1 == 0))
+        {
+            EndGame();
+            return;
+        }
         Breakmans[fromX, fromY].transform.position = GetTileCenter(toX, toY);
         Breakmans[fromX, fromY].SetPosition(toX, toY);
         Breakmans[fromX, fromY].GetComponent<Animation>().Stop();

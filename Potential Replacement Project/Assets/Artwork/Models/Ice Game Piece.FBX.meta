@@ -55,8 +55,30 @@ ModelImporter:
     4300000: ChamferCyl001
     4300002: Torus Knot001
     7400000: Hover
+    7400002: Hover //// Ice Piece
+    7400004: Hover //// Torus Knot001
     9500000: //RootNode
     11100000: //RootNode
+    11100002: Birth 001
+    11100004: Blizzard001
+    11100006: ChamferCyl001
+    11100008: Collision 001
+    11100010: Collision 002
+    11100012: Delete 001
+    11100014: Display 001
+    11100016: Display 002
+    11100018: Event 001
+    11100020: Event 002
+    11100022: Event 003
+    11100024: GroundDeflector
+    11100026: Ice Piece
+    11100028: Particle View 001
+    11100030: PF Arrow001
+    11100032: Position Icon 001
+    11100034: Render 001
+    11100036: Speed 001
+    11100038: Torus Knot001
+    11100040: UDeflector001
   externalObjects: {}
   materials:
     importMaterials: 1
