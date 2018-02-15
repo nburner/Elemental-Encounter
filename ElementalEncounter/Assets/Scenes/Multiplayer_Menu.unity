@@ -1195,6 +1195,7 @@ MonoBehaviour:
     type: 2}
   clientPrefab: {fileID: 1420666769438646, guid: de8987478662a574d82e10995b14e5e3,
     type: 2}
+  nameInput: {fileID: 127929715}
 --- !u!4 &883716439
 Transform:
   m_ObjectHideFlags: 0

@@ -86,7 +86,7 @@ public class BoardManager : MonoBehaviour
 
         if (!isClicked)
         {
-            selectedBreakman.GetComponent<Animation>().Play();
+            selectedBreakman.GetComponent<Animation>().enabled = true;
             isClicked = !isClicked;
         }
 
@@ -126,7 +126,7 @@ public class BoardManager : MonoBehaviour
             selectedBreakman.transform.position = GetTileCenter(x, y);
             selectedBreakman.SetPosition(x, y);
             Breakmans[x, y] = selectedBreakman;
-            selectedBreakman.GetComponent<Animation>().Stop();
+            selectedBreakman.GetComponent<Animation>().enabled = false;
             
             isIceTurn = !isIceTurn;
             MakeAIMove(isIceTurn ? Turn.ICE : Turn.FIRE);
@@ -134,8 +134,9 @@ public class BoardManager : MonoBehaviour
 
         if (isClicked)
         {
+            selectedBreakman.GetComponent<Animation>().enabled = false;
 
-            selectedBreakman.GetComponent<Animation>().Stop();
+
             //selectedBreakman.GetComponent<Animation>().Rewind();
             isClicked = !isClicked;
         }
@@ -174,7 +175,7 @@ public class BoardManager : MonoBehaviour
             Destroy(Breakmans[toX, toY].gameObject);
         }
 
-        Piece selectedBreakman = Breakmans[fromX, fromY];
+        //Piece selectedBreakman = Breakmans[fromX, fromY];
         if ((isIceTurn && Breakmans[fromX, fromY].CurrentY + 1 == 7) || (!isIceTurn && Breakmans[fromX, fromY].CurrentY - 1 == 0))
         {
             EndGame();
@@ -182,7 +183,7 @@ public class BoardManager : MonoBehaviour
         }
         Breakmans[fromX, fromY].transform.position = GetTileCenter(toX, toY);
         Breakmans[fromX, fromY].SetPosition(toX, toY);
-        Breakmans[fromX, fromY].GetComponent<Animation>().Stop();
+        Breakmans[fromX, fromY].GetComponent<Animation>().enabled = false;
 
         Breakmans[toX, toY] = Breakmans[fromX, fromY];
         Breakmans[fromX, fromY] = null;
@@ -220,7 +221,7 @@ public class BoardManager : MonoBehaviour
             for (int j = 0; j <= 8; j++)
             {
                 start = Vector3.right * j;
-                Debug.DrawLine(start, start + widthLine);
+                Debug.DrawLine(start, start + heightLine);
             }
         }
 
@@ -244,6 +245,8 @@ public class BoardManager : MonoBehaviour
         Breakmans[x, y] = go.GetComponent<Piece>();
         Breakmans[x, y].SetPosition(x, y);
         activeBreakman.Add(go);
+        go.GetComponent<Animation>().Play();
+        go.GetComponent<Animation>().enabled = false;
     }
 
     private void SpawnBoardSpace(int index, int x, int y)

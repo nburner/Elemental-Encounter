@@ -22,12 +22,12 @@ namespace GameCore
 				game.newGame(ai2, noob, true);
 			
 			Console.WriteLine("Hooray for "+(game.Winner == Turn.WHITE? "Pet" : "Noob"));
-				//if (game.Winner == Turn.WHITE) ++petWins; else ++testWins;
+			if (game.Winner == Turn.WHITE) ++petWins; else ++testWins;
 				//Console.Write("\rPet: {0}\tTest: {1}", petWins, testWins);
 
 				game.newGame(noob, ai2, true);
 			Console.WriteLine("Hooray for "+(game.Winner == Turn.BLACK ? "Pet" : "Noob"));
-				//if (game.Winner == Turn.BLACK) ++petWins; else ++testWins;
+			if (game.Winner == Turn.BLACK) ++petWins; else ++testWins;
 				//Console.Write("\rPet: {0}\tTest: {1}", petWins, testWins);
 
 			//}
