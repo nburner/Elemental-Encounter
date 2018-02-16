@@ -1,7 +1,6 @@
 D:\Users\Daryl\Documents\GitHub\Elemental-Encounter\CSharpSolution\GameCore\bin\Release\GameCore.exe.config
 D:\Users\Daryl\Documents\GitHub\Elemental-Encounter\CSharpSolution\GameCore\bin\Release\GameCore.exe
 D:\Users\Daryl\Documents\GitHub\Elemental-Encounter\CSharpSolution\GameCore\bin\Release\GameCore.pdb
-D:\Users\Daryl\Documents\GitHub\Elemental-Encounter\CSharpSolution\GameCore\obj\Release\GameCore.csprojResolveAssemblyReference.cache
 D:\Users\Daryl\Documents\GitHub\Elemental-Encounter\CSharpSolution\GameCore\obj\Release\GameCore.csproj.CoreCompileInputs.cache
 D:\Users\Daryl\Documents\GitHub\Elemental-Encounter\CSharpSolution\GameCore\obj\Release\GameCore.exe
 D:\Users\Daryl\Documents\GitHub\Elemental-Encounter\CSharpSolution\GameCore\obj\Release\GameCore.pdb

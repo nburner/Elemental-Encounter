@@ -15,21 +15,21 @@ namespace GameCore.AIWrapper
 	class AI : Player
 	{
 		[DllImport("AILibrary.dll")]
-		public static extern void BasicRandom(bitboard white, bitboard black, Turn t, ref int from, ref int to);
+		public static extern void BasicRandom(bitboard white, bitboard black, Turn t, out int from, out int to);
 		[DllImport("AILibrary.dll")]
-		public static extern void BasicDefense(bitboard white, bitboard black, Turn t, ref int from, ref int to);
+		public static extern void BasicDefense(bitboard white, bitboard black, Turn t, out int from, out int to);
 		[DllImport("AILibrary.dll")]
-		public static extern void BasicOffense(bitboard white, bitboard black, Turn t, ref int from, ref int to);
+		public static extern void BasicOffense(bitboard white, bitboard black, Turn t, out int from, out int to);
 		[DllImport("AILibrary.dll")]
-		public static extern void DarylsPet(bitboard white, bitboard black, Turn t, ref int from, ref int to);
+		public static extern void DarylsPet(bitboard white, bitboard black, Turn t, out int from, out int to);
 		[DllImport("AILibrary.dll")]
-		public static extern void MemPet(bitboard white, bitboard black, Turn t, ref int from, ref int to, int id = 0);
+		public static extern void MemPet(bitboard white, bitboard black, Turn t, out int from, out int to, int id = 0);
 		[DllImport("AILibrary.dll")]
-		public static extern void RandomPet(bitboard white, bitboard black, Turn t, ref int from, ref int to);
+		public static extern void RandomPet(bitboard white, bitboard black, Turn t, out int from, out int to);
 		[DllImport("AILibrary.dll")]
-		public static extern void Test(bitboard white, bitboard black, Turn t, ref int from, ref int to);
+		public static extern void Test(bitboard white, bitboard black, Turn t, out int from, out int to);
 		[DllImport("AILibrary.dll")]
-		public static extern void DarylsPrune(bitboard white, bitboard black, Turn t, ref int from, ref int to);
+		public static extern void DarylsPrune(bitboard white, bitboard black, Turn t, out int from, out int to);
 
 		public AIType Type { get; private set; }
 
@@ -49,14 +49,14 @@ namespace GameCore.AIWrapper
 			//Get move from type
 			int from = 0, to = 0;
 			switch (Type) {
-				case AIType.B_OFFENSE: BasicOffense(white, black, t, ref from, ref to); break;
-				case AIType.B_DEFENSE: BasicDefense(white, black, t, ref from, ref to); break;
-				case AIType.B_RANDOM: BasicRandom(white, black, t, ref from, ref to); break;
-				case AIType.RANDOM_PET: RandomPet(white, black, t, ref from, ref to); break;
-				case AIType.DARYLS_PET: DarylsPet(white, black, t, ref from, ref to); break;
-				case AIType.MEM_PET: MemPet(white, black, t, ref from, ref to); break;
-				case AIType.TEST: Test(white, black, t, ref from, ref to); break;
-				case AIType.DARYLS_PRUNE: DarylsPrune(white, black, t, ref from, ref to); break;
+				case AIType.B_OFFENSE: BasicOffense(white, black, t, out from, out to); break;
+				case AIType.B_DEFENSE: BasicDefense(white, black, t, out from, out to); break;
+				case AIType.B_RANDOM: BasicRandom(white, black, t, out from, out to); break;
+				case AIType.RANDOM_PET: RandomPet(white, black, t, out from, out to); break;
+				case AIType.DARYLS_PET: DarylsPet(white, black, t, out from, out to); break;
+				case AIType.MEM_PET: MemPet(white, black, t, out from, out to); break;
+				case AIType.TEST: Test(white, black, t, out from, out to); break;
+				case AIType.DARYLS_PRUNE: DarylsPrune(white, black, t, out from, out to); break;
 				default: break;
 			}
 			

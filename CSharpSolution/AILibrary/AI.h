@@ -1,6 +1,7 @@
 #pragma once
 #include "Board.h"
 #include "FeatureFunctions.h"
+#include "timer.h"
 #include <algorithm>
 #include <vector>
 

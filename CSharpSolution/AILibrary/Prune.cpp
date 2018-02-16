@@ -1,12 +1,14 @@
 #include "stdafx.h"
 #include "AI.h"
 #include "Board.h"
+#include "timer.h"
 #include <random>
 #include <set>
+#include <ctime>
 
 using namespace AI;
 
-int Prune::PLY_COUNT = 2;
+int Prune::PLY_COUNT = 4;
 
 AI::Prune::Prune(int) : Pet(0)
 {
@@ -36,8 +38,9 @@ int Prune::alphabeta(Board board, int currentPly) const {
 
 move Prune::operator()(const Board b) const
 {
-	PLY_COUNT = 3 + (32 - featureCalculators[MY_PAWN_COUNT](b) - featureCalculators[THEIR_PAWN_COUNT](b))/2;
-	
+	static timer _timer;
+	_timer.start();
+	//PLY_COUNT = 3 + (32 - featureCalculators[MY_PAWN_COUNT](b) - featureCalculators[THEIR_PAWN_COUNT](b))/2;
 
 	auto boards = b.validWinBoards();
 	if (!boards.empty()) return boards[0].lastMove;
@@ -46,6 +49,7 @@ move Prune::operator()(const Board b) const
 
 	move result; int bestVal = INT_MIN;
 
+#pragma omp parallel for
 	for (int i = 0; i < boards.size(); i++) {
 		evaluate(boards[i]);
 		boards[i].val /= 2;
@@ -63,6 +67,7 @@ move Prune::operator()(const Board b) const
 	//cout << "AI's Move: " << BoardHelpers::to_string(result.first) << " - " << BoardHelpers::to_string(result.second) << endl;
 	//cout << " Best Val: " << bestVal << endl;
 
-	cout << "PLY_COUNT: " << PLY_COUNT << endl;
+	//cout << "PLY_COUNT: " << PLY_COUNT << endl;
+	cout << "This move took: " << _timer.read() << " seconds" << endl;
 	return result;
 }
