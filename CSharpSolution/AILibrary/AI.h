@@ -9,7 +9,7 @@ using std::vector;
 using std::string;
 
 namespace AI {
-
+	
 	enum BoardFeature {					//NOTE - THE BELOW COMMENTS MAY BE BIASED TOWARDS WHITE
 		ROW_2_THREATENED,				//number of threatened squares in row 2 (0-8)
 		ROW_2_THREATENED_B,				//1 if all of row 2 is threatened, 0 otherwise
@@ -77,7 +77,7 @@ namespace AI {
 	protected:
 		static int PLY_COUNT;
 		int alphabeta(Board board, int currentPly) const;
-
+		
 	public:
 		Prune();
 		Prune(int);
@@ -110,13 +110,4 @@ namespace AI {
 		void debug();
 	};
 
-
-	class MemoryPrune : public Prune
-	{
-	public:
-		MemoryPrune(int); 
-		void save(int);
-		void tweak();
-		static MemoryPrune * mix(MemoryPrune * mom, MemoryPrune * dad);
-	};
 }
