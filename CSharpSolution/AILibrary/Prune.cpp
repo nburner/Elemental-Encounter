@@ -1,14 +1,12 @@
-#include "stdafx.h"
 #include "AI.h"
-#include "Board.h"
-#include "timer.h"
 #include <random>
-#include <set>
 #include <ctime>
 
 using namespace AI;
 
-int Prune::PLY_COUNT = 4;
+static timer _timer;
+int Prune::PLY_COUNT = 2;
+const auto TIME_CUTOFF = 5.85;
 
 AI::Prune::Prune(int) : Pet(0)
 {
@@ -31,43 +29,48 @@ int Prune::alphabeta(Board board, int currentPly) const {
 			return board.beta;   //  fail hard beta-cutoff
 		if (boards[i].val > board.alpha)
 			board.alpha = boards[i].val; // alpha acts like max in MiniMax
+
+		if (_timer.read() > TIME_CUTOFF) break;
 	}
 
 	return board.alpha;
 }
 
+bool valueCompare(const Board& a, const Board& b) {
+	return a.val < b.val;
+}
+
 move Prune::operator()(const Board b) const
 {
-	static timer _timer;
 	_timer.start();
-	//PLY_COUNT = 3 + (32 - featureCalculators[MY_PAWN_COUNT](b) - featureCalculators[THEIR_PAWN_COUNT](b))/2;
+	
+	PLY_COUNT = 2;
+	move result; bool timeRemaining = true;
+	
+	while (timeRemaining) {
+		auto boards = b.validWinBoards();
+		if (!boards.empty()) return boards[0].lastMove;
+		boards = b.validNextBoards();
 
-	auto boards = b.validWinBoards();
-	if (!boards.empty()) return boards[0].lastMove;
+		++PLY_COUNT;
+		result = std::max_element(boards.begin(), boards.end(), valueCompare)->lastMove;
 
-	boards = b.validNextBoards();
+		//#pragma omp parallel for
+		for (int i = 0; i < boards.size(); i++) {
+			evaluate(boards[i]);
+			boards[i].val /= 2;
+			boards[i].val += alphabeta(boards[i], 0) / 2;
 
-	move result; int bestVal = INT_MIN;
-
-#pragma omp parallel for
-	for (int i = 0; i < boards.size(); i++) {
-		evaluate(boards[i]);
-		boards[i].val /= 2;
-		boards[i].val += alphabeta(boards[i], 0) / 2;
-		if (boards[i].val > bestVal) {
-			bestVal = boards[i].val;
-			result = boards[i].lastMove;
+			if (_timer.read() > TIME_CUTOFF) {
+				timeRemaining = false;
+				break;
+			}
 		}
 	}
-
-	/*std::sort(boards.begin(), boards.end(), [](Board& a, Board& b) {
-	return a.val > b.val;
-	});*/
-
 	//cout << "AI's Move: " << BoardHelpers::to_string(result.first) << " - " << BoardHelpers::to_string(result.second) << endl;
 	//cout << " Best Val: " << bestVal << endl;
 
-	//cout << "PLY_COUNT: " << PLY_COUNT << endl;
+	cout << "PLY_COUNT: " << PLY_COUNT << endl;
 	cout << "This move took: " << _timer.read() << " seconds" << endl;
 	return result;
 }
