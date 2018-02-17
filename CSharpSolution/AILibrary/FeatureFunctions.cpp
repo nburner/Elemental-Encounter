@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "FeatureFunctions.h"
 #include "Board.h"
 
