@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -142,8 +142,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   breakmanPrefabs:
-  - {fileID: 1431556235264618, guid: f59dd648d83b6284d8cfe470a6093e53, type: 2}
-  - {fileID: 1596454050834402, guid: 15ca5086d99fdfc4ab801e5d70251585, type: 2}
+  - {fileID: 1081819570631570, guid: 8a33cc82ef7eecf448e319a76f57c925, type: 2}
+  - {fileID: 1848356010410964, guid: ecefcb705f84eac47a8a025fe76ec3e8, type: 2}
   boardPrefabs:
   - {fileID: 1643396766749774, guid: ee6ed1a904506db44b3f4a3153b3f90d, type: 2}
   - {fileID: 1523715143533048, guid: c34f65431586e7344b5d406eca69dafc, type: 2}
@@ -192,7 +192,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &374203864
 AudioListener:
   m_ObjectHideFlags: 0

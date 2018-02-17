@@ -86,7 +86,7 @@ public class BoardManager : MonoBehaviour
 
         if (!isClicked)
         {
-            selectedBreakman.GetComponent<Animation>().enabled = true;
+            //selectedBreakman.GetComponent<Animation>().enabled = true;
             isClicked = !isClicked;
         }
 
@@ -126,7 +126,7 @@ public class BoardManager : MonoBehaviour
             selectedBreakman.transform.position = GetTileCenter(x, y);
             selectedBreakman.SetPosition(x, y);
             Breakmans[x, y] = selectedBreakman;
-            selectedBreakman.GetComponent<Animation>().enabled = false;
+            //selectedBreakman.GetComponent<Animation>().enabled = false;
             
             isIceTurn = !isIceTurn;
             MakeAIMove(isIceTurn ? Turn.ICE : Turn.FIRE);
@@ -134,7 +134,7 @@ public class BoardManager : MonoBehaviour
 
         if (isClicked)
         {
-            selectedBreakman.GetComponent<Animation>().enabled = false;
+            //selectedBreakman.GetComponent<Animation>().enabled = false;
 
 
             //selectedBreakman.GetComponent<Animation>().Rewind();
@@ -183,7 +183,7 @@ public class BoardManager : MonoBehaviour
         }
         Breakmans[fromX, fromY].transform.position = GetTileCenter(toX, toY);
         Breakmans[fromX, fromY].SetPosition(toX, toY);
-        Breakmans[fromX, fromY].GetComponent<Animation>().enabled = false;
+        //Breakmans[fromX, fromY].GetComponent<Animation>().enabled = false;
 
         Breakmans[toX, toY] = Breakmans[fromX, fromY];
         Breakmans[fromX, fromY] = null;
@@ -245,8 +245,8 @@ public class BoardManager : MonoBehaviour
         Breakmans[x, y] = go.GetComponent<Piece>();
         Breakmans[x, y].SetPosition(x, y);
         activeBreakman.Add(go);
-        go.GetComponent<Animation>().Play();
-        go.GetComponent<Animation>().enabled = false;
+        //go.GetComponent<Animation>().Play();
+        //go.GetComponent<Animation>().enabled = false;
     }
 
     private void SpawnBoardSpace(int index, int x, int y)
