@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Board.h"
 #include <intrin.h>
 #include <algorithm>
@@ -11,20 +10,20 @@ using namespace BoardHelpers;
 Board::Board() {
 	bb[WHITE] = bitboard(0x000000000000FFFF);
 	bb[BLACK] = bitboard(0xFFFF000000000000);
-	turn = WHITE;
+	_turn = WHITE;
 }
 
 Board::Board(bitboard white, bitboard black, Turn t) {
 	bb[WHITE] = white;
 	bb[BLACK] = black;
-	turn = t;
+	_turn = t;
 }
 
 Board::Board(const Board& b, bool flipTurn)
 {
 	bb[WHITE] = b.bb[WHITE];
 	bb[BLACK] = b.bb[BLACK];
-	turn = Turn((flipTurn + b.turn) % 2);
+	_turn = Turn((flipTurn + b._turn) % 2);
 
 	lastMove = b.lastMove;
 }
@@ -63,19 +62,19 @@ std::vector<Board> Board::validNextBoards() const
 
 	std::vector<Board> result = std::vector<Board>();
 
-	Direction forward = turn == WHITE ? NORTH : SOUTH;
+	Direction forward = _turn == WHITE ? NORTH : SOUTH;
 	Direction left = Direction(forward + WEST);
 	Direction right = Direction(forward + EAST);
 
 	unsigned long to;
 
 	//Move Up
-	bitboard possibleUps = shift(bb[turn], forward) & ~bb[WHITE] & ~bb[BLACK];
+	bitboard possibleUps = shift(bb[_turn], forward) & ~bb[WHITE] & ~bb[BLACK];
 	while (_BitScanForward64(&to, possibleUps)) {
 		Board newBoard = Board(*this, true);
 
-		set(newBoard.bb[turn], to);
-		reset(newBoard.bb[turn], to - forward);
+		set(newBoard.bb[_turn], to);
+		reset(newBoard.bb[_turn], to - forward);
 		newBoard.lastMove = move(Square(to - forward), Square(to));
 		result.push_back(newBoard);
 
@@ -83,13 +82,13 @@ std::vector<Board> Board::validNextBoards() const
 	}
 
 	//Move Right
-	bitboard possibleRights = shift(bb[turn], right) & ~bb[turn] & ~colA;
+	bitboard possibleRights = shift(bb[_turn], right) & ~bb[_turn] & ~colA;
 	while (_BitScanForward64(&to, possibleRights)) {
 		Board newBoard = Board(*this, true);
 
-		set(newBoard.bb[turn], to);
-		reset(newBoard.bb[newBoard.turn], to);
-		reset(newBoard.bb[turn], to - right);
+		set(newBoard.bb[_turn], to);
+		reset(newBoard.bb[newBoard._turn], to);
+		reset(newBoard.bb[_turn], to - right);
 		newBoard.lastMove = move(Square(to - right), Square(to));
 		result.push_back(newBoard);
 
@@ -97,13 +96,13 @@ std::vector<Board> Board::validNextBoards() const
 	}
 
 	//Move Left
-	bitboard possibleLefts = shift(bb[turn], left) & ~bb[turn] & ~colH;
+	bitboard possibleLefts = shift(bb[_turn], left) & ~bb[_turn] & ~colH;
 	while (_BitScanForward64(&to, possibleLefts)) {
 		Board newBoard = Board(*this, true);
 
-		set(newBoard.bb[turn], to);
-		reset(newBoard.bb[newBoard.turn], to);
-		reset(newBoard.bb[turn], to - left);
+		set(newBoard.bb[_turn], to);
+		reset(newBoard.bb[newBoard._turn], to);
+		reset(newBoard.bb[_turn], to - left);
 		newBoard.lastMove = move(Square(to - left), Square(to));
 		result.push_back(newBoard);
 
@@ -119,20 +118,20 @@ std::vector<Board> Board::validAttackBoards() const
 
 	std::vector<Board> result = std::vector<Board>();
 
-	Direction forward = turn == WHITE ? NORTH : SOUTH;
+	Direction forward = _turn == WHITE ? NORTH : SOUTH;
 	Direction left = Direction(forward + WEST);
 	Direction right = Direction(forward + EAST);
 
 	unsigned long to;
 
 	//Move Right
-	bitboard possibleRights = shift(bb[turn], right) & ~bb[turn] & bb[!turn] & ~colA;
+	bitboard possibleRights = shift(bb[_turn], right) & ~bb[_turn] & bb[!_turn] & ~colA;
 	while (_BitScanForward64(&to, possibleRights)) {
 		Board newBoard = Board(*this, true);
 
-		set(newBoard.bb[turn], to);
-		reset(newBoard.bb[newBoard.turn], to);
-		reset(newBoard.bb[turn], to - right);
+		set(newBoard.bb[_turn], to);
+		reset(newBoard.bb[newBoard._turn], to);
+		reset(newBoard.bb[_turn], to - right);
 		newBoard.lastMove = move(Square(to - right), Square(to));
 		result.push_back(newBoard);
 
@@ -140,13 +139,13 @@ std::vector<Board> Board::validAttackBoards() const
 	}
 
 	//Move Left
-	bitboard possibleLefts = shift(bb[turn], left) & ~bb[turn] & bb[!turn] & ~colH;
+	bitboard possibleLefts = shift(bb[_turn], left) & ~bb[_turn] & bb[!_turn] & ~colH;
 	while (_BitScanForward64(&to, possibleLefts)) {
 		Board newBoard = Board(*this, true);
 
-		set(newBoard.bb[turn], to);
-		reset(newBoard.bb[newBoard.turn], to);
-		reset(newBoard.bb[turn], to - left);
+		set(newBoard.bb[_turn], to);
+		reset(newBoard.bb[newBoard._turn], to);
+		reset(newBoard.bb[_turn], to - left);
 		newBoard.lastMove = move(Square(to - left), Square(to));
 		result.push_back(newBoard);
 
@@ -162,20 +161,20 @@ std::vector<Board> Board::validWinBoards() const
 
 	std::vector<Board> result = std::vector<Board>();
 
-	Direction forward = turn == WHITE ? NORTH : SOUTH;
+	Direction forward = _turn == WHITE ? NORTH : SOUTH;
 	Direction left = Direction(forward + WEST);
 	Direction right = Direction(forward + EAST);
-	auto myWinRow = turn == WHITE ? row8 : row1;
+	auto myWinRow = _turn == WHITE ? row8 : row1;
 
 	unsigned long to;
 
 	//Move Up
-	bitboard possibleUps = shift(bb[turn], forward) & ~bb[WHITE] & ~bb[BLACK] & myWinRow;
+	bitboard possibleUps = shift(bb[_turn], forward) & ~bb[WHITE] & ~bb[BLACK] & myWinRow;
 	while (_BitScanForward64(&to, possibleUps)) {
 		Board newBoard = Board(*this, true);
 
-		set(newBoard.bb[turn], to);
-		reset(newBoard.bb[turn], to - forward);
+		set(newBoard.bb[_turn], to);
+		reset(newBoard.bb[_turn], to - forward);
 		newBoard.lastMove = move(Square(to - forward), Square(to));
 		result.push_back(newBoard);
 
@@ -183,13 +182,13 @@ std::vector<Board> Board::validWinBoards() const
 	}
 
 	//Move Right
-	bitboard possibleRights = shift(bb[turn], right) & ~bb[turn] & ~colA & myWinRow;
+	bitboard possibleRights = shift(bb[_turn], right) & ~bb[_turn] & ~colA & myWinRow;
 	while (_BitScanForward64(&to, possibleRights)) {
 		Board newBoard = Board(*this, true);
 
-		set(newBoard.bb[turn], to);
-		reset(newBoard.bb[newBoard.turn], to);
-		reset(newBoard.bb[turn], to - right);
+		set(newBoard.bb[_turn], to);
+		reset(newBoard.bb[newBoard._turn], to);
+		reset(newBoard.bb[_turn], to - right);
 		newBoard.lastMove = move(Square(to - right), Square(to));
 		result.push_back(newBoard);
 
@@ -197,13 +196,13 @@ std::vector<Board> Board::validWinBoards() const
 	}
 
 	//Move Left
-	bitboard possibleLefts = shift(bb[turn], left) & ~bb[turn] & ~colH & myWinRow;
+	bitboard possibleLefts = shift(bb[_turn], left) & ~bb[_turn] & ~colH & myWinRow;
 	while (_BitScanForward64(&to, possibleLefts)) {
 		Board newBoard = Board(*this, true);
 
-		set(newBoard.bb[turn], to);
-		reset(newBoard.bb[newBoard.turn], to);
-		reset(newBoard.bb[turn], to - left);
+		set(newBoard.bb[_turn], to);
+		reset(newBoard.bb[newBoard._turn], to);
+		reset(newBoard.bb[_turn], to - left);
 		newBoard.lastMove = move(Square(to - left), Square(to));
 		result.push_back(newBoard);
 
@@ -213,16 +212,36 @@ std::vector<Board> Board::validWinBoards() const
 	return result;
 }
 
+Board AI::Board::ignoreBack() const
+{
+	Board result = *this;
+
+	result.bb[this->_turn] &= this->_turn ? (row2 | row3 | row4) : (row5 | row6 | row7);
+	result.bb[!this->_turn] &= this->_turn ? (row1 | row2 | row3) : (row6 | row7 | row8);
+
+	return result;
+}
+
+Square AI::Board::furthestPiece(Turn t) const
+{
+	unsigned long result;
+
+	if (t) _BitScanReverse64(&result, bb[t]);
+	else _BitScanForward64(&result, bb[t]);
+
+	return (Square)result;
+}
+
 //returns INT_MAX if the current player won, INT_MIN if the current player lost, 0 otherwise
 int Board::gameOver() const
 {
 	if (bb[WHITE] & row8 || !bb[BLACK]) {
-		if (!turn) return -1*INT_MAX;
-		if (turn) return INT_MAX;
+		if (!_turn) return -1*INT_MAX;
+		if (_turn) return INT_MAX;
 	}
 	if (bb[BLACK] & row1 || !bb[WHITE]) {
-		if (!turn) return INT_MAX;
-		if (turn) return -1*INT_MAX;
+		if (!_turn) return INT_MAX;
+		if (_turn) return -1*INT_MAX;
 	}
 	return 0;
 }

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "AI.h"
 #include "Board.h"
 #include "timer.h"
@@ -9,6 +8,10 @@
 using namespace AI;
 
 int Prune::PLY_COUNT = 4;
+
+AI::Prune::Prune()
+{
+}
 
 AI::Prune::Prune(int) : Pet(0)
 {
