@@ -13,8 +13,8 @@ public class BoardManager : MonoBehaviour
     public char[,] AllowedMoves { set; get; }
 
     public Piece[,] Breakmans { set; get; }
-    public bool[,] Spacesboard{ set; get; }
-    public Piece selectedBreakman;
+    public bool[,] Spacesboard { set; get; }
+    private Piece selectedBreakman;
     private bool isClicked = false;
 
     private const float TILE_SIZE = 1.0f;
@@ -28,18 +28,12 @@ public class BoardManager : MonoBehaviour
     private List<GameObject> activeBreakman;
 
     public bool isIceTurn = true;
-    public bool isMultiplayer = true;
 
     [DllImport("Assets/Plugins/AILibrary.dll")]
     public static extern void DarylsPet(bitboard white, bitboard black, Turn t, ref int from, ref int to);
-    private NetworkClient client;
+
     private void Start()
     {
-        if (isMultiplayer)
-        {
-           //client = FindObjectOfType<NetworkClient>();
-           //isIceTurn = client.isHost;
-        }
         Instance = this;
         SpawnAllBoardSpaces();
         SpawnAllBreakPieces();
@@ -62,21 +56,7 @@ public class BoardManager : MonoBehaviour
                 else
                 {
                     // Move the Piece
-                    if (!isMultiplayer)
-                        MoveBreakman(selectionX, selectionY);
-                    else
-                    {
-                        string msg = "CMOV|";
-                        msg += selectedBreakman.CurrentX.ToString() + "|";
-                        msg += selectedBreakman.CurrentY.ToString() + "|";
-                        msg += selectionX.ToString() + "|";
-                        msg += selectionY.ToString();
-
-                        //client.Send(msg);
-                        MoveBreakmanNet(selectionX, selectionY);
-                        selectedBreakman = null;
-                        isIceTurn = !isIceTurn;
-                    }
+                    MoveBreakman(selectionX, selectionY);
                 }
             }
         }
@@ -88,9 +68,8 @@ public class BoardManager : MonoBehaviour
         if (Breakmans[x, y] == null)
             return;
 
-        if (Breakmans[x, y].isIce != isIceTurn || !isIceTurn)
+        if (Breakmans[x, y].isIce != isIceTurn)
             return;
-
         bool hasAtleastOneMove = false;
         AllowedMoves = Breakmans[x, y].PossibleMove();
         for (int i = 0; i < 8; i++)
@@ -109,96 +88,12 @@ public class BoardManager : MonoBehaviour
 
         if (!isClicked)
         {
-<<<<<<< HEAD
-=======
-            selectedBreakman.GetComponent<Animation>().enabled = true;
->>>>>>> d213fc36cb0ac85ac55681c94f7116e32a325693
             isClicked = !isClicked;
         }
 
     }
 
-    public void MoveBreakmanNet(int CurrentX,int CurrentY, int x, int y)
-    {
-
-        // TODO: Add winning conditions. Make in different functions.
-
-            if (Breakmans[x, y] != null)
-            {
-                // Capture a piece
-                activeBreakman.Remove(Breakmans[CurrentX, CurrentY].gameObject);
-                Destroy(Breakmans[CurrentX, CurrentY].gameObject);
-            }
-
-            //Piece selectedBreakman = Breakmans[fromX, fromY];
-            if ((isIceTurn && Breakmans[CurrentX, CurrentY].CurrentY + 1 == 7) || (!isIceTurn && Breakmans[CurrentX, CurrentY].CurrentY - 1 == 0))
-            {
-                EndGame();
-                return;
-            }
-
-
-
-            Breakmans[CurrentX, CurrentY].transform.position = GetTileCenter(x, y);
-            Breakmans[CurrentX, CurrentY].SetPosition(x, y);
-            Breakmans[x, y] = Breakmans[CurrentX, CurrentY];
-
-            Breakmans[CurrentX, CurrentY].GetComponent<Animation>().enabled = false;
-
-            Breakmans[CurrentX, CurrentY] = null;
-
-    }
-
-    public void MoveBreakmanNet(int x, int y)
-    {
-        // TODO: Add winning conditions. Make in different functions.
-        if (AllowedMoves[x, y])
-        {
-            Piece b = Breakmans[x, y];
-            if (b != null && b.isIce != isIceTurn)
-            {
-                // Capture a piece
-                activeBreakman.Remove(b.gameObject);
-                Destroy(b.gameObject);
-            }
-
-            if (isIceTurn)
-            {
-                if (selectedBreakman.CurrentY + 1 == 7)
-                {
-                    EndGame();
-                    return;
-                }
-            }
-            else
-            {
-                if (selectedBreakman.CurrentY - 1 == 0)
-                {
-                    EndGame();
-                    return;
-                }
-            }
-
-            selectedBreakman.transform.position = GetTileCenter(x, y);
-            selectedBreakman.SetPosition(x, y);
-            Breakmans[x, y] = selectedBreakman;
-            selectedBreakman.GetComponent<Animation>().enabled = false;
-
-            if (isClicked)
-            {
-                selectedBreakman.GetComponent<Animation>().enabled = false;
-
-
-                //selectedBreakman.GetComponent<Animation>().Rewind();
-                isClicked = !isClicked;
-            }
-            BoardHighlights.Instance.HideHighlights();
-
-            isIceTurn = !isIceTurn;
-        }
-    }
-
-    public void MoveBreakman(int x, int y)
+    private void MoveBreakman(int x, int y)
     {
         // TODO: Add winning conditions. Make in different functions.
         if (AllowedMoves[x, y] != 0)
@@ -234,30 +129,15 @@ public class BoardManager : MonoBehaviour
             playAnimation(selectedBreakman, temp);
             selectedBreakman.SetPosition(x, y);
             Breakmans[x, y] = selectedBreakman;
-<<<<<<< HEAD
-            
-            
-            isIceTurn = !isIceTurn;
-            MakeAIMove(isIceTurn ? Turn.ICE : Turn.FIRE);
-            
-=======
-            selectedBreakman.GetComponent<Animation>().enabled = false;
+
 
             isIceTurn = !isIceTurn;
-            if(!isMultiplayer)
-                MakeAIMove(isIceTurn ? Turn.ICE : Turn.FIRE);
->>>>>>> d213fc36cb0ac85ac55681c94f7116e32a325693
+            MakeAIMove(isIceTurn ? Turn.ICE : Turn.FIRE);
+
         }
 
         if (isClicked)
         {
-<<<<<<< HEAD
-=======
-            selectedBreakman.GetComponent<Animation>().enabled = false;
-
-
-            //selectedBreakman.GetComponent<Animation>().Rewind();
->>>>>>> d213fc36cb0ac85ac55681c94f7116e32a325693
             isClicked = !isClicked;
         }
         BoardHighlights.Instance.HideHighlights();
@@ -303,10 +183,6 @@ public class BoardManager : MonoBehaviour
         }
         Breakmans[fromX, fromY].transform.position = GetTileCenter(toX, toY);
         Breakmans[fromX, fromY].SetPosition(toX, toY);
-<<<<<<< HEAD
-=======
-        Breakmans[fromX, fromY].GetComponent<Animation>().enabled = false;
->>>>>>> d213fc36cb0ac85ac55681c94f7116e32a325693
 
         Breakmans[toX, toY] = Breakmans[fromX, fromY];
         Breakmans[fromX, fromY] = null;
@@ -368,11 +244,6 @@ public class BoardManager : MonoBehaviour
         Breakmans[x, y] = go.GetComponent<Piece>();
         Breakmans[x, y].SetPosition(x, y);
         activeBreakman.Add(go);
-<<<<<<< HEAD
-=======
-        go.GetComponent<Animation>().Play();
-        go.GetComponent<Animation>().enabled = false;
->>>>>>> d213fc36cb0ac85ac55681c94f7116e32a325693
     }
 
     private void SpawnBoardSpace(int index, int x, int y)
@@ -409,11 +280,11 @@ public class BoardManager : MonoBehaviour
 
     private void SpawnAllBoardSpaces()
     {
-        bool isBlackPiece=false;
+        bool isBlackPiece = false;
         Spacesboard = new bool[8, 8];
         for (int i = 0; i < 8; i++)
         {
-            for(int j = 0; j < 8; j++)
+            for (int j = 0; j < 8; j++)
             {
                 Spacesboard[i, j] = isBlackPiece;
                 if (!isBlackPiece)
@@ -426,7 +297,7 @@ public class BoardManager : MonoBehaviour
                 }
                 isBlackPiece = !isBlackPiece;
             }
-            isBlackPiece =! isBlackPiece;
+            isBlackPiece = !isBlackPiece;
         }
     }
 
@@ -446,7 +317,7 @@ public class BoardManager : MonoBehaviour
         {
             Destroy(go);
         }
-        
+
 
         isIceTurn = false; //This is provoking an error Needs to have another winning conditions separetely
         BoardHighlights.Instance.HideHighlights();
@@ -456,7 +327,7 @@ public class BoardManager : MonoBehaviour
     public void playAnimation(Piece selectedPiece, char moveDirection)
     {
         //If Movement is Left, plays left animation
-        if(moveDirection == 'l')
+        if (moveDirection == 'l')
         {
             selectedBreakman.GetComponent<Animation>().Play("Left");
         }
