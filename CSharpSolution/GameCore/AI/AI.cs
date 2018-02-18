@@ -9,8 +9,9 @@ namespace GameCore.AIWrapper
 	enum AIType
 	{
 		B_OFFENSE, B_DEFENSE, B_RANDOM, RANDOM_PET, DARYLS_PET, MEM_PET, TEST,
-		DARYLS_PRUNE
-	};
+		DARYLS_PRUNE,
+        SEEKER
+    };
 
 	class AI : Player
 	{
@@ -30,6 +31,8 @@ namespace GameCore.AIWrapper
 		public static extern void Test(bitboard white, bitboard black, Turn t, out int from, out int to);
 		[DllImport("AILibrary.dll")]
 		public static extern void DarylsPrune(bitboard white, bitboard black, Turn t, out int from, out int to);
+		[DllImport("AILibrary.dll")]
+		public static extern void Seeker(bitboard white, bitboard black, Turn t, out int from, out int to);
 
 		public AIType Type { get; private set; }
 
@@ -57,6 +60,7 @@ namespace GameCore.AIWrapper
 				case AIType.MEM_PET: MemPet(white, black, t, out from, out to); break;
 				case AIType.TEST: Test(white, black, t, out from, out to); break;
 				case AIType.DARYLS_PRUNE: DarylsPrune(white, black, t, out from, out to); break;
+				case AIType.SEEKER: Seeker(white, black, t, out from, out to); break;
 				default: break;
 			}
 			

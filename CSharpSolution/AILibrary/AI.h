@@ -110,4 +110,13 @@ namespace AI {
 		void debug();
 	};
 
+	class Seeker : public Prune {
+	protected:
+		//int alphabeta(Board board, int currentPly) const;
+
+	public:
+		Seeker();
+		Seeker(int);
+		virtual move operator()(const Board b) const;
+	};
 }

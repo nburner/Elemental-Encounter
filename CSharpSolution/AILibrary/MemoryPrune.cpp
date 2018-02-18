@@ -7,13 +7,14 @@ using std::ifstream; using std::ofstream;
 
 const int MAX_WEIGHT = 127;
 
-MemoryPet::MemoryPet(int k) {
+AI::MemoryPrune::MemoryPrune(int k)
+{
 	static std::default_random_engine generator;
-	static const std::uniform_int_distribution<short> distribution(-1*MAX_WEIGHT, MAX_WEIGHT);
+	static const std::uniform_int_distribution<short> distribution(-1 * MAX_WEIGHT, MAX_WEIGHT);
 	setFeatureCalculators();
 
 	ifstream fin("memorypet" + std::to_string(k) + ".save");
-	
+
 	if (fin.is_open())
 		for (int i = 0; i < NULL_FEATURE; i++)
 			for (int j = 0; j < NULL_FEATURE; j++) {
@@ -24,10 +25,10 @@ MemoryPet::MemoryPet(int k) {
 	else
 		for (int i = 0; i < NULL_FEATURE; i++)
 			//for (int j = 0; j < NULL_FEATURE; j++)
-				weights[i][i] = distribution(generator);
+			weights[i][i] = distribution(generator);
 }
 
-void MemoryPet::save(int k)
+void MemoryPrune::save(int k)
 {
 	ofstream fout("memorypet" + std::to_string(k) + ".save");
 	for (int i = 0; i < NULL_FEATURE; i++) {
@@ -36,7 +37,6 @@ void MemoryPet::save(int k)
 		fout << std::endl;
 	}
 }
-
 
 bool percentChance(int i) {
 	static std::random_device rd;
@@ -48,7 +48,7 @@ bool percentChance(int i) {
 	return d(gen);
 }
 
-void MemoryPet::tweak()
+void MemoryPrune::tweak()
 {
 	for (int i = 0; i < NULL_FEATURE; i++)
 		for (int j = 0; j < NULL_FEATURE; j++) {
@@ -60,13 +60,13 @@ void MemoryPet::tweak()
 		}
 }
 
-MemoryPet * MemoryPet::mix(MemoryPet * mom, MemoryPet * dad)
+MemoryPrune * MemoryPrune::mix(MemoryPrune * mom, MemoryPrune * dad)
 {
-	MemoryPet* result = new MemoryPet(-1);
+	MemoryPrune* result = new MemoryPrune(-1);
 
 	for (int i = 0; i < NULL_FEATURE; i++)
 		for (int j = 0; j < NULL_FEATURE; j++)
 			result->weights[i][j] = percentChance(50) ? mom->weights[i][j] : dad->weights[i][j];
-	
+
 	return result;
 }

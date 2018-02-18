@@ -11,6 +11,7 @@ typedef uint64_t bitboard;
 
 namespace AI {
 
+	#pragma region Types
 	/*Arranged the squares to look like the board
 	Below is a picture of the board for my own sake
 	So A1 is 0, and H8 is 63, and it counts from left to right, bottom to top
@@ -60,78 +61,79 @@ namespace AI {
 	//A simple enum for black and white
 	//Useful because you can make an array and use white or black as the subscript
 	enum Turn : bool { WHITE, BLACK };
+#pragma endregion
 
 	namespace CommonBitboards {
 		//This gives all the moves for the white piece at the position indicated by the index of the array
-		const bitboard whiteMoves[64] = {
-			0x300,
-			0x700,
-			0xE00,
-			0x1C00,
-			0x3800,
-			0x7000,
-			0xE000,
-			0xC000,					//End of Row 1
-			0x30000,
-			0x70000,
-			0xE0000,
-			0x1C0000,
-			0x380000,
-			0x700000,
-			0xE00000,
-			0xC00000,				//End of Row 2
-			0x3000000,
-			0x7000000,
-			0xE000000,
-			0x1C000000,
-			0x38000000,
-			0x70000000,
-			0xE0000000,
-			0xC0000000,				//End of Row 3
-			0x300000000,
-			0x700000000,
-			0xE00000000,
-			0x1C00000000,
-			0x3800000000,
-			0x7000000000,
-			0xE000000000,
-			0xC000000000,			//End of Row 4
-			0x30000000000,
-			0x70000000000,
-			0xE0000000000,
-			0x1C0000000000,
-			0x380000000000,
-			0x700000000000,
-			0xE00000000000,
-			0xC00000000000,			//End of Row 5
-			0x3000000000000,
-			0x7000000000000,
-			0xE000000000000,
-			0x1C000000000000,
-			0x38000000000000,
-			0x70000000000000,
-			0xE0000000000000,
-			0xC0000000000000,		//End of Row 6
-			0x300000000000000,
-			0x700000000000000,
-			0xE00000000000000,
-			0x1C00000000000000,
-			0x3800000000000000,
-			0x7000000000000000,
-			0xE000000000000000,
-			0xC000000000000000,		//End of Row 7
-			0x0000000000000000,
-			0x0000000000000000,
-			0x0000000000000000,
-			0x0000000000000000,
-			0x0000000000000000,
-			0x0000000000000000,
-			0x0000000000000000,
-			0x0000000000000000		//Row 8 is Victory (no moves) so the bitboards are empty
-		};
+		//const bitboard whiteMoves[64] = {
+		//	0x300,
+		//	0x700,
+		//	0xE00,
+		//	0x1C00,
+		//	0x3800,
+		//	0x7000,
+		//	0xE000,
+		//	0xC000,					//End of Row 1
+		//	0x30000,
+		//	0x70000,
+		//	0xE0000,
+		//	0x1C0000,
+		//	0x380000,
+		//	0x700000,
+		//	0xE00000,
+		//	0xC00000,				//End of Row 2
+		//	0x3000000,
+		//	0x7000000,
+		//	0xE000000,
+		//	0x1C000000,
+		//	0x38000000,
+		//	0x70000000,
+		//	0xE0000000,
+		//	0xC0000000,				//End of Row 3
+		//	0x300000000,
+		//	0x700000000,
+		//	0xE00000000,
+		//	0x1C00000000,
+		//	0x3800000000,
+		//	0x7000000000,
+		//	0xE000000000,
+		//	0xC000000000,			//End of Row 4
+		//	0x30000000000,
+		//	0x70000000000,
+		//	0xE0000000000,
+		//	0x1C0000000000,
+		//	0x380000000000,
+		//	0x700000000000,
+		//	0xE00000000000,
+		//	0xC00000000000,			//End of Row 5
+		//	0x3000000000000,
+		//	0x7000000000000,
+		//	0xE000000000000,
+		//	0x1C000000000000,
+		//	0x38000000000000,
+		//	0x70000000000000,
+		//	0xE0000000000000,
+		//	0xC0000000000000,		//End of Row 6
+		//	0x300000000000000,
+		//	0x700000000000000,
+		//	0xE00000000000000,
+		//	0x1C00000000000000,
+		//	0x3800000000000000,
+		//	0x7000000000000000,
+		//	0xE000000000000000,
+		//	0xC000000000000000,		//End of Row 7
+		//	0x0000000000000000,
+		//	0x0000000000000000,
+		//	0x0000000000000000,
+		//	0x0000000000000000,
+		//	0x0000000000000000,
+		//	0x0000000000000000,
+		//	0x0000000000000000,
+		//	0x0000000000000000		//Row 8 is Victory (no moves) so the bitboards are empty
+		//};
 
 		//This is an array of boards with only one bit set, corresponding with(to?) the index
-		const bitboard onePiece[64] = {
+		/*const bitboard onePiece[64] = {
 			0x1,
 			0x2,
 			0x4,
@@ -196,7 +198,7 @@ namespace AI {
 			0x2000000000000000,
 			0x4000000000000000,
 			0x8000000000000000
-		};
+		};*/
 
 		//These have all the bits of a column set
 		const bitboard colA = bitboard(0x0101010101010101);
@@ -242,15 +244,13 @@ namespace AI {
 		}
 
 		//This sets one bit (to 1) of a bitboard and returns said bitboard
-		inline bitboard set(bitboard& b, int i) {
-			b |= CommonBitboards::onePiece[i];
-			return b;
+		inline void set(bitboard& b, int i) {
+			_bittestandset64((long long*)(void*)&b, i);
 		}
 
 		//This resets one bit (to 0) of a bitboard and returns said bitboard
-		inline bitboard reset(bitboard& b, int i) {
-			b &= ~CommonBitboards::onePiece[i];
-			return b;
+		inline void reset(bitboard& b, int i) {
+			_bittestandreset64((long long*)(void*)&b, i);
 		}
 
 		//This counts the number of bits set on a bitboard
@@ -267,10 +267,10 @@ namespace AI {
 	class Board
 	{
 		bitboard bb[2];
-		Turn turn;
+		Turn _turn;
 
 		inline void nextTurn() {
-			turn = Turn(!turn);
+			_turn = Turn(!_turn);
 		}
 
 	public:
@@ -281,10 +281,14 @@ namespace AI {
 		std::vector<Board> validNextBoards() const;
 		std::vector<Board> validAttackBoards() const;
 		std::vector<Board> validWinBoards() const;
-		int gameOver() const;
-		inline bool whiteTurn() const { return !turn; }
-		inline bool blackTurn() const { return turn; }
+		Board ignoreBack() const;	
 
+		Square furthestPiece(Turn) const;
+
+		int gameOver() const;
+		inline Turn turn() const { return _turn; }
+		inline bool hasPawns(Turn t) const { return bb[t]; }
+		
 		mutable move lastMove;
 		mutable int beta = INT16_MAX;
 		mutable int alpha = INT16_MIN;
