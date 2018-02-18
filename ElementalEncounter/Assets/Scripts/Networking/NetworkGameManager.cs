@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class NetworkGameManager : MonoBehaviour
 { 
@@ -18,7 +19,7 @@ public class NetworkGameManager : MonoBehaviour
 
     private const int PORT_NUMBER = 6321;
 
-    void Start ()
+    void Start()
     {
         Instance = this;
         hostMenu.SetActive(false);
@@ -41,6 +42,7 @@ public class NetworkGameManager : MonoBehaviour
 
             NetworkClient c = Instantiate(clientPrefab).GetComponent<NetworkClient>();
             c.clientName = nameInput.text;
+            c.isHost = true;
             if (c.clientName == "")
             {
                 c.clientName = "Host";
@@ -97,5 +99,10 @@ public class NetworkGameManager : MonoBehaviour
         {
             Destroy(c.gameObject);
         }
+    }
+
+    public void StartGame()
+    {
+        SceneManager.LoadScene("BreakGame");
     }
 }

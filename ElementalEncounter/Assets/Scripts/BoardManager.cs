@@ -14,7 +14,7 @@ public class BoardManager : MonoBehaviour
 
     public Piece[,] Breakmans { set; get; }
     public bool[,] Spacesboard{ set; get; }
-    private Piece selectedBreakman;
+    public Piece selectedBreakman;
     private bool isClicked = false;
 
     private const float TILE_SIZE = 1.0f;
@@ -28,12 +28,18 @@ public class BoardManager : MonoBehaviour
     private List<GameObject> activeBreakman;
 
     public bool isIceTurn = true;
+    public bool isMultiplayer = true;
 
     [DllImport("Assets/Plugins/AILibrary.dll")]
     public static extern void DarylsPet(bitboard white, bitboard black, Turn t, ref int from, ref int to);
-
+    private NetworkClient client;
     private void Start()
     {
+        if (isMultiplayer)
+        {
+           //client = FindObjectOfType<NetworkClient>();
+           //isIceTurn = client.isHost;
+        }
         Instance = this;
         SpawnAllBoardSpaces();
         SpawnAllBreakPieces();
@@ -56,7 +62,21 @@ public class BoardManager : MonoBehaviour
                 else
                 {
                     // Move the Piece
-                    MoveBreakman(selectionX, selectionY);
+                    if (!isMultiplayer)
+                        MoveBreakman(selectionX, selectionY);
+                    else
+                    {
+                        string msg = "CMOV|";
+                        msg += selectedBreakman.CurrentX.ToString() + "|";
+                        msg += selectedBreakman.CurrentY.ToString() + "|";
+                        msg += selectionX.ToString() + "|";
+                        msg += selectionY.ToString();
+
+                        //client.Send(msg);
+                        MoveBreakmanNet(selectionX, selectionY);
+                        selectedBreakman = null;
+                        isIceTurn = !isIceTurn;
+                    }
                 }
             }
         }
@@ -67,8 +87,9 @@ public class BoardManager : MonoBehaviour
         if (Breakmans[x, y] == null)
             return;
 
-        if (Breakmans[x, y].isIce != isIceTurn)
+        if (Breakmans[x, y].isIce != isIceTurn || !isIceTurn)
             return;
+
         bool hasAtleastOneMove = false;
         AllowedMoves = Breakmans[x, y].PossibleMove();
         for (int i = 0; i < 8; i++)
@@ -92,7 +113,87 @@ public class BoardManager : MonoBehaviour
 
     }
 
-    private void MoveBreakman(int x, int y)
+    public void MoveBreakmanNet(int CurrentX,int CurrentY, int x, int y)
+    {
+
+        // TODO: Add winning conditions. Make in different functions.
+
+            if (Breakmans[x, y] != null)
+            {
+                // Capture a piece
+                activeBreakman.Remove(Breakmans[CurrentX, CurrentY].gameObject);
+                Destroy(Breakmans[CurrentX, CurrentY].gameObject);
+            }
+
+            //Piece selectedBreakman = Breakmans[fromX, fromY];
+            if ((isIceTurn && Breakmans[CurrentX, CurrentY].CurrentY + 1 == 7) || (!isIceTurn && Breakmans[CurrentX, CurrentY].CurrentY - 1 == 0))
+            {
+                EndGame();
+                return;
+            }
+
+
+
+            Breakmans[CurrentX, CurrentY].transform.position = GetTileCenter(x, y);
+            Breakmans[CurrentX, CurrentY].SetPosition(x, y);
+            Breakmans[x, y] = Breakmans[CurrentX, CurrentY];
+
+            Breakmans[CurrentX, CurrentY].GetComponent<Animation>().enabled = false;
+
+            Breakmans[CurrentX, CurrentY] = null;
+
+    }
+
+    public void MoveBreakmanNet(int x, int y)
+    {
+        // TODO: Add winning conditions. Make in different functions.
+        if (AllowedMoves[x, y])
+        {
+            Piece b = Breakmans[x, y];
+            if (b != null && b.isIce != isIceTurn)
+            {
+                // Capture a piece
+                activeBreakman.Remove(b.gameObject);
+                Destroy(b.gameObject);
+            }
+
+            if (isIceTurn)
+            {
+                if (selectedBreakman.CurrentY + 1 == 7)
+                {
+                    EndGame();
+                    return;
+                }
+            }
+            else
+            {
+                if (selectedBreakman.CurrentY - 1 == 0)
+                {
+                    EndGame();
+                    return;
+                }
+            }
+
+            selectedBreakman.transform.position = GetTileCenter(x, y);
+            selectedBreakman.SetPosition(x, y);
+            Breakmans[x, y] = selectedBreakman;
+            selectedBreakman.GetComponent<Animation>().enabled = false;
+
+            if (isClicked)
+            {
+                selectedBreakman.GetComponent<Animation>().enabled = false;
+
+
+                //selectedBreakman.GetComponent<Animation>().Rewind();
+                isClicked = !isClicked;
+            }
+            BoardHighlights.Instance.HideHighlights();
+
+            isIceTurn = !isIceTurn;
+        }
+    }
+
+    public void MoveBreakman(int x, int y)
     {
         // TODO: Add winning conditions. Make in different functions.
         if (AllowedMoves[x, y])
@@ -127,9 +228,10 @@ public class BoardManager : MonoBehaviour
             selectedBreakman.SetPosition(x, y);
             Breakmans[x, y] = selectedBreakman;
             selectedBreakman.GetComponent<Animation>().enabled = false;
-            
+
             isIceTurn = !isIceTurn;
-            MakeAIMove(isIceTurn ? Turn.ICE : Turn.FIRE);
+            if(!isMultiplayer)
+                MakeAIMove(isIceTurn ? Turn.ICE : Turn.FIRE);
         }
 
         if (isClicked)

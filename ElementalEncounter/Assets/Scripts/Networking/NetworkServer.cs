@@ -65,7 +65,7 @@ public class NetworkServer : MonoBehaviour
             }
         }
 
-        for(int i =0;i<disconnectList.Count - 1; i++)
+        for(int i = 0 ; i < disconnectList.Count - 1; i++)
         {
             //Tell our player somebody has disconnected
             clients.Remove(disconnectList[i]);
@@ -81,12 +81,18 @@ public class NetworkServer : MonoBehaviour
     {
         TcpListener listener = (TcpListener)ar.AsyncState;
 
+        string allUsers = "";
+        foreach (ServerClient i in clients)
+        {
+            allUsers += i.clientName + '|';
+        }
+
         ServerClient sc = new ServerClient(listener.EndAcceptTcpClient(ar));
         clients.Add(sc);
 
         StartListening();
-
-        Debug.Log("Somebody has connected!");
+        //Debug.Log("Somebody has connected!");
+        BroadCast("SWHO|" + allUsers, clients[clients.Count - 1]);
     }
 
     private bool IsConnected(TcpClient c)
@@ -126,10 +132,28 @@ public class NetworkServer : MonoBehaviour
             }
         }
     }
+    private void BroadCast(string data, ServerClient c)
+    {
+        List<ServerClient> sc = new List<ServerClient>() { c };
+        BroadCast(data, sc);
+    }
     // Server Read
     private void OnIncomingData(ServerClient c, string data)
     {
-        Debug.Log(c.clientName + " : " + data);
+        Debug.Log("Server:" + data);
+        string[] aData = data.Split('|');
+        switch (aData[0])
+        {
+            case "CWHO":
+                c.clientName = aData[1];
+                c.isHost = (aData[2] == "0") ? false : true;
+
+                BroadCast("SCNN|" + c.clientName, clients);
+                break;
+            case "CMOV":
+                BroadCast("SMOV|" + aData[1] + "|" + aData[2]+"|" + aData[3] + "|" + aData[4], clients);
+                break;
+        }
     }
 }
 
@@ -137,6 +161,7 @@ public class ServerClient
 {
     public string clientName;
     public TcpClient tcp;
+    public bool isHost;
 
     public ServerClient(TcpClient tcp)
     {
