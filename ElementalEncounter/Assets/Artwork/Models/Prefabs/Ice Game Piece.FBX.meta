@@ -1,115 +1,56 @@
 fileFormatVersion: 2
 guid: 1e9bf098dfefd8d448c45f183efc0e21
-timeCreated: 1518910068
+timeCreated: 1518926801
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
-    100000: Birth 001
-    100002: ChamferCyl001
+    100000: Base
+    100002: Birth 001
     100004: Collision 001
     100006: Collision 002
-    100008: Cone001
-    100010: Cone002
-    100012: Cone003
-    100014: Cone004
-    100016: Cone005
-    100018: Cone006
-    100020: Cone007
-    100022: Cone008
-    100024: Cone009
-    100026: Cone010
-    100028: Cone011
-    100030: Cone012
-    100032: Cone013
-    100034: Delete 001
-    100036: Display 001
-    100038: Display 002
-    100040: Event 001
-    100042: Event 002
-    100044: Event 003
-    100046: //RootNode
-    100048: Icicle
-    100050: Particle View 001
-    100052: PF Arrow001
-    100054: Position Icon 001
-    100056: Render 001
-    100058: Speed 001
-    400000: Birth 001
-    400002: ChamferCyl001
+    100008: Delete 001
+    100010: Display 001
+    100012: Display 002
+    100014: Event 001
+    100016: Event 002
+    100018: Event 003
+    100020: //RootNode
+    100022: Icicle
+    100024: Particle View 001
+    100026: PF Arrow001
+    100028: Position Icon 001
+    100030: Render 001
+    100032: Speed 001
+    400000: Base
+    400002: Birth 001
     400004: Collision 001
     400006: Collision 002
-    400008: Cone001
-    400010: Cone002
-    400012: Cone003
-    400014: Cone004
-    400016: Cone005
-    400018: Cone006
-    400020: Cone007
-    400022: Cone008
-    400024: Cone009
-    400026: Cone010
-    400028: Cone011
-    400030: Cone012
-    400032: Cone013
-    400034: Delete 001
-    400036: Display 001
-    400038: Display 002
-    400040: Event 001
-    400042: Event 002
-    400044: Event 003
-    400046: //RootNode
-    400048: Icicle
-    400050: Particle View 001
-    400052: PF Arrow001
-    400054: Position Icon 001
-    400056: Render 001
-    400058: Speed 001
+    400008: Delete 001
+    400010: Display 001
+    400012: Display 002
+    400014: Event 001
+    400016: Event 002
+    400018: Event 003
+    400020: //RootNode
+    400022: Icicle
+    400024: Particle View 001
+    400026: PF Arrow001
+    400028: Position Icon 001
+    400030: Render 001
+    400032: Speed 001
     2100000: No Name
-    2300000: ChamferCyl001
-    2300002: Cone001
-    2300004: Cone002
-    2300006: Cone003
-    2300008: Cone004
-    2300010: Cone005
-    2300012: Cone006
-    2300014: Cone007
-    2300016: Cone008
-    2300018: Cone009
-    2300020: Cone010
-    2300022: Cone011
-    2300024: Cone012
-    2300026: Cone013
-    3300000: ChamferCyl001
-    3300002: Cone001
-    3300004: Cone002
-    3300006: Cone003
-    3300008: Cone004
-    3300010: Cone005
-    3300012: Cone006
-    3300014: Cone007
-    3300016: Cone008
-    3300018: Cone009
-    3300020: Cone010
-    3300022: Cone011
-    3300024: Cone012
-    3300026: Cone013
-    4300000: ChamferCyl001
-    4300002: Cone001
-    4300004: Cone002
-    4300006: Cone003
-    4300008: Cone004
-    4300010: Cone005
-    4300012: Cone006
-    4300014: Cone007
-    4300016: Cone008
-    4300018: Cone009
-    4300020: Cone010
-    4300022: Cone011
-    4300024: Cone012
-    4300026: Cone013
-    7400000: Take 001
+    2300000: Base
+    2300002: Icicle
+    3300000: Base
+    3300002: Icicle
+    4300000: Base
+    4300002: Icicle
+    7400000: Forward
+    7400002: Left
+    7400004: Right
     9500000: //RootNode
+    11100000: //RootNode
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -130,13 +71,97 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     animationCompression: 1
-    animationRotationError: 0.5
-    animationPositionError: 0.5
-    animationScaleError: 0.5
+    animationRotationError: 0
+    animationPositionError: 0
+    animationScaleError: 0
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Forward
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 100
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Left
+      takeName: Take 001
+      firstFrame: 102
+      lastFrame: 199
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Right
+      takeName: Take 001
+      firstFrame: 202
+      lastFrame: 302
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
@@ -181,10 +206,10 @@ ModelImporter:
     rootMotionBoneName: 
     rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 1
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
