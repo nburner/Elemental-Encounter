@@ -15,9 +15,9 @@ public class Piece : MonoBehaviour
         
     }
 
-    public bool[,] PossibleMove()
+    public char[,] PossibleMove()
     {
-        bool[,] r = new bool[8, 8];
+        char[,] r = new char[8, 8];
         Piece b;
 
         if (isIce)
@@ -28,7 +28,7 @@ public class Piece : MonoBehaviour
                 b = BoardManager.Instance.Breakmans[CurrentX - 1, CurrentY + 1];
                 if (b == null || !b.isIce)
                 {
-                    r[CurrentX - 1, CurrentY + 1] = true;
+                    r[CurrentX - 1, CurrentY + 1] = 'l';
                 }
             }
 
@@ -38,7 +38,7 @@ public class Piece : MonoBehaviour
                 b = BoardManager.Instance.Breakmans[CurrentX + 1, CurrentY + 1];
                 if (b == null || !b.isIce)
                 {
-                    r[CurrentX + 1, CurrentY + 1] = true;
+                    r[CurrentX + 1, CurrentY + 1] = 'r';
                 }
             }
 
@@ -48,7 +48,7 @@ public class Piece : MonoBehaviour
                 b = BoardManager.Instance.Breakmans[CurrentX, CurrentY + 1];
                 if (b == null)
                 {
-                    r[CurrentX, CurrentY + 1] = true;
+                    r[CurrentX, CurrentY + 1] = 'm';
                 }
             }
         }
@@ -60,7 +60,7 @@ public class Piece : MonoBehaviour
                 b = BoardManager.Instance.Breakmans[CurrentX - 1, CurrentY - 1];
                 if (b == null || b.isIce)
                 {
-                    r[CurrentX - 1, CurrentY - 1] = true;
+                    r[CurrentX - 1, CurrentY - 1] = 'l';
                 }
             }
 
@@ -70,7 +70,7 @@ public class Piece : MonoBehaviour
                 b = BoardManager.Instance.Breakmans[CurrentX + 1, CurrentY - 1];
                 if (b == null || b.isIce)
                 {
-                    r[CurrentX + 1, CurrentY - 1] = true;
+                    r[CurrentX + 1, CurrentY - 1] = 'r';
                 }
             }
 
@@ -80,7 +80,7 @@ public class Piece : MonoBehaviour
                 b = BoardManager.Instance.Breakmans[CurrentX, CurrentY - 1];
                 if (b == null)
                 {
-                    r[CurrentX, CurrentY - 1] = true;
+                    r[CurrentX, CurrentY - 1] = 'm';
                 }
             }
         }

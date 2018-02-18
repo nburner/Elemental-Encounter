@@ -10,7 +10,7 @@ public class BoardManager : MonoBehaviour
 {
     public enum Turn { ICE, FIRE };
     public static BoardManager Instance { set; get; }
-    public bool[,] AllowedMoves { set; get; }
+    public char[,] AllowedMoves { set; get; }
 
     public Piece[,] Breakmans { set; get; }
     public bool[,] Spacesboard{ set; get; }
@@ -64,6 +64,7 @@ public class BoardManager : MonoBehaviour
 
     private void SelectBreakMan(int x, int y)
     {
+
         if (Breakmans[x, y] == null)
             return;
 
@@ -75,18 +76,18 @@ public class BoardManager : MonoBehaviour
         {
             for (int j = 0; j < 8; j++)
             {
-                if (AllowedMoves[i, j])
+                if (AllowedMoves[i, j] != 0)
                     hasAtleastOneMove = true;
             }
         }
         if (!hasAtleastOneMove)
             return;
+
         selectedBreakman = Breakmans[x, y];
         BoardHighlights.Instance.HighlightAllowedMoves(AllowedMoves);
 
         if (!isClicked)
         {
-            //selectedBreakman.GetComponent<Animation>().enabled = true;
             isClicked = !isClicked;
         }
 
@@ -95,7 +96,7 @@ public class BoardManager : MonoBehaviour
     private void MoveBreakman(int x, int y)
     {
         // TODO: Add winning conditions. Make in different functions.
-        if (AllowedMoves[x, y])
+        if (AllowedMoves[x, y] != 0)
         {
             Piece b = Breakmans[x, y];
             if (b != null && b.isIce != isIceTurn)
@@ -122,22 +123,21 @@ public class BoardManager : MonoBehaviour
                 }
             }
 
+            char temp = AllowedMoves[x, y];
+
             Breakmans[selectedBreakman.CurrentX, selectedBreakman.CurrentY] = null;
-            selectedBreakman.transform.position = GetTileCenter(x, y);
+            playAnimation(selectedBreakman, temp);
             selectedBreakman.SetPosition(x, y);
             Breakmans[x, y] = selectedBreakman;
-            //selectedBreakman.GetComponent<Animation>().enabled = false;
+            
             
             isIceTurn = !isIceTurn;
             MakeAIMove(isIceTurn ? Turn.ICE : Turn.FIRE);
+            
         }
 
         if (isClicked)
         {
-            //selectedBreakman.GetComponent<Animation>().enabled = false;
-
-
-            //selectedBreakman.GetComponent<Animation>().Rewind();
             isClicked = !isClicked;
         }
         BoardHighlights.Instance.HideHighlights();
@@ -183,7 +183,6 @@ public class BoardManager : MonoBehaviour
         }
         Breakmans[fromX, fromY].transform.position = GetTileCenter(toX, toY);
         Breakmans[fromX, fromY].SetPosition(toX, toY);
-        //Breakmans[fromX, fromY].GetComponent<Animation>().enabled = false;
 
         Breakmans[toX, toY] = Breakmans[fromX, fromY];
         Breakmans[fromX, fromY] = null;
@@ -245,8 +244,6 @@ public class BoardManager : MonoBehaviour
         Breakmans[x, y] = go.GetComponent<Piece>();
         Breakmans[x, y].SetPosition(x, y);
         activeBreakman.Add(go);
-        //go.GetComponent<Animation>().Play();
-        //go.GetComponent<Animation>().enabled = false;
     }
 
     private void SpawnBoardSpace(int index, int x, int y)
@@ -325,5 +322,26 @@ public class BoardManager : MonoBehaviour
         isIceTurn = false; //This is provoking an error Needs to have another winning conditions separetely
         BoardHighlights.Instance.HideHighlights();
         SpawnAllBreakPieces();
+    }
+
+    public void playAnimation(Piece selectedPiece, char moveDirection)
+    {
+        //If Movement is Left, plays left animation
+        if(moveDirection == 'l')
+        {
+            selectedBreakman.GetComponent<Animation>().Play("Left");
+        }
+
+        //If Movement is Right, plays right animation
+        if (moveDirection == 'r')
+        {
+            selectedBreakman.GetComponent<Animation>().Play("Right");
+        }
+
+        //If movement is Forward, plays forward animation
+        if (moveDirection == 'm')
+        {
+            selectedBreakman.GetComponent<Animation>().Play("Forward");
+        }
     }
 }
