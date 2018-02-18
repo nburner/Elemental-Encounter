@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "AI.h"
 #include "Board.h"
 #include <random>
