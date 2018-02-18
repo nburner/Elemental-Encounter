@@ -67,5 +67,8 @@ namespace GameCore.AIWrapper
 			return new move((Square)from, (Square)to);
 		}
 
+		public override string ToString() {
+			return GetType() + ": " + Type.ToString();
+		}
 	}
 }

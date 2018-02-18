@@ -58,7 +58,7 @@ move AI::Seeker::operator()(const Board b) const
 	t.start();
 	//for(seekDepth = 2; seekDepth < 7; seekDepth++) 
 		result = seek(b.ignoreBack());
-	cout << "Seek took " << t.read() << " and returned " << BoardHelpers::to_string(result) << endl;
+	//cout << "Seek took " << t.read() << " and returned " << BoardHelpers::to_string(result) << endl;
 
 	if (result.first == result.second) result = Prune::Pet::operator()(b);
 	
