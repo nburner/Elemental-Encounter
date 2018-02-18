@@ -30,7 +30,7 @@ public class BoardManager : MonoBehaviour
     public bool isIceTurn = true;
 
     [DllImport("Assets/Plugins/AILibrary.dll")]
-    public static extern void DarylsPet(bitboard white, bitboard black, Turn t, ref int from, ref int to);
+    public static extern void Seeker(bitboard white, bitboard black, Turn t, ref int from, ref int to);
 
     private void Start()
     {
@@ -126,7 +126,8 @@ public class BoardManager : MonoBehaviour
             char temp = AllowedMoves[x, y];
 
             Breakmans[selectedBreakman.CurrentX, selectedBreakman.CurrentY] = null;
-            playAnimation(selectedBreakman, temp);
+            //playAnimation(selectedBreakman, temp);0
+            selectedBreakman.transform.position = GetTileCenter(x, y);
             selectedBreakman.SetPosition(x, y);
             Breakmans[x, y] = selectedBreakman;
 
@@ -160,7 +161,7 @@ public class BoardManager : MonoBehaviour
                 }
 
         int from = 48; int to = 41;
-        DarylsPet(white, black, t, ref from, ref to);
+        Seeker(white, black, t, ref from, ref to);
         //Debug.Log(from.ToString() + " -> " + to.ToString());
 
         int toX = to % 8;
