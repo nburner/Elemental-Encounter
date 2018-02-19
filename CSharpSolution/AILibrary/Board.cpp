@@ -238,7 +238,7 @@ Square AI::Board::furthestPiece(Turn t) const
 {
 	unsigned long result;
 
-	if (t) _BitScanReverse64(&result, bb[t]);
+	if (!t) _BitScanReverse64(&result, bb[t]);
 	else _BitScanForward64(&result, bb[t]);
 
 	return (Square)result;

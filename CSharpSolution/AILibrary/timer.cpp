@@ -2,6 +2,7 @@
 
 timer::timer()
 {
+	started = false;
 }
 
 
@@ -12,14 +13,16 @@ timer::~timer()
 void timer::start()
 {
 	_start = std::clock();
+	started = true;
 }
 
 void timer::reset()
 {
-	_start = std::clock();
+	if(started)	_start = std::clock();
 }
 
-double timer::read()
+double timer::read() const
 {
-	return (std::clock() - _start) / (double)CLOCKS_PER_SEC;;
+	if(started) return (std::clock() - _start) / (double)CLOCKS_PER_SEC;
+	else return 0;
 }
