@@ -12,3 +12,9 @@ C:\Users\softdev.SI-203-05\Documents\GitHub\Elemental-Encounter\CSharpSolution\G
 C:\Users\softdev.SI-203-05\Documents\GitHub\Elemental-Encounter\CSharpSolution\GameCore\obj\Release\GameCore.pdb
 C:\Users\softdev.SI-203-05\Documents\GitHub\Elemental-Encounter\CSharpSolution\GameCore\obj\Release\GameCore.csprojResolveAssemblyReference.cache
 D:\Users\Daryl\Documents\GitHub\Elemental-Encounter\CSharpSolution\GameCore\obj\Release\GameCore.csprojResolveAssemblyReference.cache
+C:\Users\natha\Documents\GitHub\Elemental-Encounter\CSharpSolution\GameCore\bin\Release\GameCore.exe.config
+C:\Users\natha\Documents\GitHub\Elemental-Encounter\CSharpSolution\GameCore\bin\Release\GameCore.exe
+C:\Users\natha\Documents\GitHub\Elemental-Encounter\CSharpSolution\GameCore\bin\Release\GameCore.pdb
+C:\Users\natha\Documents\GitHub\Elemental-Encounter\CSharpSolution\GameCore\obj\Release\GameCore.csproj.CoreCompileInputs.cache
+C:\Users\natha\Documents\GitHub\Elemental-Encounter\CSharpSolution\GameCore\obj\Release\GameCore.exe
+C:\Users\natha\Documents\GitHub\Elemental-Encounter\CSharpSolution\GameCore\obj\Release\GameCore.pdb
