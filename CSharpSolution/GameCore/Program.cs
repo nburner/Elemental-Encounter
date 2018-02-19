@@ -41,7 +41,7 @@ namespace GameCore
                     Square.F1, Square.F2,
                     Square.G1, Square.G2, Square.G5,
                     Square.H2}, 
-                daryl, 
+                pet, 
                 new[]{Square.A8,
                     Square.B8, 
                     Square.C8, 

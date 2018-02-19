@@ -12,11 +12,11 @@ AI::Seeker::Seeker(int) : Prune(0)
 {
 }
 
-///Not sure necessary
 static int seekDepth = INT_MAX;
 static timer t;
+static double seekTime = 4;
 
-move seek(const Board& b, int movesMade = 0);
+move seek(const Board& b, int movesMade = 0, const timer& time = timer());
 
 inline bool movesToWinComparer(const Board& b1, const Board& b2) {
 	return b1.movesBeforeWin < b2.movesBeforeWin;
@@ -26,15 +26,15 @@ inline bool valueComparer(const Board& b1, const Board& b2) {
 	return b1.val < b2.val;
 }
 
-bool stop(const Board& b, int movesMade) {
+bool stop(const Board& b, int movesMade, const timer& time) {
 	//Timer break point
-	//if (t.read() > 3.2) return true;
+	if (time.read() > seekTime) return true;
 	
 	auto boards = b.validNextBoards();
 	int maxMovesBeforeWin = 0;
 
 	for (int i = 0; i < boards.size(); i++) {
-		move m = seek(boards[i], movesMade);
+		move m = seek(boards[i], movesMade, time);
 		maxMovesBeforeWin = std::max(boards[i].movesBeforeWin, maxMovesBeforeWin);
 		if (m.first == m.second) return true;
 	}
@@ -43,7 +43,7 @@ bool stop(const Board& b, int movesMade) {
 	return false;
 }
 
-move seek(const Board& b, int movesMade) {
+move seek(const Board& b, int movesMade, const timer& time) {
 	//Check to see if you can make a winning move : GOOD
 	auto boards = b.validWinBoards(); if (!boards.empty()) {
 		b.movesBeforeWin = 1;
@@ -54,7 +54,7 @@ move seek(const Board& b, int movesMade) {
 	if (++movesMade == seekDepth) return { A1, A1 };
 
 	//Timer break point
-	//if (t.read() > 3.2) return { A1, A1 }; 
+	if (time.read() > seekTime) return { A1, A1 }; 
 
 	//Check to see if you have pawns and they don't : GOOD
 	if (b.hasPawns(b.turn()) && !b.hasPawns(Turn(!b.turn()))) {
@@ -67,7 +67,7 @@ move seek(const Board& b, int movesMade) {
 	//Look for moves that can't be stopped : GOOD
 	boards = b.validNextBoards();
 	for (auto it = boards.begin(); it != boards.end(); ) {
-		if (stop(*it, movesMade)) it = boards.erase(it);
+		if (stop(*it, movesMade, time)) it = boards.erase(it);
 		else ++it;
 	}
 	if(!boards.empty()) return std::min_element(boards.begin(), boards.end(), movesToWinComparer)->lastMove;
@@ -76,19 +76,27 @@ move seek(const Board& b, int movesMade) {
 	return { A1, A1 };
 }
 
+move deepTimedSeek(const Board& b, double time, int depth = 20) {
+	move seekResult = { A1, A1 };
+	timer seekTimer; seekTimer.start(); seekTime = time;
+	for (seekDepth = 2; seekDepth < 20 && seekTimer.read() < seekTime; seekDepth++) {
+		move newResult = seek(b.ignoreBack(), 0, seekTimer);
+		seekResult = newResult.first == newResult.second ? seekResult : newResult;
+	}
+	return seekResult;
+}
+
 move AI::Seeker::operator()(const Board b) const
 {
 	t.start(); 
-	move seekResult;
 
 	//Always win if you can
 	auto boards = b.validWinBoards();
 	if (!boards.empty()) return boards[0].lastMove;
 	
 	//If you can't, look for a way to win
-	///for(seekDepth = 2; seekDepth < 7; seekDepth++) 
-	seekResult = seek(b.ignoreBack());
-	if(t.read() > 3.2) cout << "Seek took " << t.read() << " and returned " << BoardHelpers::to_string(seekResult) << endl;
+	move seekResult = deepTimedSeek(b, 2.5);
+	if(t.read() > seekTime) cout << "Seek took " << t.read() << " and returned " << BoardHelpers::to_string(seekResult) << endl;
 
 	//Suppose you couldn't find a way to victory
 	if (seekResult.first == seekResult.second) {
@@ -96,7 +104,7 @@ move AI::Seeker::operator()(const Board b) const
 		boards = b.validNextBoards();
 	//And ignore all the ones that would cause your enemy to win
 		for (auto it = boards.begin(); it != boards.end(); ) {
-			move test = seek(it->ignoreBack());
+			move test = deepTimedSeek(it->ignoreBack(), 2.5/boards.size());
 			if (test.first != test.second) it = boards.erase(it);
 			else ++it;
 		}
@@ -117,7 +125,7 @@ move AI::Seeker::operator()(const Board b) const
 	//But if there is a way to victory, ensure it doesn't cost you the game
 	else {
 	//See if your enemy will have a way to victory after your move
-		move test = seek(b.makeMove(seekResult).ignoreBack());
+		move test = deepTimedSeek(b.makeMove(seekResult).ignoreBack(), 1);
 	//If they don't, good for you!
 		if (test.first == test.second) return seekResult; 
 	//If they do, see if there is a way to stop them
@@ -125,7 +133,7 @@ move AI::Seeker::operator()(const Board b) const
 			boards = b.validNextBoards();
 			int maxMovesToWin = 0; int minMovesToWin = 165; move bestShot = { A1, A1 };
 			for (auto it = boards.begin(); it != boards.end(); ) {
-				move test = seek(it->ignoreBack());
+				move test = deepTimedSeek(it->ignoreBack(), 2/boards.size());
 				if (test.first != test.second) { 
 					minMovesToWin = (minMovesToWin > it->movesBeforeWin) ? it->movesBeforeWin : minMovesToWin;
 					if (maxMovesToWin < it->movesBeforeWin) {
@@ -151,7 +159,8 @@ move AI::Seeker::operator()(const Board b) const
 		}
 	}
 
-	if (t.read() > 6) cout << "This move took: " << t.read() << " seconds" << endl;
+	//if (t.read() > 6) 
+		cout << "This move took: " << t.read() << " seconds" << endl;
 	return std::max_element(boards.begin(), boards.end(), valueComparer)->lastMove;
 }
 

@@ -4,11 +4,12 @@
 class timer
 {
 	clock_t _start;
+	bool started;
 public:
 	timer();
 	~timer();
 	void start();
 	void reset();
-	double read();
+	double read() const;
 };
 
