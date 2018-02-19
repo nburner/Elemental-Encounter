@@ -126,7 +126,9 @@ public class BoardManager : MonoBehaviour
             char temp = AllowedMoves[x, y];
 
             Breakmans[selectedBreakman.CurrentX, selectedBreakman.CurrentY] = null;
-            //playAnimation(selectedBreakman, temp);0
+            playAnimation(selectedBreakman, temp);
+
+
             selectedBreakman.transform.position = GetTileCenter(x, y);
             selectedBreakman.SetPosition(x, y);
             Breakmans[x, y] = selectedBreakman;
@@ -182,6 +184,7 @@ public class BoardManager : MonoBehaviour
             EndGame();
             return;
         }
+
         Breakmans[fromX, fromY].transform.position = GetTileCenter(toX, toY);
         Breakmans[fromX, fromY].SetPosition(toX, toY);
 

@@ -54,7 +54,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4775921199310792}
   - component: {fileID: 111785151451684278}
-  - component: {fileID: 114798086139347720}
+  - component: {fileID: 114024460672676400}
   m_Layer: 0
   m_Name: Fire Game P
   m_TagString: Untagged
@@ -69,7 +69,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1419910826099948}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: -0, y: -7.219114e-16, z: 3.3019996}
   m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
   m_Children: []
   m_Father: {fileID: 4775921199310792}
@@ -81,8 +81,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1474268591112818}
-  m_LocalRotation: {x: -0.7071068, y: 8.659561e-17, z: 8.659561e-17, w: 0.7071068}
-  m_LocalPosition: {x: -7.324844e-39, y: 1.27, z: 1.8047785e-16}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -0, y: 1.27, z: 3.3019996}
   m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
   m_Children: []
   m_Father: {fileID: 4775921199310792}
@@ -193,16 +193,17 @@ Animation:
   m_GameObject: {fileID: 1848356010410964}
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: 0}
+  m_Animation: {fileID: 7400006, guid: 2e898659875cb31478111ea59f7eeb0d, type: 3}
   m_Animations:
   - {fileID: 7400000, guid: 2e898659875cb31478111ea59f7eeb0d, type: 3}
   - {fileID: 7400002, guid: 2e898659875cb31478111ea59f7eeb0d, type: 3}
   - {fileID: 7400004, guid: 2e898659875cb31478111ea59f7eeb0d, type: 3}
+  - {fileID: 7400006, guid: 2e898659875cb31478111ea59f7eeb0d, type: 3}
   m_WrapMode: 0
-  m_PlayAutomatically: 0
+  m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
---- !u!114 &114798086139347720
+--- !u!114 &114024460672676400
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
