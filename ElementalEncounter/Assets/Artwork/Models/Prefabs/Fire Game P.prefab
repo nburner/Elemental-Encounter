@@ -54,7 +54,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4775921199310792}
   - component: {fileID: 111785151451684278}
-  - component: {fileID: 114024460672676400}
+  - component: {fileID: 114770267648051328}
   m_Layer: 0
   m_Name: Fire Game P
   m_TagString: Untagged
@@ -193,7 +193,7 @@ Animation:
   m_GameObject: {fileID: 1848356010410964}
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: 7400006, guid: 2e898659875cb31478111ea59f7eeb0d, type: 3}
+  m_Animation: {fileID: 7400000, guid: 2e898659875cb31478111ea59f7eeb0d, type: 3}
   m_Animations:
   - {fileID: 7400000, guid: 2e898659875cb31478111ea59f7eeb0d, type: 3}
   - {fileID: 7400002, guid: 2e898659875cb31478111ea59f7eeb0d, type: 3}
@@ -203,7 +203,7 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
---- !u!114 &114024460672676400
+--- !u!114 &114770267648051328
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

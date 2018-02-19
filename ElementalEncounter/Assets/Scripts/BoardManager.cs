@@ -11,6 +11,7 @@ public class BoardManager : MonoBehaviour
     public enum Turn { ICE, FIRE };
     public static BoardManager Instance { set; get; }
     public char[,] AllowedMoves { set; get; }
+    public char[,] aiAllowedMoves { set; get; }
 
     public Piece[,] Breakmans { set; get; }
     public bool[,] Spacesboard { set; get; }
@@ -185,6 +186,14 @@ public class BoardManager : MonoBehaviour
             return;
         }
 
+        
+
+        aiAllowedMoves = Breakmans[fromX, fromY].PossibleMove();
+
+        char aiTemp = aiAllowedMoves[toX, toY];
+
+        playAnimation(Breakmans[fromX, fromY], aiTemp);
+
         Breakmans[fromX, fromY].transform.position = GetTileCenter(toX, toY);
         Breakmans[fromX, fromY].SetPosition(toX, toY);
 
@@ -333,19 +342,19 @@ public class BoardManager : MonoBehaviour
         //If Movement is Left, plays left animation
         if (moveDirection == 'l')
         {
-            selectedBreakman.GetComponent<Animation>().Play("Left");
+            selectedPiece.GetComponent<Animation>().Play("Left");
         }
 
         //If Movement is Right, plays right animation
         if (moveDirection == 'r')
         {
-            selectedBreakman.GetComponent<Animation>().Play("Right");
+            selectedPiece.GetComponent<Animation>().Play("Right");
         }
 
         //If movement is Forward, plays forward animation
         if (moveDirection == 'm')
         {
-            selectedBreakman.GetComponent<Animation>().Play("Forward");
+            selectedPiece.GetComponent<Animation>().Play("Forward");
         }
     }
 }

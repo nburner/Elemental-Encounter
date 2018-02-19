@@ -523,7 +523,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 1e9bf098dfefd8d448c45f183efc0e21, type: 3}
+  - {fileID: 2100000, guid: 8690faaa878436046861b96d727a9900, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -557,7 +557,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 1e9bf098dfefd8d448c45f183efc0e21, type: 3}
+  - {fileID: 2100000, guid: ddf7f6a45e0a87c4cac373b03cd831fa, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -599,7 +599,7 @@ Animation:
   m_GameObject: {fileID: 1081819570631570}
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: 7400006, guid: 1e9bf098dfefd8d448c45f183efc0e21, type: 3}
+  m_Animation: {fileID: 7400000, guid: 1e9bf098dfefd8d448c45f183efc0e21, type: 3}
   m_Animations:
   - {fileID: 7400000, guid: 1e9bf098dfefd8d448c45f183efc0e21, type: 3}
   - {fileID: 7400002, guid: 1e9bf098dfefd8d448c45f183efc0e21, type: 3}
