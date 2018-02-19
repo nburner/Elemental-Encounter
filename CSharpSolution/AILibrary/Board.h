@@ -133,7 +133,7 @@ namespace AI {
 		//};
 
 		//This is an array of boards with only one bit set, corresponding with(to?) the index
-		/*const bitboard onePiece[64] = {
+		const bitboard onePiece[64] = {
 			0x1,
 			0x2,
 			0x4,
@@ -198,7 +198,7 @@ namespace AI {
 			0x2000000000000000,
 			0x4000000000000000,
 			0x8000000000000000
-		};*/
+		};
 
 		//These have all the bits of a column set
 		const bitboard colA = bitboard(0x0101010101010101);
@@ -281,6 +281,7 @@ namespace AI {
 		std::vector<Board> validNextBoards() const;
 		std::vector<Board> validAttackBoards() const;
 		std::vector<Board> validWinBoards() const;
+		Board makeMove(move) const;
 		Board ignoreBack() const;	
 
 		Square furthestPiece(Turn) const;
@@ -293,6 +294,7 @@ namespace AI {
 		mutable int beta = INT16_MAX;
 		mutable int alpha = INT16_MIN;
 		mutable int val = 0;
+		mutable int movesBeforeWin = 0;
 
 		Board();
 		Board(bitboard white, bitboard black, Turn t);

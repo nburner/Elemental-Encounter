@@ -212,6 +212,18 @@ std::vector<Board> Board::validWinBoards() const
 	return result;
 }
 
+Board AI::Board::makeMove(move m) const
+{
+	Board newBoard = Board(*this, true);
+
+	set(newBoard.bb[_turn], m.second);
+	reset(newBoard.bb[_turn], m.first);
+	if((m.second - m.first) % 8 != 0) reset(newBoard.bb[newBoard._turn], m.second);
+	newBoard.lastMove = m;
+
+	return newBoard;
+}
+
 Board AI::Board::ignoreBack() const
 {
 	Board result = *this;

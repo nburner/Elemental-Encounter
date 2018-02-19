@@ -6,8 +6,9 @@
 #include <ctime>
 
 using namespace AI;
+typedef vector<Board>::iterator BoardIterator;
 
-int Prune::PLY_COUNT = 4;
+int Prune::PLY_COUNT = 2;
 
 AI::Prune::Prune()
 {
@@ -39,6 +40,10 @@ int Prune::alphabeta(Board board, int currentPly) const {
 	return board.alpha;
 }
 
+inline bool valueComparer(const Board& b1, const Board& b2) {
+	return b1.val < b2.val;
+}
+
 move Prune::operator()(const Board b) const
 {
 	static timer _timer;
@@ -50,27 +55,16 @@ move Prune::operator()(const Board b) const
 
 	boards = b.validNextBoards();
 
-	move result; int bestVal = INT_MIN;
-
-#pragma omp parallel for
 	for (int i = 0; i < boards.size(); i++) {
 		evaluate(boards[i]);
 		boards[i].val /= 2;
 		boards[i].val += alphabeta(boards[i], 0) / 2;
-		if (boards[i].val > bestVal) {
-			bestVal = boards[i].val;
-			result = boards[i].lastMove;
-		}
 	}
-
-	/*std::sort(boards.begin(), boards.end(), [](Board& a, Board& b) {
-	return a.val > b.val;
-	});*/
 
 	//cout << "AI's Move: " << BoardHelpers::to_string(result.first) << " - " << BoardHelpers::to_string(result.second) << endl;
 	//cout << " Best Val: " << bestVal << endl;
 
 	//cout << "PLY_COUNT: " << PLY_COUNT << endl;
-	cout << "This move took: " << _timer.read() << " seconds" << endl;
-	return result;
+	if(_timer.read() > 6) cout << "This move took: " << _timer.read() << " seconds" << endl;
+	return std::max_element(boards.begin(), boards.end(), valueComparer)->lastMove;
 }

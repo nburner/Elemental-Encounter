@@ -32,6 +32,20 @@ namespace GameCore.Core
 
 			for (Square i = Square.A7; i <= Square.H8; i++) this[i] = 'B';
 		}
-		private GameBoard(GameBoard _) { }
+        public GameBoard(Square[] white, Square[] black)
+        {
+            char bar = (char)9608;
+
+            for (int i = 0; i < 64; i++)
+            {
+                if ((i / 8 + i) % 2 == 0) space[i] = bar;
+                else space[i] = ' ';
+            }
+
+            for (int i = 0; i < white.Length; i++) this[white[i]] = 'W';
+
+            for (int i = 0; i < black.Length; i++) this[black[i]] = 'B';
+        }
+        private GameBoard(GameBoard _) { }
 	}
 }

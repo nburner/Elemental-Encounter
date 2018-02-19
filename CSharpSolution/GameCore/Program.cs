@@ -17,20 +17,40 @@ namespace GameCore
 			AI seeker = new AI(AIType.SEEKER);
 			AI pet = new AI(AIType.DARYLS_PET);
 			
-			for (int i = 0; i < 250; i++) {
-				AI rand = new AI(AIType.B_RANDOM);
-				AI rand2 = new AI(AIType.RANDOM_PET);
+			//for (int i = 0; i < 250; i++) {
+			//	AI rand = new AI(AIType.B_RANDOM);
+			//	AI rand2 = new AI(AIType.RANDOM_PET);
 
-				playAIMatch(seeker, rand);
-				playAIMatch(seeker, rand2);
-				playAIMatch(rand, seeker);
-				playAIMatch(rand2, seeker);
+			//	playAIMatch(seeker, rand);
+			//	playAIMatch(seeker, rand2);
+			//	playAIMatch(rand, seeker);
+			//	playAIMatch(rand2, seeker);
 
-				playAIMatch(pet, rand);
-				playAIMatch(pet, rand2);
-				playAIMatch(rand, pet);
-				playAIMatch(rand2, pet);
-			}
+			//	playAIMatch(pet, rand);
+			//	playAIMatch(pet, rand2);
+			//	playAIMatch(rand, pet);
+			//	playAIMatch(rand2, pet);
+			//}
+
+            game.newGame(seeker, 
+                new[]{Square.A2,
+                    Square.B1, Square.B2, Square.B3,
+                    Square.C1, Square.C2, Square.C4,
+                    Square.D2,
+                    Square.E2,
+                    Square.F1, Square.F2,
+                    Square.G1, Square.G2, Square.G5,
+                    Square.H2}, 
+                daryl, 
+                new[]{Square.A8,
+                    Square.B8, 
+                    Square.C8, 
+                    Square.D8, Square.D4,
+                    Square.E8, Square.E6, Square.E4,
+                    Square.F8, Square.F7, Square.F4,
+                    Square.G8, Square.G7,
+                    Square.H8, Square.H7}, 
+                Turn.WHITE, true );
 		}
 
 		private static void playAIMatch(AI ai1, AI ai2, bool verbose = true) {

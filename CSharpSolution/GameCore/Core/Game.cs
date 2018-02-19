@@ -19,10 +19,30 @@ namespace GameCore.Core
 			white.myColor = Turn.WHITE;
 			black.myColor = Turn.BLACK;
 
+            PlayerTurn = Turn.WHITE;
+
 			if (print) printBoard();
 			startGameLoop(print);
 		}
-		public bool GameOver {
+        public void newGame(Player white, Square[] whitePieces, Player black, Square[] blackPieces, Turn t, bool print = true)
+        {
+            if (print) Console.WriteLine("WHITE: {0}\t\tBLACK: {1}", white.ToString(), black.ToString());
+
+            Board = new GameBoard(whitePieces, blackPieces);
+            pieces = new int[] { whitePieces.Length, blackPieces.Length};
+
+            players[(int)Turn.WHITE] = white;
+            players[(int)Turn.BLACK] = black;
+
+            white.myColor = Turn.WHITE;
+            black.myColor = Turn.BLACK;
+
+            PlayerTurn = t;
+
+            if (print) printBoard();
+            startGameLoop(print);
+        }
+        public bool GameOver {
 			get {
 				for (Square i = Square.A8; i <= Square.H8; i++) //Loop through the back row
 					if (Board[i] == 'W')                        //Check if one is 'W'	
