@@ -66,6 +66,7 @@
     <Compile Include="Core\GameBoard.cs" />
     <Compile Include="Core\Human.cs" />
     <Compile Include="Core\Player.cs" />
+    <Compile Include="Misc\Fun.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Types.cs" />
@@ -85,5 +86,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
