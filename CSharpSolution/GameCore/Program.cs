@@ -16,10 +16,8 @@ namespace GameCore
 
 			AI seeker = new AI(AIType.SEEKER);
 			AI pet = new AI(AIType.DARYLS_PET);
-			
-			
 
-            
+            Misc.Fun.TypeString("Hello Nathan. This process should be as painful, er, painless as possible.");            
 		}
 
         private static void functionForNathan()
