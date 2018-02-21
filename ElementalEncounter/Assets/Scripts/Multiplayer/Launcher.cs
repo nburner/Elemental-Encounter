@@ -64,15 +64,15 @@ namespace NetworkGame
             controlPanel.SetActive(false);
 
             // If connected, join random room
-            if (PhotonNetwork.connected)
-            {
-                PhotonNetwork.JoinRandomRoom();
-            }
-            else
-            {
+            //if (PhotonNetwork.connected)
+            //{
+            //    PhotonNetwork.JoinRandomRoom();
+            //}
+            //else
+            //{
                 // Connect to online server
                 PhotonNetwork.ConnectUsingSettings(_gameVersion);
-            }
+            //}
         }
 
         public override void OnConnectedToMaster()
@@ -95,6 +95,7 @@ namespace NetworkGame
         public override void OnPhotonRandomJoinFailed(object[] codeAndMsg)
         {
             PhotonNetwork.CreateRoom(null, new RoomOptions() { MaxPlayers = MaxPlayersPerRoom }, null);
+            BoardManager.Instance.IsMultiplayer(true);
         }
 
         public override void OnJoinedRoom()
@@ -108,6 +109,7 @@ namespace NetworkGame
                 // #Critical
                 // Load the Room Level. 
                 PhotonNetwork.LoadLevel("BreakGame");
+                BoardManager.Instance.IsMultiplayer(true);
             }
 
         }
