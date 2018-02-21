@@ -5,6 +5,13 @@ namespace NetworkGame
 {
     public class Launcher : Photon.PunBehaviour
     {
+        /// <summary>
+        /// Keep track of the current process. Since connection is asynchronous and is based on several callbacks from Photon, 
+        /// we need to keep track of this to properly adjust the behavior when we receive call back by Photon.
+        /// Typically this is used for the OnConnectedToMaster() callback.
+        /// </summary>
+        bool isConnecting;
+
         #region Public Variables
 
 
@@ -52,6 +59,7 @@ namespace NetworkGame
         /// </summary>
         public void Connect()
         {
+            isConnecting = true;
             progressLabel.SetActive(true);
             controlPanel.SetActive(false);
 
@@ -70,7 +78,11 @@ namespace NetworkGame
         public override void OnConnectedToMaster()
         {
             Debug.Log("OnConnectedToMaster() called.");
-            PhotonNetwork.JoinRandomRoom();
+            if (isConnecting)
+            {
+                // #Critical: The first we try to do is to join a potential existing room. If there is, good, else, we'll be called back with OnPhotonRandomJoinFailed()
+                PhotonNetwork.JoinRandomRoom();
+            }
         }
 
         public override void OnDisconnectedFromPhoton()
@@ -87,7 +99,17 @@ namespace NetworkGame
 
         public override void OnJoinedRoom()
         {
-            Debug.Log("OnJoinedRoom() called.");
+            // #Critical: We only load if we are the first player, else we rely on  PhotonNetwork.automaticallySyncScene to sync our instance scene.
+            if (PhotonNetwork.room.PlayerCount == 2)
+            {
+                Debug.Log("We load the 'Room for 1' ");
+
+
+                // #Critical
+                // Load the Room Level. 
+                PhotonNetwork.LoadLevel("BreakGame");
+            }
+
         }
 
         #endregion
