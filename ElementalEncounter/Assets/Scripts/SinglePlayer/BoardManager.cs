@@ -107,6 +107,9 @@ public class BoardManager : MonoBehaviour
                 activeBreakman.Remove(b.gameObject);
                 Destroy(b.gameObject);
                 playAnimation(selectedBreakman, temp, x, y, false);
+            }
+            else
+            {
 
             }
 
@@ -128,8 +131,8 @@ public class BoardManager : MonoBehaviour
             }
 
             Breakmans[selectedBreakman.CurrentX, selectedBreakman.CurrentY] = null;
-            playAnimation(selectedBreakman, temp, x, y, false);
 
+            playAnimation(selectedBreakman, temp, x, y, false);
 
             selectedBreakman.transform.position = GetTileCenter(x, y);
             selectedBreakman.SetPosition(x, y);
@@ -180,8 +183,15 @@ public class BoardManager : MonoBehaviour
         {
             // Capture a piece
             activeBreakman.Remove(Breakmans[toX, toY].gameObject);
-            Destroy(Breakmans[toX, toY].gameObject);
+            Destroy(Breakmans[toX, toY].gameObject, .5f);
+
+            
+
             playAnimation(Breakmans[fromX, fromY], aiTemp, toX, toY, true);
+        }
+        else
+        {
+            playAnimation(Breakmans[fromX, fromY], aiTemp, toX, toY, false);
         }
 
         //Piece selectedBreakman = Breakmans[fromX, fromY];
@@ -192,10 +202,6 @@ public class BoardManager : MonoBehaviour
         }
 
         
-
-        
-
-        playAnimation(Breakmans[fromX, fromY], aiTemp, toX, toY, false);
 
         Breakmans[fromX, fromY].transform.position = GetTileCenter(toX, toY);
         Breakmans[fromX, fromY].SetPosition(toX, toY);
@@ -342,6 +348,7 @@ public class BoardManager : MonoBehaviour
 
     public void playAnimation(Piece selectedPiece, char moveDirection, int x, int y, bool capture)
     {
+
         if (capture == false)
         {
             //If Movement is Left, plays left animation
@@ -364,16 +371,44 @@ public class BoardManager : MonoBehaviour
         }
         else
         {
-            if (moveDirection == 'l')
+            if(isIceTurn == false)
             {
-                selectedPiece.GetComponent<Animation>().Play("Capture - Left");
-            }
+                //If capture is Left, plays left capture animation
+                if (moveDirection == 'l')
+                {
+                    selectedPiece.GetComponent<Animation>().Play("LeftBreak");
+                    SpawnBreakman(3, x, y);
+                    Destroy(Breakmans[x, y], 3f);
+                }
 
-            //If Movement is Right, plays right animation
-            if (moveDirection == 'r')
-            {
-                selectedPiece.GetComponent<Animation>().Play("Capture - Right");
+                //If capture is Right, plays right capture animation
+                if (moveDirection == 'r')
+                {
+                    selectedPiece.GetComponent<Animation>().Play("RightBreak");
+                    SpawnBreakman(2, x, y);
+                    Destroy(Breakmans[x, y], 3f);
+
+                }
             }
+            //else
+            //{
+            //    //If capture is Left, plays left capture animation
+            //    if (moveDirection == 'l')
+            //    {
+            //        SpawnBreakman(4, x, y);
+            //        Destroy(Breakmans[x, y]);
+            //        SpawnBreakman(0, x, y);
+            //    }
+
+            //    //If capture is Right, plays right capture animation
+            //    if (moveDirection == 'r')
+            //    {
+            //        SpawnBreakman(5, x, y);
+            //        Destroy(Breakmans[x, y]);
+            //        SpawnBreakman(0, x, y);
+            //    }
+            //}
+            
         }
     }
 }

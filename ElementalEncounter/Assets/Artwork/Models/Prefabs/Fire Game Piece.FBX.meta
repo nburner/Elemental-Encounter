@@ -19,8 +19,8 @@ ModelImporter:
     4300000: ChamferCyl001
     4300002: GeoSphere001
     7400000: Forward
-    7400002: Left
-    7400004: Right
+    7400002: Right
+    7400004: Left
     7400006: Start
     9500000: //RootNode
     11100000: //RootNode
