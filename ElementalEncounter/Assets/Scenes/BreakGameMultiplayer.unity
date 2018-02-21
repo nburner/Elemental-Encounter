@@ -123,7 +123,6 @@ GameObject:
   - component: {fileID: 18783751}
   - component: {fileID: 18783752}
   - component: {fileID: 18783750}
-  - component: {fileID: 18783753}
   m_Layer: 0
   m_Name: BreakBoard
   m_TagString: Untagged
@@ -176,21 +175,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   highlightPrefab: {fileID: 1218835126624804, guid: 443c6d45544333c4ab70daf9e20177b1,
     type: 2}
---- !u!114 &18783753
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 18783749}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb56e46429f09a948ab2fb209a3ea038, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LogLevel: 0
-  MaxPlayersPerRoom: 2
-  controlPanel: {fileID: 0}
-  progressLabel: {fileID: 0}
 --- !u!1 &374203863
 GameObject:
   m_ObjectHideFlags: 0

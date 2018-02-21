@@ -95,7 +95,6 @@ namespace NetworkGame
         public override void OnPhotonRandomJoinFailed(object[] codeAndMsg)
         {
             PhotonNetwork.CreateRoom(null, new RoomOptions() { MaxPlayers = MaxPlayersPerRoom }, null);
-            BoardManager.Instance.IsMultiplayer(true);
         }
 
         public override void OnJoinedRoom()
@@ -109,7 +108,6 @@ namespace NetworkGame
                 // #Critical
                 // Load the Room Level. 
                 PhotonNetwork.LoadLevel("BreakGame");
-                BoardManager.Instance.IsMultiplayer(true);
             }
 
         }
