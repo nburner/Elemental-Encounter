@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour
+public class HUD : MonoBehaviour
 {
     [Header("Set in Inspector")]
     public GameObject quitPanel;
@@ -13,13 +13,9 @@ public class MainMenu : MonoBehaviour
         quitPanel.SetActive(false);
     }
 
-    public void PlaySinglePlayerGame()
+    public void MainMenuClicked()
     {
-        SceneManager.LoadScene("BreakGame");
-    }
-    public void PlayMultiplayerGame()
-    {
-        SceneManager.LoadScene("Game_Lobby");
+        quitPanel.SetActive(true);
     }
 
     public void ShowQuitGamePanel()
@@ -29,7 +25,7 @@ public class MainMenu : MonoBehaviour
 
     public void PlayerConfirmedQuit()
     {
-        Application.Quit();
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void PlayerDeniedQuit()
