@@ -341,7 +341,7 @@ public class BoardManager : MonoBehaviour
         }
 
 
-        isIceTurn = false; //This is provoking an error Needs to have another winning conditions separetely
+        //isIceTurn = false; //This is provoking an error Needs to have another winning conditions separetely
         BoardHighlights.Instance.HideHighlights();
         SpawnAllBreakPieces();
     }
