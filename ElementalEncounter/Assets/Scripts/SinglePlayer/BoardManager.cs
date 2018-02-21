@@ -100,11 +100,14 @@ public class BoardManager : MonoBehaviour
         if (AllowedMoves[x, y] != 0)
         {
             Piece b = Breakmans[x, y];
+            char temp = AllowedMoves[x, y];
             if (b != null && b.isIce != isIceTurn)
             {
                 // Capture a piece
                 activeBreakman.Remove(b.gameObject);
                 Destroy(b.gameObject);
+                playAnimation(selectedBreakman, temp, x, y, false);
+
             }
 
             if (isIceTurn)
@@ -124,10 +127,8 @@ public class BoardManager : MonoBehaviour
                 }
             }
 
-            char temp = AllowedMoves[x, y];
-
             Breakmans[selectedBreakman.CurrentX, selectedBreakman.CurrentY] = null;
-            playAnimation(selectedBreakman, temp);
+            playAnimation(selectedBreakman, temp, x, y, false);
 
 
             selectedBreakman.transform.position = GetTileCenter(x, y);
@@ -172,11 +173,15 @@ public class BoardManager : MonoBehaviour
         int fromX = from % 8;
         int fromY = from / 8;
 
+        aiAllowedMoves = Breakmans[fromX, fromY].PossibleMove();
+        char aiTemp = aiAllowedMoves[toX, toY];
+
         if (Breakmans[toX, toY] != null)
         {
             // Capture a piece
             activeBreakman.Remove(Breakmans[toX, toY].gameObject);
             Destroy(Breakmans[toX, toY].gameObject);
+            playAnimation(Breakmans[fromX, fromY], aiTemp, toX, toY, true);
         }
 
         //Piece selectedBreakman = Breakmans[fromX, fromY];
@@ -188,11 +193,9 @@ public class BoardManager : MonoBehaviour
 
         
 
-        aiAllowedMoves = Breakmans[fromX, fromY].PossibleMove();
+        
 
-        char aiTemp = aiAllowedMoves[toX, toY];
-
-        playAnimation(Breakmans[fromX, fromY], aiTemp);
+        playAnimation(Breakmans[fromX, fromY], aiTemp, toX, toY, false);
 
         Breakmans[fromX, fromY].transform.position = GetTileCenter(toX, toY);
         Breakmans[fromX, fromY].SetPosition(toX, toY);
@@ -337,24 +340,40 @@ public class BoardManager : MonoBehaviour
         SpawnAllBreakPieces();
     }
 
-    public void playAnimation(Piece selectedPiece, char moveDirection)
+    public void playAnimation(Piece selectedPiece, char moveDirection, int x, int y, bool capture)
     {
-        //If Movement is Left, plays left animation
-        if (moveDirection == 'l')
+        if (capture == false)
         {
-            selectedPiece.GetComponent<Animation>().Play("Left");
-        }
+            //If Movement is Left, plays left animation
+            if (moveDirection == 'l')
+            {
+                selectedPiece.GetComponent<Animation>().Play("Left");
+            }
 
-        //If Movement is Right, plays right animation
-        if (moveDirection == 'r')
-        {
-            selectedPiece.GetComponent<Animation>().Play("Right");
-        }
+            //If Movement is Right, plays right animation
+            if (moveDirection == 'r')
+            {
+                selectedPiece.GetComponent<Animation>().Play("Right");
+            }
 
-        //If movement is Forward, plays forward animation
-        if (moveDirection == 'm')
+            //If movement is Forward, plays forward animation
+            if (moveDirection == 'm')
+            {
+                selectedPiece.GetComponent<Animation>().Play("Forward");
+            }
+        }
+        else
         {
-            selectedPiece.GetComponent<Animation>().Play("Forward");
+            if (moveDirection == 'l')
+            {
+                selectedPiece.GetComponent<Animation>().Play("Capture - Left");
+            }
+
+            //If Movement is Right, plays right animation
+            if (moveDirection == 'r')
+            {
+                selectedPiece.GetComponent<Animation>().Play("Capture - Right");
+            }
         }
     }
 }
