@@ -54,7 +54,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4775921199310792}
   - component: {fileID: 111785151451684278}
-  - component: {fileID: 114770267648051328}
+  - component: {fileID: 114615899188489982}
+  - component: {fileID: 95355249386054630}
   m_Layer: 0
   m_Name: Fire Game P
   m_TagString: Untagged
@@ -185,6 +186,23 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1419910826099948}
   m_Mesh: {fileID: 4300000, guid: 2e898659875cb31478111ea59f7eeb0d, type: 3}
+--- !u!95 &95355249386054630
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1848356010410964}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c5f584d5fb8b22f4587c7ef26e6c63fc, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!111 &111785151451684278
 Animation:
   m_ObjectHideFlags: 1
@@ -199,11 +217,13 @@ Animation:
   - {fileID: 7400002, guid: 2e898659875cb31478111ea59f7eeb0d, type: 3}
   - {fileID: 7400004, guid: 2e898659875cb31478111ea59f7eeb0d, type: 3}
   - {fileID: 7400006, guid: 2e898659875cb31478111ea59f7eeb0d, type: 3}
+  - {fileID: 7400000, guid: 66ebd05cfd28bb444abbd64d23a527db, type: 3}
+  - {fileID: 7400000, guid: d8d2557184b3c0b419b2c9f69b853088, type: 3}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
---- !u!114 &114770267648051328
+--- !u!114 &114615899188489982
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
