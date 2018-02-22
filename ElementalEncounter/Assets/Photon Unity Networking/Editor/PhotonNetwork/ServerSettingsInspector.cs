@@ -123,18 +123,18 @@ public class ServerSettingsInspector : Editor
 
 
 				EditorGUI.indentLevel ++;
-				CloudRegionFlag valRegions = (CloudRegionFlag)EditorGUILayout.EnumMaskField(" ", settings.EnabledRegions);
+				//CloudRegionFlag valRegions = (CloudRegionFlag)EditorGUILayout.EnumMaskField(" ", settings.EnabledRegions);
 
-                    if (valRegions != settings.EnabledRegions)
-                    {
-                        settings.EnabledRegions = valRegions;
-                        this.showMustHaveRegion = valRegions == 0;
-                    }
-                    if (this.showMustHaveRegion)
-                    {
-                        EditorGUILayout.HelpBox("You should enable at least two regions for 'Best Region' hosting.", MessageType.Warning);
-                    }
-				EditorGUI.indentLevel --;
+    //                if (valRegions != settings.EnabledRegions)
+    //                {
+    //                    settings.EnabledRegions = valRegions;
+    //                    this.showMustHaveRegion = valRegions == 0;
+    //                }
+    //                if (this.showMustHaveRegion)
+    //                {
+    //                    EditorGUILayout.HelpBox("You should enable at least two regions for 'Best Region' hosting.", MessageType.Warning);
+    //                }
+				//EditorGUI.indentLevel --;
 
 
 
