@@ -35,8 +35,9 @@ namespace GameCore.AIWrapper
 		public static extern void Seeker(bitboard white, bitboard black, Turn t, out int from, out int to);
 
 		public AIType Type { get; private set; }
+		private bool Verbose { get; set; }
 
-		public AI(AIType t) { Type = t; }
+        public AI(AIType t, bool verbose = false) { Type = t; Verbose = verbose; }
 
 		public override move getMove(GameBoard gb) {
 			//Convert Gameboard
@@ -63,8 +64,10 @@ namespace GameCore.AIWrapper
 				case AIType.SEEKER: Seeker(white, black, t, out from, out to); break;
 				default: break;
 			}
-			
-			return new move((Square)from, (Square)to);
+            move result = new move((Square)from, (Square)to);
+
+            if(Verbose) Console.WriteLine("AI Move: " + Board.to_string(result));
+			return result;
 		}
 
 		public override string ToString() {

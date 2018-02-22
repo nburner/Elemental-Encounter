@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GameCore.Core
 {
@@ -46,6 +48,14 @@ namespace GameCore.Core
 
             for (int i = 0; i < black.Length; i++) this[black[i]] = 'B';
         }
-        private GameBoard(GameBoard _) { }
-	}
+        private GameBoard(GameBoard _) {
+            justTaken = _.justTaken;
+            space = (char[])_.space.Clone();
+        }
+
+        internal GameBoard Clone()
+        {
+            return new GameBoard(this);
+        }
+    }
 }

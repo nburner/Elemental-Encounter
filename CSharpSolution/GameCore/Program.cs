@@ -12,19 +12,30 @@ namespace GameCore
 		private static Game game = new Game();
 		private static Dictionary<AIType, int> wins = Enum.GetValues(typeof(AIType)).Cast<AIType>().ToDictionary<AIType, AIType, int>((a) => { return a; }, (a) => { return 0; });
 		static void Main(string[] args) {
-			Daryl daryl = new Daryl();
-
-			AI seeker = new AI(AIType.SEEKER);
-			AI pet = new AI(AIType.DARYLS_PET);
-
-            Misc.Fun.TypeString("Hello Nathan. This process should be as painful, er, painless as possible.");            
+            functionForNathan();
 		}
 
         private static void functionForNathan()
         {
-            Console.WriteLine("Hello Nathan. This process should be as painful, er, painless as possible.");
-            Console.WriteLine("First, determine what side the AI will play as.");
-            Console.WriteLine("W or B?");
+            //This declares the players (one ai and one human who represents the opponents ai)
+            AI ai = new AI(AIType.SEEKER, true); //NOTE - Change AIType to DARYLS_PET if Seeker crashes or takes too long (hopefully shouldn't happen)
+            Nathan opponent = new Nathan(); 
+
+            //Fun instructions
+            Misc.Fun.TypeString("Hello Nathan. This process should be as painful, er, painless as possible.\n");
+            Misc.Fun.TypeString("First, determine what side the AI will play as.\n");
+            Misc.Fun.TypeString("W or B?  ");
+
+            //This gets the user input for which side the ai is playing
+            char sideChar;
+            do {
+                sideChar = Char.ToUpper(Console.ReadKey().KeyChar);
+            } while (sideChar != 'W' && sideChar != 'B');
+            Console.WriteLine("\n");
+
+            //This starts the game based on which color the user selected. Note the order of the players is swapped in the two function calls
+            if(sideChar == 'W') game.newGame(ai, opponent, true);
+            else game.newGame(opponent, ai, true);
         }
         private static void playThatOneTestCase()
         {

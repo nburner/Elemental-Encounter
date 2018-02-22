@@ -14,8 +14,11 @@ namespace GameCore.Misc
         }
         private static void TypeChar(char c)
         {
+            int sleep = 50;
+            if (Char.IsPunctuation(c)) sleep += 150;
+            if (c == '.' || c == '\n') sleep += 100;
             Console.Write(c);
-            Thread.Sleep(150);
+            Thread.Sleep(sleep);
         }
 	}
 }

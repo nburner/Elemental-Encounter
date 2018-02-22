@@ -110,7 +110,7 @@ namespace GameCore.AIWrapper
 		}
 
 		public static string to_string(move m, bool addX = false) {
-			return _SquaresStr[(int)m.Item1] + (addX ? " X " : " ") + _SquaresStr[(int)m.Item2];
+			return _SquaresStr[(int)m.Item1] + (addX ? " X " : " to ") + _SquaresStr[(int)m.Item2];
 		}
 
 		//This takes a bitboard and shifts all the bits in a direction on the board, returning the new bitboard

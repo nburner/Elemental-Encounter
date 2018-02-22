@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="AI\AI.cs" />
     <Compile Include="AI\Board.cs" />
+    <Compile Include="Core\Nathan.cs" />
     <Compile Include="Core\Daryl.cs" />
     <Compile Include="Core\Game.cs" />
     <Compile Include="Core\GameBoard.cs" />
