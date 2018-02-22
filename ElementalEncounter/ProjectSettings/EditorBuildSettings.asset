@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MainMenu.unity
-    guid: 5f9a87af5f1fd6841b66c31d197bdc58
+    path: Assets/Scenes/MainMenu2.unity
+    guid: 64859d234044d6940a31b6b2417e2f96
   - enabled: 1
     path: Assets/Scenes/BreakGame.unity
     guid: 8ee257a0805228b47b4c34fbab0ed8a2
@@ -17,3 +17,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game_Lobby.unity
     guid: 3f207f5a84101ea4ab7b61c7f213481c
+  - enabled: 0
+    path: Assets/Scenes/MainMenu.unity
+    guid: 5f9a87af5f1fd6841b66c31d197bdc58
