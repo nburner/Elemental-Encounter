@@ -76,7 +76,7 @@ namespace AI {
 	class Prune : public Pet {
 	protected:
 		static int PLY_COUNT;
-		int alphabeta(Board board, int currentPly) const;
+		int alphabeta(Board board, int currentPly, double duration = 1.5, const timer& t = timer()) const;
 		
 	public:
 		Prune();

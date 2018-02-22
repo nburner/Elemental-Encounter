@@ -12,8 +12,13 @@ timer::~timer()
 
 void timer::start()
 {
-	_start = std::clock();
+	if(!started) _start = std::clock();
 	started = true;
+}
+
+void timer::stop()
+{
+	started = false;
 }
 
 void timer::reset()

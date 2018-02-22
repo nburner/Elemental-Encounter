@@ -4,17 +4,20 @@
 using namespace AI;
 typedef vector<Board>::iterator BoardIterator;
 
+static timer t;
+static int seekDepth = INT_MAX;
+static double seekTime = 4;
+
 AI::Seeker::Seeker()
 {
+	t.start();
 }
 
 AI::Seeker::Seeker(int) : Prune(0)
 {
+	t.start();
 }
 
-static int seekDepth = INT_MAX;
-static timer t;
-static double seekTime = 4;
 
 move seek(const Board& b, int movesMade = 0, const timer& time = timer());
 
@@ -88,11 +91,14 @@ move deepTimedSeek(const Board& b, double time, int depth = 20) {
 
 move AI::Seeker::operator()(const Board b) const
 {
-	t.start(); 
+	t.reset(); 
 
 	//Always win if you can
 	auto boards = b.validWinBoards();
-	if (!boards.empty()) return boards[0].lastMove;
+	if (!boards.empty()) {
+		cout << "This move took: " << t.read() << " seconds" << endl;
+		return boards[0].lastMove;
+	}
 	
 	//If you can't, look for a way to win
 	move seekResult = deepTimedSeek(b, 2.5);
@@ -103,13 +109,16 @@ move AI::Seeker::operator()(const Board b) const
 	//Then look at all the possible moves
 		boards = b.validNextBoards();
 	//And ignore all the ones that would cause your enemy to win
+		double allottedTime = 2.5 / boards.size();
 		for (auto it = boards.begin(); it != boards.end(); ) {
-			move test = deepTimedSeek(it->ignoreBack(), 2.5/boards.size());
+			move test = deepTimedSeek(it->ignoreBack(), allottedTime);
 			if (test.first != test.second) it = boards.erase(it);
 			else ++it;
 		}
 	//If there are no remaining options then sucks to suck lol, just race
+	//TODO - Currently this makes it obvious (to me at least) that you've got a solid victory lined up. I need a better defensive ploy too.
 		if (boards.empty()) {
+			cout << "This move took: " << t.read() << " seconds" << endl;
 			cout << "Seeker: I think I'm screwed" << endl;
 			Square from = b.furthestPiece(b.turn() ? BLACK : WHITE);
 			Square to = Square(from + (b.turn() ? SOUTH : NORTH) + (from/8 == 0 ? EAST : WEST));
@@ -119,7 +128,7 @@ move AI::Seeker::operator()(const Board b) const
 		for (int i = 0; i < boards.size(); i++) {
 			evaluate(boards[i]);
 			boards[i].val /= 2;
-			boards[i].val += alphabeta(boards[i], 0) / 2;
+			boards[i].val += alphabeta(boards[i], 0, 5.7, t) / 2;
 		}
 	}
 	//But if there is a way to victory, ensure it doesn't cost you the game
@@ -127,13 +136,18 @@ move AI::Seeker::operator()(const Board b) const
 	//See if your enemy will have a way to victory after your move
 		move test = deepTimedSeek(b.makeMove(seekResult).ignoreBack(), 1);
 	//If they don't, good for you!
-		if (test.first == test.second) return seekResult; 
+		if (test.first == test.second) {
+			cout << "This move took: " << t.read() << " seconds" << endl;
+			cout << "Seeker: I've got you now!" << endl;
+			return seekResult;
+		}
 	//If they do, see if there is a way to stop them
 		else {
 			boards = b.validNextBoards();
 			int maxMovesToWin = 0; int minMovesToWin = 165; move bestShot = { A1, A1 };
+			double allottedTime = 2 / boards.size();
 			for (auto it = boards.begin(); it != boards.end(); ) {
-				move test = deepTimedSeek(it->ignoreBack(), 2/boards.size());
+				move test = deepTimedSeek(it->ignoreBack(), allottedTime);
 				if (test.first != test.second) { 
 					minMovesToWin = (minMovesToWin > it->movesBeforeWin) ? it->movesBeforeWin : minMovesToWin;
 					if (maxMovesToWin < it->movesBeforeWin) {
@@ -145,16 +159,18 @@ move AI::Seeker::operator()(const Board b) const
 				else ++it;
 			}
 	//If there's no way to stop them...
-			if (boards.empty()) 
-	//Maybe we can beat them to it
-				if(minMovesToWin >= b.movesBeforeWin) return seekResult;
-	//Maybe we can try to slow them down
+			if (boards.empty()) {
+				cout << "This move took: " << t.read() << " seconds" << endl;
+				//Maybe we can beat them to it
+				if (minMovesToWin >= b.movesBeforeWin) return seekResult;
+				//Maybe we can try to slow them down
 				else return bestShot;
+			}
 	//Otherwise pick the best move that will stop them
 			for (int i = 0; i < boards.size(); i++) {
 				evaluate(boards[i]);
 				boards[i].val /= 2;
-				boards[i].val += alphabeta(boards[i], 0) / 2;
+				boards[i].val += alphabeta(boards[i], 0, 5.7, t) / 2;
 			}
 		}
 	}

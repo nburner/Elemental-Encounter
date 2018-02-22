@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
 
 namespace GameCore.Core
 {
@@ -121,7 +122,10 @@ namespace GameCore.Core
 
                 PlayerTurn = (Turn)Convert.ToInt16(!Convert.ToBoolean(PlayerTurn));
             } while (!GameOver);
+            moveLog.Push(String.Format("WINNER: {0} ({1})", Winner, players[(int)Winner]));
             if (print) Console.WriteLine("WINNER: {0} ({1})", Winner, players[(int)Winner]);
+
+            saveLog(string.Format("{0:yyyy-MM-dd_hh-mm-ss-tt}.log", DateTime.Now));
         }
 
         private void Undo()
@@ -171,24 +175,36 @@ namespace GameCore.Core
             }
 
             //Clear Log
-            Console.CursorTop = PreviousTop + 5;
-            Console.CursorLeft = PreviousLeft + 5;
-            //if(moveLog.Count > 1) Console.WriteLine(moveLog.Skip(1).Select((str) => { return String.Concat(Enumerable.Repeat(" ", str.Length)); }).Aggregate((str1, str2) => { return str1 + "\n" + str2; }));
+            Console.CursorTop = PreviousTop + 11;
+            Console.CursorLeft = PreviousLeft + 11;
             Console.WriteLine(moveLog.Select((str) => { return String.Concat(Enumerable.Repeat(" ", str.Length)); }).Aggregate((str1, str2) => { return str1 + "\n" + str2; }));
             //Print Log
-            Console.CursorTop = PreviousTop + 5;
+            Console.CursorTop = PreviousTop + 11;
             Console.CursorLeft = PreviousLeft;
-            Console.WriteLine("*********** LOG ***********");
+            Console.WriteLine("********************** LOG **********************");
             Console.WriteLine(moveLog.Aggregate((str1, str2) => { return str1 + "\n" + str2; }));
 
             //Clear the move space
-            Console.CursorTop = PreviousTop + (PlayerTurn == Turn.BLACK ? 2 : 0);
+            Console.CursorTop = PreviousTop + (PlayerTurn == Turn.BLACK ? 5 : 0);
             Console.CursorLeft = PreviousLeft;
-            Console.WriteLine("                             \n                             ");
-            //if(PlayerTurn == Turn.WHITE) Console.WriteLine("                             \n                             ");
+            Console.WriteLine(String.Concat(Enumerable.Repeat(String.Concat(Enumerable.Repeat(" ", Console.WindowWidth - 7)) + "\n", 5)));        
+            
+            Console.CursorTop = PreviousTop + (PlayerTurn == Turn.BLACK ? 5 : 0);
+            Console.CursorLeft = PreviousLeft;
 
-            Console.CursorTop = PreviousTop + (PlayerTurn == Turn.BLACK ? 2 : 0);
-            Console.CursorLeft = PreviousLeft;
+            Console.WindowTop = 0;
+        }
+
+        void saveLog(string file)
+        {
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "..\\..\\..\\logs");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            File.WriteAllText(Path.Combine(path, file), "********************** LOG **********************" + Environment.NewLine + moveLog.Aggregate((str1, str2) => { return str1 + Environment.NewLine + str2; }));
         }
     }
+
+    
 }

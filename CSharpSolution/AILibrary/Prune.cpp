@@ -18,7 +18,7 @@ AI::Prune::Prune(int) : Pet(0)
 {
 }
 
-int Prune::alphabeta(Board board, int currentPly) const {
+int Prune::alphabeta(Board board, int currentPly, double duration, const timer& t) const {
 	auto boards = board.validNextBoards();
 
 	if (boards.empty() || currentPly == this->PLY_COUNT) {
@@ -29,12 +29,14 @@ int Prune::alphabeta(Board board, int currentPly) const {
 	for (int i = 0; i < boards.size(); i++) {
 		boards[i].alpha = -1 * board.beta;
 		boards[i].beta = -1 * board.alpha;
-		boards[i].val = -1 * alphabeta(boards[i], currentPly + 1);
+		boards[i].val = -1 * alphabeta(boards[i], currentPly + 1, duration, t);
 
 		if (boards[i].val >= board.beta)
 			return board.beta;   //  fail hard beta-cutoff
 		if (boards[i].val > board.alpha)
 			board.alpha = boards[i].val; // alpha acts like max in MiniMax
+
+		if (t.read() >= duration) return board.alpha;
 	}
 
 	return board.alpha;

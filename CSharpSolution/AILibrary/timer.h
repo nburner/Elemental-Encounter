@@ -9,6 +9,7 @@ public:
 	timer();
 	~timer();
 	void start();
+	void stop();
 	void reset();
 	double read() const;
 };
