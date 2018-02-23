@@ -373,7 +373,7 @@ public class BoardManager : MonoBehaviour
                 if (moveDirection == 'l')
                 {
                     selectedPiece.GetComponent<Animation>().Play("LeftBreak");
-                    SpawnBreakman(2, x, y);
+                    SpawnBreakman(5, x, y);
                     Destroy(Breakmans[x, y], 3f);
                 }
 
@@ -381,7 +381,7 @@ public class BoardManager : MonoBehaviour
                 else
                 {
                     selectedPiece.GetComponent<Animation>().Play("RightBreak");
-                    SpawnBreakman(3, x, y);
+                    SpawnBreakman(4, x, y);
                     Destroy(Breakmans[x, y], 3f);
                 }
             }
@@ -391,7 +391,7 @@ public class BoardManager : MonoBehaviour
                 if (moveDirection == 'l')
                 {
                     selectedBreakman.GetComponent<Animation>().Play("LeftBreak");
-                    SpawnBreakman(5, x, y);
+                    SpawnBreakman(2, x, y);
                     Destroy(Breakmans[x, y], 3f);
                 }
 
@@ -399,7 +399,7 @@ public class BoardManager : MonoBehaviour
                 else
                 {
                     selectedBreakman.GetComponent<Animation>().Play("RightBreak");
-                    SpawnBreakman(4, x, y);
+                    SpawnBreakman(3, x, y);
                     Destroy(Breakmans[x, y], 3f);
                 }
             }
