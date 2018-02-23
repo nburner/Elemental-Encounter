@@ -87,6 +87,7 @@ namespace NetworkGame
 
         public override void OnDisconnectedFromPhoton()
         {
+            PhotonNetwork.LoadLevel("Game_Lobby");
             progressLabel.SetActive(true);
             controlPanel.SetActive(false);
             Debug.LogWarning("OnDisconnectedFromPhoton() called.");
@@ -102,12 +103,9 @@ namespace NetworkGame
             // #Critical: We only load if we are the first player, else we rely on  PhotonNetwork.automaticallySyncScene to sync our instance scene.
             if (PhotonNetwork.room.PlayerCount == 2)
             {
-                Debug.Log("We load the 'Room for 1' ");
-
-
                 // #Critical
                 // Load the Room Level. 
-                PhotonNetwork.LoadLevel("BreakGame");
+                PhotonNetwork.LoadLevel("BreakGameMultiplayer");
             }
 
         }

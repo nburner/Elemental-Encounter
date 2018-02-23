@@ -14,7 +14,7 @@ namespace NetworkGame
                 Debug.LogError("PhotonNetwork : Trying to Load a level but we are not the master Client");
             }
             Debug.Log("PhotonNetwork : Loading Level : " + PhotonNetwork.room.PlayerCount);
-            PhotonNetwork.LoadLevel("BreakGame");
+            PhotonNetwork.LoadLevel("BreakGameMultiplayer");
         }
 
         #region Photon Messages
@@ -53,6 +53,12 @@ namespace NetworkGame
         public override void OnLeftRoom()
         {
             SceneManager.LoadScene("MainMenu");
+        }
+
+        public void SendMove(int x, int y, int fromX, int fromY)
+        {
+            int[] aData = { x, y, fromX, fromY };
+            PhotonNetwork.RaiseEvent(0, aData, true, null);
         }
 
 
