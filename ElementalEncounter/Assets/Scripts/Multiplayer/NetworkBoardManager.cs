@@ -62,16 +62,6 @@ public class NetworkBoardManager : MonoBehaviour
 
     }
 
-    void OnEnable()
-    {
-        PhotonNetwork.OnEventCall += this.OnEvent;
-    }
-
-    public void OnEvent(byte eventcode, object content, int senderid)
-    {
-        int[] data = content as int[];
-        MoveBreakman(data[0], data[1], data[2], data[3]);
-    }
 
     private void Selection()
     {
@@ -175,7 +165,7 @@ public class NetworkBoardManager : MonoBehaviour
         selectedBreakman = null;
     }
 
-    private void MoveBreakman(int toX, int toY, int fromX,int fromY)
+    public void MoveBreakman(int toX, int toY, int fromX,int fromY)
     {
         if (BreakmanNet[toX, toY] != null)
         {

@@ -14,7 +14,7 @@ public class MainMenuControler : MonoBehaviour {
 
     public void PlayMultiplayerGame()
     {
-
+        SceneManager.LoadScene("Game_Lobby");
     }
 
     public void OptionsMenu()
