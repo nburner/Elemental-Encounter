@@ -56,29 +56,6 @@ namespace NetworkGame
             SceneManager.LoadScene("MainMenu");
         }
 
-        public void SendMove(int x, int y, int fromX, int fromY)
-        {
-            int[] aData = { x, y, fromX, fromY };
-            PhotonNetwork.RaiseEvent(0, aData, true, null);
-        }
-
-
-        #endregion
-
-
-        #region Public Methods
-        void Awake()
-        {
-            board = FindObjectOfType(typeof(NetworkBoardManager)) as NetworkBoardManager;
-            PhotonNetwork.OnEventCall += this.OnEvent;
-        }
-
-        public void OnEvent(byte eventcode, object content, int senderid)
-        {
-            int[] data = content as int[];
-            board.MoveBreakman(data[0], data[1], data[2], data[3]);
-        }
-
         public void LeaveRoom()
         {
             PhotonNetwork.LeaveRoom();
