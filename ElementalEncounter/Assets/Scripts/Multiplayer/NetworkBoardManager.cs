@@ -62,27 +62,27 @@ public class NetworkBoardManager : Photon.PunBehaviour
 
     }
 
-    void Awake()
-    {
-        PhotonNetwork.OnEventCall += this.OnEvent;
-    }
+    //void Awake()
+    //{
+    //    PhotonNetwork.OnEventCall += this.OnEvent;
+    //}
 
-    public void SendMove(int x, int y, int fromX, int fromY)
-    {
-        int[] aData = { x, y, fromX, fromY };
-        PhotonNetwork.RaiseEvent(0, aData, true, null);
-    }
+    //public void SendMove(int x, int y, int fromX, int fromY)
+    //{
+    //    int[] aData = { x, y, fromX, fromY };
+    //    PhotonNetwork.RaiseEvent(0, aData, true, null);
+    //}
 
 
-    public void OnEvent(byte eventcode, object content, int senderid)
-    {
-        int[] data = content as int[];
-        if (eventcode == 0)
-        {
-            MoveBreakman(data[0], data[1], data[2], data[3]);
-        }
+    //public void OnEvent(byte eventcode, object content, int senderid)
+    //{
+    //    int[] data = content as int[];
+    //    if (eventcode == 0)
+    //    {
+    //        MoveBreakman(data[0], data[1], data[2], data[3]);
+    //    }
         
-    }
+    //}
 
     private void Selection()
     {
@@ -166,7 +166,7 @@ public class NetworkBoardManager : Photon.PunBehaviour
                 }
             }
 
-            SendMove(x, y, selectedBreakman.CurrentX, selectedBreakman.CurrentY);
+            //SendMove(x, y, selectedBreakman.CurrentX, selectedBreakman.CurrentY);
             BreakmanNet[selectedBreakman.CurrentX, selectedBreakman.CurrentY] = null;
             playAnimation(selectedBreakman, temp, x, y, false);
 

@@ -7,7 +7,6 @@ namespace NetworkGame
 {
     public class GameManager : Photon.PunBehaviour
     {
-        NetworkBoardManager board;
         void LoadArena()
         {
             if (!PhotonNetwork.isMasterClient)
@@ -27,8 +26,7 @@ namespace NetworkGame
             if (PhotonNetwork.isMasterClient)
             {
                 Debug.Log("OnPhotonPlayerConnected isMasterClient " + PhotonNetwork.isMasterClient); // called before OnPhotonPlayerDisconnected
-
-
+                 
                 LoadArena();
             }
         }
@@ -53,7 +51,7 @@ namespace NetworkGame
         /// </summary>
         public override void OnLeftRoom()
         {
-            SceneManager.LoadScene("MainMenu");
+            SceneManager.LoadScene("Game_Lobby");
         }
 
         public void LeaveRoom()
