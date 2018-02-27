@@ -12417,6 +12417,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1173672432963914, guid: 54f4f862e7cde1a4cbccf98deab595ef, type: 2}
+      propertyPath: m_Name
+      value: OutsideEdgeBoardPiece
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 54f4f862e7cde1a4cbccf98deab595ef, type: 2}
   m_IsPrefabParent: 0

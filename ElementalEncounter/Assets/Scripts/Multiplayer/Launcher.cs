@@ -13,18 +13,13 @@ namespace NetworkGame
         bool isConnecting;
 
         #region Public Variables
-
-
-
-        #endregion
-
         public PhotonLogLevel LogLevel = PhotonLogLevel.ErrorsOnly;
         public byte MaxPlayersPerRoom = 2;
         public GameObject controlPanel;
         public GameObject progressLabel;
+        #endregion
 
         #region Private Variables
-
         // Update the game version everytime we create a new install
         string _gameVersion = "0.1.0";
 
@@ -63,16 +58,16 @@ namespace NetworkGame
             progressLabel.SetActive(true);
             controlPanel.SetActive(false);
 
-            // If connected, join random room
-            //if (PhotonNetwork.connected)
-            //{
-            //    PhotonNetwork.JoinRandomRoom();
-            //}
-            //else
-            //{
-                // Connect to online server
+            //If connected, join random room
+            if (PhotonNetwork.connected)
+            {
+                PhotonNetwork.JoinRandomRoom();
+            }
+            else
+            {
+                //    Connect to online server
                 PhotonNetwork.ConnectUsingSettings(_gameVersion);
-            //}
+            }
         }
 
         public override void OnConnectedToMaster()
@@ -87,7 +82,6 @@ namespace NetworkGame
 
         public override void OnDisconnectedFromPhoton()
         {
-            PhotonNetwork.LoadLevel("Game_Lobby");
             progressLabel.SetActive(true);
             controlPanel.SetActive(false);
             Debug.LogWarning("OnDisconnectedFromPhoton() called.");

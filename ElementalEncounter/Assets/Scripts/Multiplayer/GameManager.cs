@@ -13,8 +13,9 @@ namespace NetworkGame
             {
                 Debug.LogError("PhotonNetwork : Trying to Load a level but we are not the master Client");
             }
-            Debug.Log("PhotonNetwork : Loading Level : " + PhotonNetwork.room.PlayerCount);
+
             PhotonNetwork.LoadLevel("BreakGameMultiplayer");
+            Debug.Log("PhotonNetwork : Loading Level : " + PhotonNetwork.room.PlayerCount);
         }
 
         #region Photon Messages
@@ -31,7 +32,7 @@ namespace NetworkGame
             }
         }
 
-
+        
         public override void OnPhotonPlayerDisconnected(PhotonPlayer other)
         {
             Debug.Log("OnPhotonPlayerDisconnected() " + other.NickName); // seen when other disconnects
@@ -40,10 +41,9 @@ namespace NetworkGame
             if (PhotonNetwork.isMasterClient)
             {
                 Debug.Log("OnPhotonPlayerDisonnected isMasterClient " + PhotonNetwork.isMasterClient); // called before OnPhotonPlayerDisconnected
-
-
-                LoadArena();
             }
+            PhotonNetwork.LoadLevel("Game_Lobby");
+
         }
 
         /// <summary>

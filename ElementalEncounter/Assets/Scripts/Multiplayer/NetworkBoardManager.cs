@@ -23,33 +23,25 @@ public class NetworkBoardManager : Photon.PunBehaviour
     public List<GameObject> boardPrefabs;
     private List<GameObject> activeBreakman;
 
-    public NetworkGame.GameManager manager;
-
     public bool isIceTurn = true;
     public bool hasMoved = true;
     public Turn isYourTurn;
     private void Start()
     {
         Instance = this;
-        manager = gameObject.GetComponent("GameManager") as NetworkGame.GameManager;
-
-        if (manager != null)
-        {
-            if (PhotonNetwork.isMasterClient)
-            {
-                hasMoved = false;
-                isIceTurn = true;
-                isYourTurn = Turn.ICE;
-            }
-            else
-            {
-                isIceTurn = false;
-                hasMoved = true;
-            }
-        }
-            
         SpawnAllBoardSpaces();
         SpawnAllBreakPieces();
+        if (PhotonNetwork.isMasterClient)
+        {
+            hasMoved = false;
+            isIceTurn = true;
+            isYourTurn = Turn.ICE;
+        }
+        else
+        {
+            isIceTurn = false;
+            hasMoved = true;
+        }
     }
     private void Update()
     {
@@ -62,27 +54,27 @@ public class NetworkBoardManager : Photon.PunBehaviour
 
     }
 
-    //void Awake()
-    //{
-    //    PhotonNetwork.OnEventCall += this.OnEvent;
-    //}
+    void Awake()
+    {
+        PhotonNetwork.OnEventCall += this.OnEvent;
+    }
 
-    //public void SendMove(int x, int y, int fromX, int fromY)
-    //{
-    //    int[] aData = { x, y, fromX, fromY };
-    //    PhotonNetwork.RaiseEvent(0, aData, true, null);
-    //}
+    public void SendMove(int x, int y, int fromX, int fromY)
+    {
+        int[] aData = { x, y, fromX, fromY };
+        PhotonNetwork.RaiseEvent(0, aData, true, null);
+    }
 
 
-    //public void OnEvent(byte eventcode, object content, int senderid)
-    //{
-    //    int[] data = content as int[];
-    //    if (eventcode == 0)
-    //    {
-    //        MoveBreakman(data[0], data[1], data[2], data[3]);
-    //    }
-        
-    //}
+    public void OnEvent(byte eventcode, object content, int senderid)
+    {
+        int[] data = content as int[];
+        if (eventcode == 0)
+        {
+            MoveBreakman(data[0], data[1], data[2], data[3]);
+        }
+
+    }
 
     private void Selection()
     {
@@ -166,7 +158,7 @@ public class NetworkBoardManager : Photon.PunBehaviour
                 }
             }
 
-            //SendMove(x, y, selectedBreakman.CurrentX, selectedBreakman.CurrentY);
+            SendMove(x, y, selectedBreakman.CurrentX, selectedBreakman.CurrentY);
             BreakmanNet[selectedBreakman.CurrentX, selectedBreakman.CurrentY] = null;
             playAnimation(selectedBreakman, temp, x, y, false);
 
@@ -199,12 +191,28 @@ public class NetworkBoardManager : Photon.PunBehaviour
         {
         }
 
+        //if (isIceTurn)
+        //{
+        //    if (BreakmanNet[fromX, fromY].CurrentY + 1 == 7)
+        //    {
+        //        EndGame();
+        //        return;
+        //    }
+        //}
+        //else
+        //{
+        //    if (BreakmanNet[fromX, fromY].CurrentY - 1 == 0)
+        //    {
+        //        EndGame();
+        //        return;
+        //    }
+        //}
         //Piece selectedBreakman = Breakmans[fromX, fromY];
-        if ((isIceTurn && BreakmanNet[fromX, fromY].CurrentY + 1 == 7) || (!isIceTurn && BreakmanNet[fromX, fromY].CurrentY - 1 == 0))
-        {
-            EndGame();
-            return;
-        }
+        //if ((isIceTurn && BreakmanNet[fromX, fromY].CurrentY + 1 == 7) || (!isIceTurn && BreakmanNet[fromX, fromY].CurrentY - 1 == 0))
+        //{
+        //    EndGame();
+        //    return;
+        //}
 
 
         BreakmanNet[fromX, fromY].transform.position = GetTileCenter(toX, toY);
@@ -213,7 +221,6 @@ public class NetworkBoardManager : Photon.PunBehaviour
         BreakmanNet[toX, toY] = BreakmanNet[fromX, fromY];
         BreakmanNet[fromX, fromY] = null;
 
-        isIceTurn = !isIceTurn;
         hasMoved = !hasMoved;
     }
 
