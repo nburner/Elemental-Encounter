@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class BoardManager : MonoBehaviour
 {
-    public enum Turn { ICE, FIRE };
-
     //List of Gameobject for spawning pieces on the board
     public List<GameObject> breakmanPrefabs;
     public List<GameObject> boardPrefabs;
@@ -17,7 +15,7 @@ public class BoardManager : MonoBehaviour
     public Piece[,] Breakmans { set; get; }
     public bool[,] Spacesboard { set; get; }
 
-    private AIMovement ai;
+    private AI.AI ai;
     private Piece selectedBreakman;
     private bool isClicked = false;
     private const float TILE_SIZE = 1.0f;
@@ -29,7 +27,7 @@ public class BoardManager : MonoBehaviour
     private void Start()
     {
         Instance = this;
-        ai = new AIMovement();
+        ai = new AI.AI(AI.AIType.SEEKER, AI.Turn.BLACK);
         SpawnAllBoardSpaces();
         SpawnAllBreakPieces();
     }
@@ -129,11 +127,8 @@ public class BoardManager : MonoBehaviour
             selectedBreakman.transform.position = GetTileCenter(x, y);
             selectedBreakman.SetPosition(x, y);
             Breakmans[x, y] = selectedBreakman;
-
-
-            isIceTurn = !isIceTurn;
-            ai.MakeAIMove();
-
+                                    
+            ai.GetMove(Breakmans, FinishAIMove);
         }
 
         if (isClicked)
@@ -278,5 +273,24 @@ public class BoardManager : MonoBehaviour
         isIceTurn = true; //This is provoking an error Needs to have another winning conditions separetely
         BoardHighlights.Instance.HideHighlights();
         SpawnAllBreakPieces();
+    }
+
+    private void FinishAIMove(int toX, int toY, int fromX, int fromY)
+    {        
+        char aiTemp = Breakmans[fromX, fromY].PossibleMove()[toX, toY];
+
+        bool takingPiece = Breakmans[toX, toY] != null;
+        if (takingPiece) {
+            activeBreakman.Remove(Breakmans[toX, toY].gameObject);
+            Destroy(Breakmans[toX, toY].gameObject, .5f);
+        }
+        Piece.playAnimation(Breakmans[fromX, fromY], aiTemp, toX, toY, takingPiece);        
+
+        Breakmans[fromX, fromY].transform.position = GetTileCenter(toX, toY);
+        Breakmans[fromX, fromY].SetPosition(toX, toY);
+        Breakmans[toX, toY] = Breakmans[fromX, fromY];
+        Breakmans[fromX, fromY] = null;
+        
+        if (toY == 0 || toY == 7) EndGame();    
     }
 }
