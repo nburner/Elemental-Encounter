@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using UnityEngine;
 
 namespace AI
 {
@@ -12,7 +13,7 @@ namespace AI
         SEEKER
     };
 
-	class AI
+	class AI : MonoBehaviour
 	{
         #region DLL Imports
         [DllImport("Assets/Plugins/AILibrary.dll")]
@@ -34,6 +35,18 @@ namespace AI
 		[DllImport("Assets/Plugins/AILibrary.dll")]
 		public static extern void Seeker(bitboard white, bitboard black, Turn t, out int from, out int to);
         #endregion
+
+        void Update()
+        {
+            //if (myJob != null)
+            //{
+            //    if (myJob.Update())
+            //    {
+            //        // Alternative to the OnFinished callback
+            //        myJob = null;
+            //    }
+            //}
+        }
 
         public Turn Color { get; private set; }
         public AIType Type { get; private set; }
@@ -66,15 +79,13 @@ namespace AI
 				case AIType.SEEKER: Seeker(white, black, Color, out from, out to); break;
 				default: break;
 			}
-            //move result = new move((Square)from, (Square)to);
-
-            //if(Verbose) Console.WriteLine("AI Move: " + Board.to_string(result));
 
             //Do callback function
             int toX = to % 8;
             int toY = to / 8;
             int fromX = from % 8;
             int fromY = from / 8;
+
             finishAIMove(toX, toY, fromX, fromY);
         }
 		public override string ToString() {
