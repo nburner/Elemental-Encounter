@@ -151,10 +151,8 @@ MonoBehaviour:
   boardPrefabs:
   - {fileID: 1523715143533048, guid: c34f65431586e7344b5d406eca69dafc, type: 2}
   - {fileID: 1643396766749774, guid: ee6ed1a904506db44b3f4a3153b3f90d, type: 2}
-  manager: {fileID: 114237115690739384, guid: 0ee5e6b59ee2904438fc3accc8e4203c, type: 2}
-  isIceTurn: 1
-  hasMoved: 1
-  isYourTurn: 0
+  isMasterClient: 0
+  WhoseTurn: 0
 --- !u!4 &18783751
 Transform:
   m_ObjectHideFlags: 0
@@ -275,7 +273,7 @@ GameObject:
   - component: {fileID: 1177560730}
   - component: {fileID: 1177560729}
   m_Layer: 0
-  m_Name: Main Camera
+  m_Name: IceCamera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
