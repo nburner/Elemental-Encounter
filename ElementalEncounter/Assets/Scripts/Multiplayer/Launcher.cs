@@ -17,6 +17,7 @@ namespace NetworkGame
         public byte MaxPlayersPerRoom = 2;
         public GameObject controlPanel;
         public GameObject progressLabel;
+        public GameObject optionsPanel;
         #endregion
 
         #region Private Variables
@@ -42,7 +43,8 @@ namespace NetworkGame
         void Start()
         {
             progressLabel.SetActive(false);
-            controlPanel.SetActive(true);
+            controlPanel.SetActive(false);
+            optionsPanel.SetActive(true);
         }
 
         #endregion

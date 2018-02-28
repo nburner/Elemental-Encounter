@@ -141,18 +141,14 @@ public class NetworkBoardManager : Photon.PunBehaviour
                 playAnimation(selectedBreakman, temp, x, y, false);
             }
 
-            if (isIceTurn)
-            {
-                if (selectedBreakman.CurrentY + 1 == 7)
-                {
+            if (isIceTurn) {
+                if (y == 7) {
                     EndGame();
                     return;
                 }
             }
-            else
-            {
-                if (selectedBreakman.CurrentY - 1 == 0)
-                {
+            else {
+                if (x == 0) {
                     EndGame();
                     return;
                 }
@@ -166,7 +162,6 @@ public class NetworkBoardManager : Photon.PunBehaviour
             selectedBreakman.SetPosition(x, y);
             BreakmanNet[x, y] = selectedBreakman;
 
-            isIceTurn = !isIceTurn;
             hasMoved = !hasMoved;
         }
 
@@ -180,48 +175,20 @@ public class NetworkBoardManager : Photon.PunBehaviour
 
     public void MoveBreakman(int toX, int toY, int fromX,int fromY)
     {
-        if (BreakmanNet[toX, toY] != null)
-        {
-            // Capture a piece
+        bool takeAPiece = BreakmanNet[toX, toY] != null;
+        if (takeAPiece) {
             activeBreakman.Remove(BreakmanNet[toX, toY].gameObject);
             Destroy(BreakmanNet[toX, toY].gameObject, .5f);
-
         }
-        else
-        {
-        }
-
-        //if (isIceTurn)
-        //{
-        //    if (BreakmanNet[fromX, fromY].CurrentY + 1 == 7)
-        //    {
-        //        EndGame();
-        //        return;
-        //    }
-        //}
-        //else
-        //{
-        //    if (BreakmanNet[fromX, fromY].CurrentY - 1 == 0)
-        //    {
-        //        EndGame();
-        //        return;
-        //    }
-        //}
-        //Piece selectedBreakman = Breakmans[fromX, fromY];
-        //if ((isIceTurn && BreakmanNet[fromX, fromY].CurrentY + 1 == 7) || (!isIceTurn && BreakmanNet[fromX, fromY].CurrentY - 1 == 0))
-        //{
-        //    EndGame();
-        //    return;
-        //}
-
 
         BreakmanNet[fromX, fromY].transform.position = GetTileCenter(toX, toY);
         BreakmanNet[fromX, fromY].SetPosition(toX, toY);
-
         BreakmanNet[toX, toY] = BreakmanNet[fromX, fromY];
         BreakmanNet[fromX, fromY] = null;
 
         hasMoved = !hasMoved;
+        isIceTurn = !isIceTurn;
+        if (toY == 0 || toY == 7) EndGame();
     }
 
     private void UpdateSelection()
@@ -311,10 +278,12 @@ public class NetworkBoardManager : Photon.PunBehaviour
     {
         if (isIceTurn)
         {
+            isIceTurn = true;
             Debug.Log("Ice Wins!");
         }
         else
         {
+            isIceTurn = false;
             Debug.Log("Fire Wins!");
         }
 
