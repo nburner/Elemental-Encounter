@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using System.Threading.Tasks;
 using bitboard = System.UInt64;
 
 public class AIMovement : MonoBehaviour
@@ -18,7 +19,7 @@ public class AIMovement : MonoBehaviour
     private bitboard white;
     private bitboard black;
 
-    public void MakeAIMove()
+    public async void MakeAIMove()
     {
         white = 0;
         black = 0;
@@ -34,6 +35,8 @@ public class AIMovement : MonoBehaviour
         int toY = to / 8;
         int fromX = from % 8;
         int fromY = from / 8;
+
+        await Task.Delay(System.TimeSpan.FromSeconds(2));
 
         AnimateAiMovement(toX, toY, fromX, fromY);
         UpdatePiecePosition(toX, toY, fromX, fromY);
