@@ -251,6 +251,7 @@ MonoBehaviour:
   boardPrefabs:
   - {fileID: 1523715143533048, guid: c34f65431586e7344b5d406eca69dafc, type: 2}
   - {fileID: 1643396766749774, guid: ee6ed1a904506db44b3f4a3153b3f90d, type: 2}
+  activeBreakman: []
   isIceTurn: 1
 --- !u!4 &18783751
 Transform:
@@ -5780,8 +5781,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 15, y: 25}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 15, y: 15}
+  m_SizeDelta: {x: 175, y: 30}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &914325507
 MonoBehaviour:
