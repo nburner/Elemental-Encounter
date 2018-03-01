@@ -31,8 +31,10 @@ public class BoardManager : MonoBehaviour
             Instance = this;
         }
 
-        gameCore = GameCore.Instance;
+        gameCore = GameObject.Find("GameCore").GetComponent<GameCore>();
         gameCore.boardManager = this;
+
+        gameCore.StartSinglePlayerGame(GameCore.Turn.ICE, GameCore.AILevel.Intermediate);
 
         SpawnAllBoardSpaces();
         SpawnAllPieces();
@@ -284,7 +286,8 @@ public class BoardManager : MonoBehaviour
 
     public void FinishAIMove(int fromX, int fromY, int toX, int toY)
     {
-        char moveDirection = gameCore.PossibleMove(Pieces[fromX, fromY].isIce, fromX, fromY)[toX, toY];
+        char moveDirection = fromX == toX ? 'm' :
+            fromX - 1 == toX ? 'l' : 'r';
 
         bool takingPiece = Pieces[toX, toY] != null;
         if (takingPiece)

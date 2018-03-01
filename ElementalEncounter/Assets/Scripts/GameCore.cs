@@ -19,7 +19,6 @@ public class GameCore : MonoBehaviour
     private int FirePieceCount;
     public BoardManager boardManager;
     // private GameCharacter character;
-    public static GameCore Instance;
 
     public bool GameOver
     {
@@ -33,8 +32,6 @@ public class GameCore : MonoBehaviour
 
     void Start()
     {
-        Instance = this;
-
         Pieces = new char[8, 8];
         for (int x = 0; x < 8; x++) for (int y = 0; y < 8; y++) Pieces[x, y] = default(char);
         for (int x = 0; x < 8; x++) for (int y = 0; y < 2; y++) Pieces[x, y] = 'W';
@@ -53,10 +50,9 @@ public class GameCore : MonoBehaviour
         isMasterClient = true;
         isSinglePlayer = true;
 
-        boardManager = new BoardManager();
-        boardManager = BoardManager.Instance;
+        ai = gameObject.AddComponent<AI.AI>();
 
-        if (aILevel == AILevel.Intermediate) ai = new AI.AI(AI.AIType.SEEKER, mySide == Turn.ICE ? AI.Turn.BLACK : AI.Turn.WHITE, this);
+        if (aILevel == AILevel.Intermediate) ai.Initialize(AI.AIType.SEEKER, mySide == Turn.ICE ? AI.Turn.FIRE : AI.Turn.ICE, this);
 
         if (CurrentTurn == MySide) boardManager.GetLocalMove();
         else ai.GetMove();

@@ -49,5 +49,5 @@ namespace AI
 
 	//A simple enum for black and white
 	//Useful because you can make an array and use white or black as the subscript
-	enum Turn : byte { WHITE, BLACK };
+	public enum Turn : byte { ICE, FIRE };
 }

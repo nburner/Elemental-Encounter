@@ -21,7 +21,7 @@ public class MainMenu : MonoBehaviour
 
     public void PlaySinglePlayerGame()
     {
-        gameCore.StartSinglePlayerGame(GameCore.Turn.ICE, GameCore.AILevel.Intermediate);
+        //gameCore.StartSinglePlayerGame(GameCore.Turn.ICE, GameCore.AILevel.Intermediate);
         SceneManager.LoadScene("BreakGame");
     }
     public void PlayMultiplayerGame()
