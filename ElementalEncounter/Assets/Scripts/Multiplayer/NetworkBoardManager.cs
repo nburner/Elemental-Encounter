@@ -25,10 +25,11 @@ public class NetworkBoardManager : Photon.PunBehaviour
 
     //public bool isIceTurn = true;
     //public bool hasMoved = true;
-    public bool isMasterClient = PhotonNetwork.isMasterClient;
+    public bool isMasterClient;
     public Turn WhoseTurn;
     private void Start()
     {
+        isMasterClient = PhotonNetwork.isMasterClient;
         Instance = this;
         SpawnAllBoardSpaces();
         SpawnAllBreakPieces();
@@ -138,6 +139,8 @@ public class NetworkBoardManager : Photon.PunBehaviour
 
     private void MoveBreakman(int toX, int toY)
     {
+        int fromX = selectedBreakman.CurrentX;
+        int fromY = selectedBreakman.CurrentY;
         // TODO: Add winning conditions. Make in different functions.
         if (AllowedMoves[toX, toY] != 0)
         {
@@ -175,7 +178,7 @@ public class NetworkBoardManager : Photon.PunBehaviour
             BreakmanNet[toX, toY] = selectedBreakman;
 
             WhoseTurn = (WhoseTurn == Turn.ICE) ? Turn.FIRE : Turn.ICE;
-            SendMove(toX, toY, selectedBreakman.CurrentX, selectedBreakman.CurrentY, WhoseTurn);
+            SendMove(toX, toY, fromX, fromY, WhoseTurn);
         }
 
         if (isClicked)
