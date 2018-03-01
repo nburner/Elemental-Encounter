@@ -14,7 +14,7 @@ public class GameCore : MonoBehaviour
     public Turn CurrentTurn;
     public bool isMasterClient;
     private AI.AI ai;
-    private char[,] Pieces;
+    public char[,] Pieces;
     private int IcePieceCount;
     private int FirePieceCount;
     public BoardManager boardManager;
@@ -49,13 +49,11 @@ public class GameCore : MonoBehaviour
         CurrentTurn = Turn.ICE;
         isMasterClient = true;
         isSinglePlayer = true;
-
-        ai = gameObject.AddComponent<AI.AI>();
-
-        if (aILevel == AILevel.Intermediate) ai.Initialize(AI.AIType.SEEKER, mySide == Turn.ICE ? AI.Turn.FIRE : AI.Turn.ICE, this);
+        
+        if (aILevel == AILevel.Intermediate) ai = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.SEEKER, mySide == Turn.ICE ? AI.Turn.FIRE : AI.Turn.ICE, UpdateBoard);
 
         if (CurrentTurn == MySide) boardManager.GetLocalMove();
-        else ai.GetMove();
+        else ai.GetMove(Pieces);
     }
 
     public void UpdateBoard(int fromX, int fromY, int toX, int toY)
@@ -73,7 +71,7 @@ public class GameCore : MonoBehaviour
         if (CurrentTurn == MySide) boardManager.GetLocalMove();
         else
         {
-            if (isSinglePlayer) ai.GetMove();
+            if (isSinglePlayer) ai.GetMove(Pieces);
         }
     }
 
@@ -101,16 +99,5 @@ public class GameCore : MonoBehaviour
         if (y != myTop && Pieces[x, y + myForward] == default(char)) r[x, y + myForward] = 'm';
 
         return r;
-    }
-
-    public void ConvertToBitboards(out bitboard white, out bitboard black)
-    {
-        white = 0; black = 0;
-        for (int x = 0; x < 8; x++)
-            for (int y = 0; y < 8; y++)
-                {
-                    if (Pieces[x, y] == 'W') { white = AI.Board.set(white, y * 8 + x); }
-                    if (Pieces[x, y] == 'B') { black = AI.Board.set(black, y * 8 + x); }
-                }
-    }
+    }    
 }

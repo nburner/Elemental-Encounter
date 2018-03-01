@@ -8,9 +8,7 @@ namespace AI
 
     public enum AIType
 	{
-		B_OFFENSE, B_DEFENSE, B_RANDOM, RANDOM_PET, DARYLS_PET, MEM_PET, TEST,
-		DARYLS_PRUNE,
-        SEEKER
+		B_OFFENSE, B_DEFENSE, B_RANDOM, RANDOM_PET, DARYLS_PET, MEM_PET, TEST, DARYLS_PRUNE, SEEKER, HINTER
     };
 
 	class AI : MonoBehaviour
@@ -21,7 +19,7 @@ namespace AI
             {
                 if (dllCaller.Update())
                 {
-                    GameCore.UpdateBoard(dllCaller.fromX, dllCaller.fromY, dllCaller.toX, dllCaller.toY);
+                    Callback(dllCaller.fromX, dllCaller.fromY, dllCaller.toX, dllCaller.toY);
                     dllCaller = null;
                 }
             }
@@ -29,14 +27,14 @@ namespace AI
 
         public Turn Color { get; private set; }
         public AIType Type { get; private set; }
-        private GameCore GameCore { get; set; }
+        private Action<int, int, int, int> Callback { get; set; }
         private AIJob dllCaller;
 
-        public void Initialize(AIType t, Turn color, GameCore g) { Type = t; Color = color; GameCore = g; }
+        public AI Initialize(AIType t, Turn color, Action<int, int, int, int> callback) { Type = t; Color = color; Callback = callback; return this; }
 
-		public void GetMove() {
+		public void GetMove(char[,] pieces) {
 			bitboard white, black;
-            GameCore.ConvertToBitboards(out white, out black);
+            ConvertToBitboards(pieces, out white, out black);
 
             dllCaller = new AIJob
             {
@@ -49,6 +47,17 @@ namespace AI
         }
 		public override string ToString() {
 			return GetType() + ": " + Type.ToString();
-		}        
+		}
+
+        private void ConvertToBitboards(char[,] Pieces, out bitboard white, out bitboard black)
+        {
+            white = 0; black = 0;
+            for (int x = 0; x < 8; x++)
+                for (int y = 0; y < 8; y++)
+                {
+                    if (Pieces[x, y] == 'W') { white = Board.set(white, y * 8 + x); }
+                    if (Pieces[x, y] == 'B') { black = Board.set(black, y * 8 + x); }
+                }
+        }
     }
 }

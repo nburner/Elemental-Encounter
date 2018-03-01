@@ -29,6 +29,8 @@ namespace AI
         public static extern void DarylsPrune(bitboard white, bitboard black, Turn t, out int from, out int to);
         [DllImport("Assets/Plugins/AILibrary.dll")]
         public static extern void Seeker(bitboard white, bitboard black, Turn t, out int from, out int to);
+        [DllImport("Assets/Plugins/AILibrary.dll")]
+        public static extern void Hinter(bitboard white, bitboard black, Turn t, out int from, out int to);
         #endregion
 
         public bitboard white;
@@ -84,6 +86,7 @@ namespace AI
                 case AIType.TEST: Test(white, black, Color, out from, out to); break;
                 case AIType.DARYLS_PRUNE: DarylsPrune(white, black, Color, out from, out to); break;
                 case AIType.SEEKER: Seeker(white, black, Color, out from, out to); break;
+                case AIType.HINTER: Hinter(white, black, Color, out from, out to); break;
                 default: break;
             }
 

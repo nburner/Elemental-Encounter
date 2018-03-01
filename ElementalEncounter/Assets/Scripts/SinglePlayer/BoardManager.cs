@@ -22,7 +22,7 @@ public class BoardManager : MonoBehaviour
     private int selectionX = -1;
     private int selectionY = -1;
     private GameCore gameCore;
-
+    private AI.AI HinterXHinter;
 
     private void Start()
     {
@@ -34,10 +34,12 @@ public class BoardManager : MonoBehaviour
         gameCore = GameObject.Find("GameCore").GetComponent<GameCore>();
         gameCore.boardManager = this;
 
-        gameCore.StartSinglePlayerGame(GameCore.Turn.ICE, GameCore.AILevel.Intermediate);
+        HinterXHinter = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.HINTER, gameCore.MySide == GameCore.Turn.ICE ? AI.Turn.ICE : AI.Turn.FIRE, showHint);
 
         SpawnAllBoardSpaces();
         SpawnAllPieces();
+
+        gameCore.StartSinglePlayerGame(GameCore.Turn.ICE, GameCore.AILevel.Intermediate);
     }
 
     #region Spawners
@@ -97,8 +99,17 @@ public class BoardManager : MonoBehaviour
 
     #endregion
 
+    private void showHint(int fromX, int fromY, int toX, int toY)
+    {
+        char[,] move = new char[8,8];
+        move[toX, toY] = GetMoveDirection(fromX, toX);
+        move[fromX, fromY] = GetMoveDirection(toX, fromX);
+        BoardHighlights.Instance.HighlightAllowedMoves(move);
+    }
+
     internal void GetLocalMove()
     {
+        HinterXHinter.GetMove(gameCore.Pieces);
         isMyTurn = true;
     }
     private void Update()
@@ -286,16 +297,13 @@ public class BoardManager : MonoBehaviour
 
     public void FinishAIMove(int fromX, int fromY, int toX, int toY)
     {
-        char moveDirection = fromX == toX ? 'm' :
-            fromX - 1 == toX ? 'l' : 'r';
-
         bool takingPiece = Pieces[toX, toY] != null;
         if (takingPiece)
         {
             activePieces.Remove(Pieces[toX, toY].gameObject);
             Destroy(Pieces[toX, toY].gameObject, .5f);
         }
-        Piece.playAnimation(Pieces[fromX, fromY], moveDirection, toX, toY, takingPiece);
+        Piece.playAnimation(Pieces[fromX, fromY], GetMoveDirection(fromX, toX), toX, toY, takingPiece);
 
         Pieces[fromX, fromY].transform.position = GetTileCenter(toX, toY);
         Pieces[fromX, fromY].SetPosition(toX, toY);
@@ -305,5 +313,11 @@ public class BoardManager : MonoBehaviour
         if (toY == 0 || toY == 7) EndGame();
 
         isMyTurn = !isMyTurn;
+    }
+
+    private char GetMoveDirection(int fromX, int toX)
+    {
+        return fromX == toX ? 'm' :
+            fromX - 1 == toX ? 'l' : 'r';
     }
 }
