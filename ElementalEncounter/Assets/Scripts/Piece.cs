@@ -15,80 +15,7 @@ public class Piece : MonoBehaviour
         CurrentY = y;
         
     }
-
-    public char[,] PossibleMove()
-    {
-        char[,] r = new char[8, 8];
-        Piece b;
-
-        if (isIce)
-        {
-            // Diagonal Left
-            if (CurrentX != 0 && CurrentY != 7)
-            {
-                b = BoardManager.Instance.Breakmans[CurrentX - 1, CurrentY + 1];
-                if (b == null || !b.isIce)
-                {
-                    r[CurrentX - 1, CurrentY + 1] = 'l';
-                }
-            }
-
-            // Diagonal Right 
-            if (CurrentX != 7 && CurrentY != 7)
-            {
-                b = BoardManager.Instance.Breakmans[CurrentX + 1, CurrentY + 1];
-                if (b == null || !b.isIce)
-                {
-                    r[CurrentX + 1, CurrentY + 1] = 'r';
-                }
-            }
-
-            // Middle
-            if (CurrentY != 7)
-            {
-                b = BoardManager.Instance.Breakmans[CurrentX, CurrentY + 1];
-                if (b == null)
-                {
-                    r[CurrentX, CurrentY + 1] = 'm';
-                }
-            }
-        }
-        else
-        {
-            // Diagonal Left
-            if (CurrentX != 0 && CurrentY != 0)
-            {
-                b = BoardManager.Instance.Breakmans[CurrentX - 1, CurrentY - 1];
-                if (b == null || b.isIce)
-                {
-                    r[CurrentX - 1, CurrentY - 1] = 'l';
-                }
-            }
-
-            // Diagonal Right 
-            if (CurrentX != 7 && CurrentY != 0)
-            {
-                b = BoardManager.Instance.Breakmans[CurrentX + 1, CurrentY - 1];
-                if (b == null || b.isIce)
-                {
-                    r[CurrentX + 1, CurrentY - 1] = 'r';
-                }
-            }
-
-            // Middle
-            if (CurrentY != 0)
-            {
-                b = BoardManager.Instance.Breakmans[CurrentX, CurrentY - 1];
-                if (b == null)
-                {
-                    r[CurrentX, CurrentY - 1] = 'm';
-                }
-            }
-        }
-
-        return r;
-    }
-
+        
     public static void playAnimation(Piece selectedPiece, char moveDirection, int x, int y, bool capture)
     {
         bm = BoardManager.Instance;
@@ -115,22 +42,22 @@ public class Piece : MonoBehaviour
         }
         else
         {
-            if (bm.isIceTurn == false)
+            if (bm.isMyTurn == false)
             {
                 //If capture is Left, plays left capture animation
                 if (moveDirection == 'l')
                 {
                     selectedPiece.GetComponent<Animation>().Play("LeftBreak");
-                    bm.SpawnBreakman(5, x, y);
-                    Destroy(bm.Breakmans[x, y], 3f);
+                    bm.SpawnPiece(5, x, y);
+                    Destroy(bm.Pieces[x, y], 3f);
                 }
 
                 //If capture is Right, plays right capture animation
                 else
                 {
                     selectedPiece.GetComponent<Animation>().Play("RightBreak");
-                    bm.SpawnBreakman(4, x, y);
-                    Destroy(bm.Breakmans[x, y], 3f);
+                    bm.SpawnPiece(4, x, y);
+                    Destroy(bm.Pieces[x, y], 3f);
                 }
             }
             else
@@ -139,16 +66,16 @@ public class Piece : MonoBehaviour
                 if (moveDirection == 'l')
                 {
                     selectedPiece.GetComponent<Animation>().Play("LeftBreak");
-                    bm.SpawnBreakman(2, x, y);
-                    Destroy(bm.Breakmans[x, y], 3f);
+                    bm.SpawnPiece(2, x, y);
+                    Destroy(bm.Pieces[x, y], 3f);
                 }
 
                 //If capture is Right, plays right capture animation
                 else
                 {
                     selectedPiece.GetComponent<Animation>().Play("RightBreak");
-                    bm.SpawnBreakman(3, x, y);
-                    Destroy(bm.Breakmans[x, y], 3f);
+                    bm.SpawnPiece(3, x, y);
+                    Destroy(bm.Pieces[x, y], 3f);
                 }
             }
         }

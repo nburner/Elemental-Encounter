@@ -50,20 +50,14 @@ namespace AI
 
         public Turn Color { get; private set; }
         public AIType Type { get; private set; }
+        private GameCore GameCore { get; set; }
 
-        public AI(AIType t, Turn color) { Type = t; Color = color; }
+        public AI(AIType t, Turn color, GameCore g) { Type = t; Color = color; GameCore = g; }
 
-		public void GetMove(Piece[,] gb, Action<int, int, int, int> finishAIMove) {
+		public void GetMove() {
 			//Convert Gameboard
-			bitboard white = 0;
-			bitboard black = 0;
-            for (int x = 0; x < 8; x++)
-                for (int y = 0; y < 8; y++)
-                    if (gb[x, y] != null)
-                    {
-                        if (gb[x, y].isIce) { white = Board.set(white, y * 8 + x); }
-                        if (!gb[x, y].isIce) { black = Board.set(black, y * 8 + x); }
-                    }
+			bitboard white, black;
+            GameCore.ConvertToBitboards(out white, out black);
 
             //Get move from type
 			int from = 0, to = 0;
@@ -86,7 +80,7 @@ namespace AI
             int fromX = from % 8;
             int fromY = from / 8;
 
-            finishAIMove(toX, toY, fromX, fromY);
+            GameCore.UpdateBoard(toX, toY, fromX, fromY);
         }
 		public override string ToString() {
 			return GetType() + ": " + Type.ToString();

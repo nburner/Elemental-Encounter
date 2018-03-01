@@ -8,13 +8,20 @@ public class MainMenu : MonoBehaviour
     [Header("Set in Inspector")]
     public GameObject quitPanel;
 
+    private GameCore gameCore;
     void Start()
     {
         quitPanel.SetActive(false);
     }
 
+    void Awake()
+    {
+        gameCore = GameObject.Find("GameCore").GetComponent<GameCore>();
+    }
+
     public void PlaySinglePlayerGame()
     {
+        gameCore.StartSinglePlayerGame(GameCore.Turn.ICE, GameCore.AILevel.Intermediate);
         SceneManager.LoadScene("BreakGame");
     }
     public void PlayMultiplayerGame()
