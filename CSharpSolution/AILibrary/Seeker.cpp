@@ -121,7 +121,7 @@ move AI::Seeker::operator()(const Board b) const
 			cout << "This move took: " << t.read() << " seconds" << endl;
 			cout << "Seeker: I think I'm screwed" << endl;
 			Square from = b.furthestPiece(b.turn() ? BLACK : WHITE);
-			Square to = Square(from + (b.turn() ? SOUTH : NORTH) + (from/8 == 0 ? EAST : WEST));
+			Square to = Square(from + (b.turn() ? SOUTH : NORTH) + (from%8 == 0 ? EAST : WEST));
 			return { from, to };
 		}
 	//Otherwise evaluate your remaining options
