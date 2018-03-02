@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -29,10 +30,19 @@ public class BoardManager : MonoBehaviour
     {
         IceCamera = GameObject.Find("IceCamera").GetComponent<Camera>();
         FireCamera = GameObject.Find("FireCamera").GetComponent<Camera>();
-        gameCore = GameObject.Find("GameCore").GetComponent<GameCore>();
+
+        GameObject core = GameObject.Find("GameCore");
+        if (core == null)
+        {
+            gameCore = new GameObject("Temp Game Core").AddComponent<GameCore>();
+            gameCore.isSinglePlayer = true;
+            gameCore.aILevel = GameCore.AILevel.Easy;
+            gameCore.MySide = GameCore.Turn.ICE;
+        }
+        else gameCore = core.GetComponent<GameCore>();
+
         gameCore.boardManager = this;
         SpawnAllBoardSpaces();
-        gameCore.InitializeGameCore();
         InitializeBoard();
 
         if (gameCore.MySide == GameCore.Turn.ICE)
@@ -112,27 +122,46 @@ public class BoardManager : MonoBehaviour
 
     #endregion
 
-    private void showHint(int fromX, int fromY, int toX, int toY)
+    private void UpdateHint(int fromX, int fromY, int toX, int toY)
     {
-        char[,] move = new char[8,8];
-        move[toX, toY] = GetMoveDirection(fromX, toX);
-        move[fromX, fromY] = GetMoveDirection(toX, fromX);
+        hintReady = true;
+        hintToX = toX;
+        hintToY = toY;
+        HintFromX = fromX;
+        hintFromY = fromY;
+    }
+    bool hintReady = false; int hintToX; int hintToY; int HintFromX; int hintFromY;
+    private IEnumerator showHint()
+    {
+        while (!hintReady) yield return null;
+        
+        char[,] move = new char[8, 8];
+        move[hintToX, hintToY] = GetMoveDirection(HintFromX, hintToX);
+        move[HintFromX, hintFromY] = GetMoveDirection(hintToX, HintFromX);
         BoardHighlights.Instance.HighlightAllowedMoves(move);
+
+        yield return null;
+    }
+
+    public void GetHint()
+    {
+        StartCoroutine(showHint());
     }
 
     internal void GetLocalMove()
     {
         if (HinterXHinter == null)
         {
-            HinterXHinter = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.HINTER, gameCore.MySide == GameCore.Turn.ICE ? AI.Turn.ICE : AI.Turn.FIRE, showHint);
+            HinterXHinter = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.HINTER, gameCore.MySide == GameCore.Turn.ICE ? AI.Turn.ICE : AI.Turn.FIRE, UpdateHint);
         }
         HinterXHinter.GetMove(gameCore.Pieces);
+        hintReady = false;
         isMyTurn = true;
     }
     private void Update()
     {
         UpdateSelection();
-        
+
         if (Input.GetMouseButtonDown(0))
         {
             if (selectionX >= 0 && selectionY >= 0)
@@ -249,7 +278,8 @@ public class BoardManager : MonoBehaviour
         char moveDirection = gameCore.PossibleMove(selectedPiece.isIce, selectedPiece.CurrentX, selectedPiece.CurrentY)[x, y];
         if (moveDirection != default(char) && isMyTurn) //If Valid Move
         {
-            gameCore.UpdateBoard(selectedPiece.CurrentX, selectedPiece.CurrentY, x, y);                
+            isMyTurn = false;
+            gameCore.UpdateBoard(selectedPiece.CurrentX, selectedPiece.CurrentY, x, y);
         }
 
         if (isClicked)
@@ -288,7 +318,7 @@ public class BoardManager : MonoBehaviour
         origin.z += (TILE_SIZE * y) + TILE_OFFSET;
         return origin;
     }
-    
+
     public void EndGame()
     {
         if (isMyTurn)
@@ -306,10 +336,8 @@ public class BoardManager : MonoBehaviour
     private void InitializeBoard()
     {
         SpawnAllPieces();
-        gameCore.InitializeGameCore();
-        gameCore.StartSinglePlayerGame(GameCore.Turn.FIRE, GameCore.AILevel.Intermediate);
-        HinterXHinter = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.HINTER, gameCore.MySide == GameCore.Turn.ICE ? AI.Turn.ICE : AI.Turn.FIRE, showHint);
-        isMyTurn = true;
+        gameCore.Play();
+        HinterXHinter = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.HINTER, gameCore.MySide == GameCore.Turn.ICE ? AI.Turn.ICE : AI.Turn.FIRE, UpdateHint);
     }
     private void ResetBoard()
     {
@@ -320,9 +348,8 @@ public class BoardManager : MonoBehaviour
         BoardHighlights.Instance.HideHighlights();
 
         SpawnAllPieces();
-        gameCore.InitializeGameCore();
         if (HinterXHinter != null) Destroy(HinterXHinter);
-        gameCore.StartSinglePlayerGame(GameCore.Turn.FIRE, GameCore.AILevel.Intermediate);
+        gameCore.Play();
     }
     public void UpdateGUI(int fromX, int fromY, int toX, int toY)
     {

@@ -7,7 +7,7 @@ using bitboard = System.UInt64;
 public class GameCore : MonoBehaviour
 {
     public enum Turn { ICE, FIRE };
-    public enum AILevel { Intermediate };
+    public enum AILevel { Intermediate, Easy };
 
     public bool isSinglePlayer;
     public Turn MySide;
@@ -17,7 +17,8 @@ public class GameCore : MonoBehaviour
     public char[,] Pieces;
     private int IcePieceCount;
     private int FirePieceCount;
-    public BoardManager boardManager;
+    public BoardManager boardManager { get; set; }
+    public AILevel aILevel;
     // private GameCharacter character;
 
     public bool GameOver
@@ -30,12 +31,13 @@ public class GameCore : MonoBehaviour
         }
     }
 
+
     void Start()
     {
-        InitializeGameCore();
+        //InitializeGameCore();
     }
 
-    public void InitializeGameCore()
+    private void InitializeGameCore()
     {
         Pieces = new char[8, 8];
         for (int x = 0; x < 8; x++) for (int y = 0; y < 8; y++) Pieces[x, y] = default(char);
@@ -48,21 +50,25 @@ public class GameCore : MonoBehaviour
         CurrentTurn = Turn.ICE;
     }
 
-    internal void StartSinglePlayerGame(Turn mySide, AILevel aILevel)
+    public void Play()
     {
-        MySide = mySide;
-        CurrentTurn = Turn.ICE;
-        isMasterClient = true;
-        isSinglePlayer = true;
+        InitializeGameCore();
 
         if (ai != null) Destroy(ai);
+        if (isSinglePlayer) {
+            if (aILevel == AILevel.Intermediate) ai = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.SEEKER, MySide == Turn.ICE ? AI.Turn.FIRE : AI.Turn.ICE, UpdateBoard);
+            if (aILevel == AILevel.Easy) ai = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.B_RANDOM, MySide == Turn.ICE ? AI.Turn.FIRE : AI.Turn.ICE, UpdateBoard);
+        }
 
-        if (aILevel == AILevel.Intermediate) ai = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.SEEKER, mySide == Turn.ICE ? AI.Turn.FIRE : AI.Turn.ICE, UpdateBoard);
+        CurrentTurn = Turn.ICE;
 
         if (CurrentTurn == MySide) boardManager.GetLocalMove();
-        else ai.GetMove(Pieces);
-    }
+        else {
+            if(isSinglePlayer) ai.GetMove(Pieces);
 
+        }
+    }
+    
     public void UpdateBoard(int fromX, int fromY, int toX, int toY)
     {
         if (Pieces[toX, toY] == 'W') IcePieceCount--;
