@@ -221,7 +221,7 @@ GameObject:
   - component: {fileID: 261370935}
   - component: {fileID: 261370934}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: NetworkManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

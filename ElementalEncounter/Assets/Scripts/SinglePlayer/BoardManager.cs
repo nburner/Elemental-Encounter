@@ -25,6 +25,7 @@ public class BoardManager : MonoBehaviour
     private GameCore gameCore;
     private AI.AI HinterXHinter;
     private Camera IceCamera, FireCamera;
+    private GameObject networkManager;
 
     private void Start()
     {
@@ -40,6 +41,10 @@ public class BoardManager : MonoBehaviour
             gameCore.MySide = GameCore.Turn.ICE;
         }
         else gameCore = core.GetComponent<GameCore>();
+        if(gameCore.isSinglePlayer == false)
+        {
+            networkManager = GameObject.Find("");
+        }
 
         gameCore.boardManager = this;
         SpawnAllBoardSpaces();

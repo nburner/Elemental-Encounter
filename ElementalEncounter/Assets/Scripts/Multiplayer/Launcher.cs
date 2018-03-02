@@ -20,7 +20,8 @@ namespace NetworkGame
         public GameObject optionsPanel;
         public GameObject hostGamePanel;
         public GameObject connectToGamePanel;
-        
+        private GameCore gameCore;
+
         #endregion
 
         #region Private Variables
@@ -41,6 +42,15 @@ namespace NetworkGame
             PhotonNetwork.automaticallySyncScene = true;
 
             PhotonNetwork.logLevel = LogLevel;
+            GameObject core = GameObject.Find("GameCore");
+            if (core == null)
+            {
+                gameCore = new GameObject("Temp Game Core").AddComponent<GameCore>();
+                gameCore.isSinglePlayer = false;
+                gameCore.aILevel = GameCore.AILevel.Easy;
+                gameCore.MySide = GameCore.Turn.ICE;
+            }
+            else gameCore = core.GetComponent<GameCore>();
         }
 
         void Start()
@@ -111,9 +121,10 @@ namespace NetworkGame
             {
                 // #Critical
                 // Load the Room Level. 
-                PhotonNetwork.LoadLevel("BreakGameMultiplayer");
+                PhotonNetwork.LoadLevel("BreakGame");
+                gameCore.isMasterClient = true;
+                gameCore.isSinglePlayer = true;
             }
-
         }
 
         #endregion

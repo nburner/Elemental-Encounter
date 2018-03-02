@@ -5,17 +5,27 @@ using UnityEngine.SceneManagement;
 
 namespace NetworkGame
 {
-    public class GameManager : Photon.PunBehaviour
+    public class NetworkManager : Photon.PunBehaviour
     {
+        private GameCore gameCore;
         void LoadArena()
         {
+
+            PhotonNetwork.LoadLevel("BreakGame");
+            GameObject core = GameObject.Find("GameCore");
+            if (core == null)
+            {
+                gameCore = new GameObject("Temp Game Core").AddComponent<GameCore>();
+                gameCore.isSinglePlayer = false;
+                gameCore.aILevel = GameCore.AILevel.Easy;
+            }
+            else gameCore = core.GetComponent<GameCore>();
             if (!PhotonNetwork.isMasterClient)
             {
+                gameCore.MySide = GameCore.Turn.FIRE;
                 Debug.LogError("PhotonNetwork : Trying to Load a level but we are not the master Client");
             }
-
-            PhotonNetwork.LoadLevel("BreakGameMultiplayer");
-            Debug.Log("PhotonNetwork : Loading Level : " + PhotonNetwork.room.PlayerCount);
+            Debug.Log("PhotonNetwork : Loading Level ");
         }
 
         #region Photon Messages
