@@ -48,24 +48,6 @@ public class Piece : MonoBehaviour
                 if (moveDirection == 'l')
                 {
                     selectedPiece.GetComponent<Animation>().Play("LeftBreak");
-                    bm.SpawnPiece(5, x, y);
-                    Destroy(bm.Pieces[x, y], 3f);
-                }
-
-                //If capture is Right, plays right capture animation
-                else
-                {
-                    selectedPiece.GetComponent<Animation>().Play("RightBreak");
-                    bm.SpawnPiece(4, x, y);
-                    Destroy(bm.Pieces[x, y], 3f);
-                }
-            }
-            else
-            {
-                //If capture is Left, plays left capture animation
-                if (moveDirection == 'l')
-                {
-                    selectedPiece.GetComponent<Animation>().Play("LeftBreak");
                     bm.SpawnPiece(2, x, y);
                     Destroy(bm.Pieces[x, y], 3f);
                 }
@@ -75,6 +57,24 @@ public class Piece : MonoBehaviour
                 {
                     selectedPiece.GetComponent<Animation>().Play("RightBreak");
                     bm.SpawnPiece(3, x, y);
+                    Destroy(bm.Pieces[x, y], 3f);
+                }
+            }
+            else
+            {
+                //If capture is Left, plays left capture animation
+                if (moveDirection == 'l')
+                {
+                    selectedPiece.GetComponent<Animation>().Play("LeftBreak");
+                    bm.SpawnPiece(5, x, y);
+                    Destroy(bm.Pieces[x, y], 3f);
+                }
+
+                //If capture is Right, plays right capture animation
+                else
+                {
+                    selectedPiece.GetComponent<Animation>().Play("RightBreak");
+                    bm.SpawnPiece(4, x, y);
                     Destroy(bm.Pieces[x, y], 3f);
                 }
             }

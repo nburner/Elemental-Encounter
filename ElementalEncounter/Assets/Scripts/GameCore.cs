@@ -32,10 +32,10 @@ public class GameCore : MonoBehaviour
 
     void Start()
     {
-        CreateGameCore();
+        InitializeGameCore();
     }
 
-    public void CreateGameCore()
+    public void InitializeGameCore()
     {
         Pieces = new char[8, 8];
         for (int x = 0; x < 8; x++) for (int y = 0; y < 8; y++) Pieces[x, y] = default(char);
@@ -54,7 +54,9 @@ public class GameCore : MonoBehaviour
         CurrentTurn = Turn.ICE;
         isMasterClient = true;
         isSinglePlayer = true;
-        
+
+        if (ai != null) Destroy(ai);
+
         if (aILevel == AILevel.Intermediate) ai = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.SEEKER, mySide == Turn.ICE ? AI.Turn.FIRE : AI.Turn.ICE, UpdateBoard);
 
         if (CurrentTurn == MySide) boardManager.GetLocalMove();
@@ -69,10 +71,10 @@ public class GameCore : MonoBehaviour
         Pieces[toX, toY] = Pieces[fromX, fromY];
         Pieces[fromX, fromY] = default(char);
 
-        boardManager.FinishAIMove(fromX, fromY, toX, toY);
+        boardManager.UpdateGUI(fromX, fromY, toX, toY);
+        if (toY == 7 || toY == 0) return;
 
         CurrentTurn = CurrentTurn == Turn.ICE ? Turn.FIRE : Turn.ICE;
-
         if (CurrentTurn == MySide) boardManager.GetLocalMove();
         else
         {
@@ -84,7 +86,6 @@ public class GameCore : MonoBehaviour
     void Awake()
     {
         DontDestroyOnLoad(this);
-        Debug.Log("GameCore.Awake()");
     }
 
     public char[,] PossibleMove(bool isIce, int x, int y) { return PossibleMove(isIce ? Turn.ICE : Turn.FIRE, x, y); }

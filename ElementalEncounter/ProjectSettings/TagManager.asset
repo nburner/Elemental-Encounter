@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Top Down Camera
   - Music
+  - FireCamera
+  - IceCamera
   layers:
   - Default
   - TransparentFX

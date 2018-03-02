@@ -23,23 +23,36 @@ public class BoardManager : MonoBehaviour
     private int selectionY = -1;
     private GameCore gameCore;
     private AI.AI HinterXHinter;
+    private Camera IceCamera, FireCamera;
 
     private void Start()
+    {
+        IceCamera = GameObject.Find("IceCamera").GetComponent<Camera>();
+        FireCamera = GameObject.Find("FireCamera").GetComponent<Camera>();
+        gameCore = GameObject.Find("GameCore").GetComponent<GameCore>();
+        gameCore.boardManager = this;
+        SpawnAllBoardSpaces();
+        gameCore.InitializeGameCore();
+        InitializeBoard();
+
+        if (gameCore.MySide == GameCore.Turn.ICE)
+        {
+            IceCamera.gameObject.SetActive(true);
+            FireCamera.gameObject.SetActive(false);
+        }
+        else
+        {
+            IceCamera.gameObject.SetActive(false);
+            FireCamera.gameObject.SetActive(true);
+        }
+    }
+
+    private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
         }
-
-        gameCore = GameObject.Find("GameCore").GetComponent<GameCore>();
-        gameCore.boardManager = this;
-
-        HinterXHinter = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.HINTER, gameCore.MySide == GameCore.Turn.ICE ? AI.Turn.ICE : AI.Turn.FIRE, showHint);
-
-        SpawnAllBoardSpaces();
-        SpawnAllPieces();
-
-        gameCore.StartSinglePlayerGame(GameCore.Turn.ICE, GameCore.AILevel.Intermediate);
     }
 
     #region Spawners
@@ -109,6 +122,10 @@ public class BoardManager : MonoBehaviour
 
     internal void GetLocalMove()
     {
+        if (HinterXHinter == null)
+        {
+            HinterXHinter = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.HINTER, gameCore.MySide == GameCore.Turn.ICE ? AI.Turn.ICE : AI.Turn.FIRE, showHint);
+        }
         HinterXHinter.GetMove(gameCore.Pieces);
         isMyTurn = true;
     }
@@ -142,7 +159,7 @@ public class BoardManager : MonoBehaviour
         if (Pieces[x, y] == null)
             return;
 
-        if (Pieces[x, y].isIce != isMyTurn)
+        if ((Pieces[x, y].isIce && gameCore.MySide == GameCore.Turn.FIRE) || (!Pieces[x, y].isIce && gameCore.MySide == GameCore.Turn.ICE))
             return;
         bool hasAtleastOneMove = false;
         var moves = gameCore.PossibleMove(Pieces[x, y].isIce, x, y);
@@ -171,61 +188,61 @@ public class BoardManager : MonoBehaviour
 
     }
 
-    private void MovePiece(int x, int y)
-    {
-        // TODO: Add winning conditions. Make in different functions.
-        char temp = gameCore.PossibleMove(selectedPiece.isIce, selectedPiece.CurrentX, selectedPiece.CurrentY)[x, y];
-        if (temp != default(char))
-        {
-            Piece b = Pieces[x, y];
-            if (b != null && b.isIce != isMyTurn)
-            {
-                // Capture a piece
-                activePieces.Remove(b.gameObject);
-                Destroy(b.gameObject);
-                Piece.playAnimation(selectedPiece, temp, x, y, true);
-            }
-            else
-            {
-                Piece.playAnimation(selectedPiece, temp, x, y, false);
-            }
+    //private void MovePiece(int x, int y)
+    //{
+    //    // TODO: Add winning conditions. Make in different functions.
+    //    char temp = gameCore.PossibleMove(selectedPiece.isIce, selectedPiece.CurrentX, selectedPiece.CurrentY)[x, y];
+    //    if (temp != default(char))
+    //    {
+    //        Piece b = Pieces[x, y];
+    //        if (b != null && b.isIce != isMyTurn)
+    //        {
+    //            // Capture a piece
+    //            activePieces.Remove(b.gameObject);
+    //            Destroy(b.gameObject);
+    //            Piece.playAnimation(selectedPiece, temp, x, y, true);
+    //        }
+    //        else
+    //        {
+    //            Piece.playAnimation(selectedPiece, temp, x, y, false);
+    //        }
 
-            if (isMyTurn)
-            {
-                if (selectedPiece.CurrentY + 1 == 7)
-                {
-                    EndGame();
-                    return;
-                }
-            }
-            else
-            {
-                if (selectedPiece.CurrentY - 1 == 0)
-                {
-                    EndGame();
-                    return;
-                }
-            }
+    //        if (isMyTurn)
+    //        {
+    //            if (selectedPiece.CurrentY + 1 == 7)
+    //            {
+    //                EndGame();
+    //                return;
+    //            }
+    //        }
+    //        else
+    //        {
+    //            if (selectedPiece.CurrentY - 1 == 0)
+    //            {
+    //                EndGame();
+    //                return;
+    //            }
+    //        }
 
-            Pieces[selectedPiece.CurrentX, selectedPiece.CurrentY] = null;
+    //        Pieces[selectedPiece.CurrentX, selectedPiece.CurrentY] = null;
 
-            selectedPiece.transform.position = GetTileCenter(x, y);
-            selectedPiece.SetPosition(x, y);
-            Pieces[x, y] = selectedPiece;
+    //        selectedPiece.transform.position = GetTileCenter(x, y);
+    //        selectedPiece.SetPosition(x, y);
+    //        Pieces[x, y] = selectedPiece;
 
-            isMyTurn = !isMyTurn;
-            //ai.GetMove(Pieces, FinishAIMove);
-        }
+    //        isMyTurn = !isMyTurn;
+    //        //ai.GetMove(Pieces, FinishAIMove);
+    //    }
 
-        if (isClicked)
-        {
-            isClicked = !isClicked;
-        }
-        BoardHighlights.Instance.HideHighlights();
+    //    if (isClicked)
+    //    {
+    //        isClicked = !isClicked;
+    //    }
+    //    BoardHighlights.Instance.HideHighlights();
 
-        selectedPiece = null;
+    //    selectedPiece = null;
 
-    }
+    //}
 
     private void MakeLocalMove(int x, int y)
     {
@@ -277,26 +294,37 @@ public class BoardManager : MonoBehaviour
         if (isMyTurn)
         {
             Debug.Log("Ice Wins!");
-
         }
         else
         {
             Debug.Log("Fire Wins!");
         }
 
+        ResetBoard();
+    }
+
+    private void InitializeBoard()
+    {
+        SpawnAllPieces();
+        gameCore.InitializeGameCore();
+        gameCore.StartSinglePlayerGame(GameCore.Turn.FIRE, GameCore.AILevel.Intermediate);
+        HinterXHinter = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.HINTER, gameCore.MySide == GameCore.Turn.ICE ? AI.Turn.ICE : AI.Turn.FIRE, showHint);
+        isMyTurn = true;
+    }
+    private void ResetBoard()
+    {
         foreach (GameObject go in activePieces)
         {
             Destroy(go);
         }
-
-
-        isMyTurn = true; //This is provoking an error Needs to have another winning conditions separetely
         BoardHighlights.Instance.HideHighlights();
-        SpawnAllPieces();
-        gameCore.CreateGameCore();
-    }
 
-    public void FinishAIMove(int fromX, int fromY, int toX, int toY)
+        SpawnAllPieces();
+        gameCore.InitializeGameCore();
+        if (HinterXHinter != null) Destroy(HinterXHinter);
+        gameCore.StartSinglePlayerGame(GameCore.Turn.FIRE, GameCore.AILevel.Intermediate);
+    }
+    public void UpdateGUI(int fromX, int fromY, int toX, int toY)
     {
         bool takingPiece = Pieces[toX, toY] != null;
         if (takingPiece)
