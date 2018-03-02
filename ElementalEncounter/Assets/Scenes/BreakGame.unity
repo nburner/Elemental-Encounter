@@ -241,7 +241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3ec628744da2654ea151b75aa4d2675, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breakmanPrefabs:
+  piecePrefabs:
   - {fileID: 1081819570631570, guid: 8a33cc82ef7eecf448e319a76f57c925, type: 2}
   - {fileID: 1848356010410964, guid: ecefcb705f84eac47a8a025fe76ec3e8, type: 2}
   - {fileID: 1848356010410964, guid: fd74466a38bee474eb72705fa4751b08, type: 2}
@@ -252,7 +252,7 @@ MonoBehaviour:
   - {fileID: 1523715143533048, guid: c34f65431586e7344b5d406eca69dafc, type: 2}
   - {fileID: 1643396766749774, guid: ee6ed1a904506db44b3f4a3153b3f90d, type: 2}
   activeBreakman: []
-  isIceTurn: 1
+  isMyTurn: 1
 --- !u!4 &18783751
 Transform:
   m_ObjectHideFlags: 0

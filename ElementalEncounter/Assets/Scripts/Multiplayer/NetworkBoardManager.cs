@@ -23,35 +23,33 @@ public class NetworkBoardManager : Photon.PunBehaviour
     public List<GameObject> boardPrefabs;
     private List<GameObject> activeBreakman;
 
-    public bool isIceTurn = true;
-    public bool hasMoved = true;
-    public Turn isYourTurn;
+    //public bool isIceTurn = true;
+    //public bool hasMoved = true;
+    public bool isMasterClient;
+    public Turn WhoseTurn;
     private void Start()
     {
+        isMasterClient = PhotonNetwork.isMasterClient;
         Instance = this;
         SpawnAllBoardSpaces();
         SpawnAllBreakPieces();
-        if (PhotonNetwork.isMasterClient)
-        {
-            hasMoved = false;
-            isIceTurn = true;
-            isYourTurn = Turn.ICE;
-        }
-        else
-        {
-            isIceTurn = false;
-            hasMoved = true;
-        }
+        //if (isMasterClient)
+        //{
+        //    hasMoved = false;
+        //    isIceTurn = true;
+        WhoseTurn = Turn.ICE;
+        //}
+        //else
+        //{
+        //    WhoseTurn = Turn.FIRE;
+        //    isIceTurn = false;
+        //    hasMoved = true;
+        //}
     }
     private void Update()
     {
         UpdateSelection();
-
-        if (!hasMoved)
-        {
-            Selection();
-        }
-
+        Selection();
     }
 
     void Awake()
@@ -59,12 +57,16 @@ public class NetworkBoardManager : Photon.PunBehaviour
         PhotonNetwork.OnEventCall += this.OnEvent;
     }
 
-    public void SendMove(int x, int y, int fromX, int fromY)
+    public void SendMove(int x, int y, int fromX, int fromY, Turn T)
     {
-        int[] aData = { x, y, fromX, fromY };
+        int[] aData = { x, y, fromX, fromY , (int)T };
         PhotonNetwork.RaiseEvent(0, aData, true, null);
     }
 
+    public void SendEndGame()
+    {
+        PhotonNetwork.RaiseEvent(1, null, true, null);
+    }
 
     public void OnEvent(byte eventcode, object content, int senderid)
     {
@@ -72,6 +74,11 @@ public class NetworkBoardManager : Photon.PunBehaviour
         if (eventcode == 0)
         {
             MoveBreakman(data[0], data[1], data[2], data[3]);
+            WhoseTurn = (Turn)data[4];
+        }
+        if (eventcode == 1)
+        {
+            EndGame();
         }
 
     }
@@ -85,7 +92,10 @@ public class NetworkBoardManager : Photon.PunBehaviour
                 if (selectedBreakman == null)
                 {
                     // select the Piece
-                    SelectBreakMan(selectionX, selectionY);
+                    if ((isMasterClient && WhoseTurn == Turn.ICE) || (!isMasterClient && WhoseTurn == Turn.FIRE))
+                    {
+                        SelectBreakMan(selectionX, selectionY);
+                    }
                     Debug.Log("Selected");
                 }
                 else
@@ -101,8 +111,9 @@ public class NetworkBoardManager : Photon.PunBehaviour
         if (BreakmanNet[x, y] == null)
             return;
 
-        if (BreakmanNet[x, y].isIce != isIceTurn)
+        if ((WhoseTurn == Turn.FIRE) == (BreakmanNet[x, y].isIce) )
             return;
+
         bool hasAtleastOneMove = false;
         AllowedMoves = BreakmanNet[x, y].PossibleMove();
         for (int i = 0; i < 8; i++)
@@ -126,48 +137,48 @@ public class NetworkBoardManager : Photon.PunBehaviour
 
     }
 
-    private void MoveBreakman(int x, int y)
+    private void MoveBreakman(int toX, int toY)
     {
+        int fromX = selectedBreakman.CurrentX;
+        int fromY = selectedBreakman.CurrentY;
         // TODO: Add winning conditions. Make in different functions.
-        if (AllowedMoves[x, y] != 0)
+        if (AllowedMoves[toX, toY] != 0)
         {
-            PieceMultiplayer b = BreakmanNet[x, y];
-            char temp = AllowedMoves[x, y];
-            if (b != null && b.isIce != isIceTurn)
+            PieceMultiplayer b = BreakmanNet[toX, toY];
+            char temp = AllowedMoves[toX, toY];
+            if (b != null && b.isIce != (WhoseTurn == Turn.ICE))
             {
                 // Capture a piece
                 activeBreakman.Remove(b.gameObject);
                 Destroy(b.gameObject);
-                playAnimation(selectedBreakman, temp, x, y, false);
+                playAnimation(selectedBreakman, temp, toX, toY, false);
             }
 
-            if (isIceTurn)
-            {
-                if (selectedBreakman.CurrentY + 1 == 7)
-                {
+            if (WhoseTurn == Turn.ICE) {
+                if (toY == 7) {
                     EndGame();
+                    SendEndGame();
                     return;
                 }
             }
-            else
-            {
-                if (selectedBreakman.CurrentY - 1 == 0)
-                {
+            else {
+                if (toY == 0) {
                     EndGame();
+                    SendEndGame();
                     return;
                 }
             }
 
-            SendMove(x, y, selectedBreakman.CurrentX, selectedBreakman.CurrentY);
+            
             BreakmanNet[selectedBreakman.CurrentX, selectedBreakman.CurrentY] = null;
-            playAnimation(selectedBreakman, temp, x, y, false);
+            playAnimation(selectedBreakman, temp, toX, toY, false);
 
-            selectedBreakman.transform.position = GetTileCenter(x, y);
-            selectedBreakman.SetPosition(x, y);
-            BreakmanNet[x, y] = selectedBreakman;
+            selectedBreakman.transform.position = GetTileCenter(toX, toY);
+            selectedBreakman.SetPosition(toX, toY);
+            BreakmanNet[toX, toY] = selectedBreakman;
 
-            isIceTurn = !isIceTurn;
-            hasMoved = !hasMoved;
+            WhoseTurn = (WhoseTurn == Turn.ICE) ? Turn.FIRE : Turn.ICE;
+            SendMove(toX, toY, fromX, fromY, WhoseTurn);
         }
 
         if (isClicked)
@@ -180,48 +191,19 @@ public class NetworkBoardManager : Photon.PunBehaviour
 
     public void MoveBreakman(int toX, int toY, int fromX,int fromY)
     {
-        if (BreakmanNet[toX, toY] != null)
-        {
-            // Capture a piece
+        bool takeAPiece = BreakmanNet[toX, toY] != null;
+        if (takeAPiece) {
             activeBreakman.Remove(BreakmanNet[toX, toY].gameObject);
             Destroy(BreakmanNet[toX, toY].gameObject, .5f);
-
         }
-        else
-        {
-        }
-
-        //if (isIceTurn)
-        //{
-        //    if (BreakmanNet[fromX, fromY].CurrentY + 1 == 7)
-        //    {
-        //        EndGame();
-        //        return;
-        //    }
-        //}
-        //else
-        //{
-        //    if (BreakmanNet[fromX, fromY].CurrentY - 1 == 0)
-        //    {
-        //        EndGame();
-        //        return;
-        //    }
-        //}
-        //Piece selectedBreakman = Breakmans[fromX, fromY];
-        //if ((isIceTurn && BreakmanNet[fromX, fromY].CurrentY + 1 == 7) || (!isIceTurn && BreakmanNet[fromX, fromY].CurrentY - 1 == 0))
-        //{
-        //    EndGame();
-        //    return;
-        //}
-
 
         BreakmanNet[fromX, fromY].transform.position = GetTileCenter(toX, toY);
         BreakmanNet[fromX, fromY].SetPosition(toX, toY);
-
         BreakmanNet[toX, toY] = BreakmanNet[fromX, fromY];
         BreakmanNet[fromX, fromY] = null;
 
-        hasMoved = !hasMoved;
+        //WhoseTurn = (WhoseTurn == Turn.ICE) ? Turn.FIRE : Turn.ICE; 
+        if (toY == 0 || toY == 7) EndGame();
     }
 
     private void UpdateSelection()
@@ -309,12 +291,14 @@ public class NetworkBoardManager : Photon.PunBehaviour
 
     private void EndGame()
     {
-        if (isIceTurn)
+        if (WhoseTurn == Turn.ICE)
         {
+            //isIceTurn = true;
             Debug.Log("Ice Wins!");
         }
         else
         {
+            //isIceTurn = false;
             Debug.Log("Fire Wins!");
         }
 
@@ -322,10 +306,9 @@ public class NetworkBoardManager : Photon.PunBehaviour
         {
             Destroy(go);
         }
-
-        isIceTurn = true; //This is provoking an error Needs to have another winning conditions separetely
+        //isIceTurn = true; //This is provoking an error Needs to have another winning conditions separetely
         BoardHighlights.Instance.HideHighlights();
-        SpawnAllBreakPieces();
+        //SpawnAllBreakPieces();
     }
 
     public void playAnimation(PieceMultiplayer selectedPiece, char moveDirection, int x, int y, bool capture)

@@ -3,7 +3,7 @@
 
 namespace NetworkGame
 {
-    public class Launcher : Photon.PunBehaviour
+    public class Launcher : Photon.PunBehaviour 
     {
         /// <summary>
         /// Keep track of the current process. Since connection is asynchronous and is based on several callbacks from Photon, 
@@ -17,6 +17,10 @@ namespace NetworkGame
         public byte MaxPlayersPerRoom = 2;
         public GameObject controlPanel;
         public GameObject progressLabel;
+        public GameObject optionsPanel;
+        public GameObject hostGamePanel;
+        public GameObject connectToGamePanel;
+        
         #endregion
 
         #region Private Variables
@@ -43,6 +47,9 @@ namespace NetworkGame
         {
             progressLabel.SetActive(false);
             controlPanel.SetActive(true);
+            optionsPanel.SetActive(false);
+            hostGamePanel.SetActive(false);
+            connectToGamePanel.SetActive(false);
         }
 
         #endregion
@@ -65,9 +72,14 @@ namespace NetworkGame
             }
             else
             {
-                //    Connect to online server
+                //Connect to online server
                 PhotonNetwork.ConnectUsingSettings(_gameVersion);
             }
+        }
+
+        public void HostGame()
+        {
+
         }
 
         public override void OnConnectedToMaster()

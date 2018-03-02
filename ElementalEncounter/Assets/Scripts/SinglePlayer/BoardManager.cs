@@ -1,85 +1,168 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BoardManager : MonoBehaviour
 {
-    public enum Turn { ICE, FIRE };
-
     //List of Gameobject for spawning pieces on the board
-    public List<GameObject> breakmanPrefabs;
+    public List<GameObject> piecePrefabs;
     public List<GameObject> boardPrefabs;
-    public List<GameObject> activeBreakman;
+    public List<GameObject> activePieces;
 
-    public bool isIceTurn = true;
+    public bool isMyTurn = true;
 
     public static BoardManager Instance { set; get; }
-    public char[,] AllowedMoves { set; get; }
-    public Piece[,] Breakmans { set; get; }
-    public bool[,] Spacesboard { set; get; }
+    public Piece[,] Pieces { set; get; }
 
-    private AIMovement ai;
-    private Piece selectedBreakman;
+    private Piece selectedPiece;
     private bool isClicked = false;
     private const float TILE_SIZE = 1.0f;
     private const float TILE_OFFSET = 0.5f;
     private int selectionX = -1;
     private int selectionY = -1;
-
+    private GameCore gameCore;
+    private AI.AI HinterXHinter;
 
     private void Start()
     {
-        Instance = this;
-        ai = new AIMovement();
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+
+        gameCore = GameObject.Find("GameCore").GetComponent<GameCore>();
+        gameCore.boardManager = this;
+
+        HinterXHinter = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.HINTER, gameCore.MySide == GameCore.Turn.ICE ? AI.Turn.ICE : AI.Turn.FIRE, showHint);
+
         SpawnAllBoardSpaces();
-        SpawnAllBreakPieces();
+        SpawnAllPieces();
+
+        gameCore.StartSinglePlayerGame(GameCore.Turn.ICE, GameCore.AILevel.Intermediate);
+    }
+
+    #region Spawners
+    private void SpawnAllPieces()
+    {
+        activePieces = new List<GameObject>();
+        Pieces = new Piece[8, 8];
+        //spawn Ice team
+        for (int i = 0; i < 8; i++)
+        {
+            SpawnPiece(0, i, 0);
+            SpawnPiece(0, i, 1);
+        }
+        //spawn Fire team
+        for (int i = 0; i < 8; i++)
+        {
+            SpawnPiece(1, i, 6);
+            SpawnPiece(1, i, 7);
+        }
+    }
+    public void SpawnPiece(int index, int x, int y)
+    {
+        GameObject go = Instantiate(piecePrefabs[index], GetTileCenter(x, y), Quaternion.identity) as GameObject;
+        go.transform.SetParent(transform);
+        Pieces[x, y] = go.GetComponent<Piece>();
+        Pieces[x, y].SetPosition(x, y);
+        activePieces.Add(go);
+    }
+
+    private void SpawnAllBoardSpaces()
+    {
+        bool isBlackPiece = false;
+        bool[,] Spacesboard = new bool[8, 8];
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                Spacesboard[i, j] = isBlackPiece;
+                if (!isBlackPiece)
+                {
+                    SpawnBoardSpace(1, i, j);
+                }
+                else
+                {
+                    SpawnBoardSpace(0, i, j);
+                }
+                isBlackPiece = !isBlackPiece;
+            }
+            isBlackPiece = !isBlackPiece;
+        }
+    }
+    private void SpawnBoardSpace(int index, int x, int y)
+    {
+        GameObject another = Instantiate(boardPrefabs[index], GetTileCenter(x, y), Quaternion.identity) as GameObject;
+        another.transform.SetParent(transform);
+    }
+
+    #endregion
+
+    private void showHint(int fromX, int fromY, int toX, int toY)
+    {
+        char[,] move = new char[8,8];
+        move[toX, toY] = GetMoveDirection(fromX, toX);
+        move[fromX, fromY] = GetMoveDirection(toX, fromX);
+        BoardHighlights.Instance.HighlightAllowedMoves(move);
+    }
+
+    internal void GetLocalMove()
+    {
+        HinterXHinter.GetMove(gameCore.Pieces);
+        isMyTurn = true;
     }
     private void Update()
     {
         UpdateSelection();
-        //DrawBoard();
-
+        
         if (Input.GetMouseButtonDown(0))
         {
             if (selectionX >= 0 && selectionY >= 0)
             {
-                if (selectedBreakman == null)
+                if (selectedPiece == null)
                 {
                     // select the Piece
-                    SelectBreakMan(selectionX, selectionY);
+                    SelectPiece(selectionX, selectionY);
                     Debug.Log("Selected");
                 }
                 else
                 {
                     // Move the Piece
-                    MoveBreakman(selectionX, selectionY);
+                    //MovePiece(selectionX, selectionY);
+                    MakeLocalMove(selectionX, selectionY);
                 }
             }
         }
     }
 
-    private void SelectBreakMan(int x, int y)
+    private void SelectPiece(int x, int y)
     {
 
-        if (Breakmans[x, y] == null)
+        if (Pieces[x, y] == null)
             return;
 
-        if (Breakmans[x, y].isIce != isIceTurn)
+        if (Pieces[x, y].isIce != isMyTurn)
             return;
         bool hasAtleastOneMove = false;
-        AllowedMoves = Breakmans[x, y].PossibleMove();
+        var moves = gameCore.PossibleMove(Pieces[x, y].isIce, x, y);
         for (int i = 0; i < 8; i++)
         {
             for (int j = 0; j < 8; j++)
             {
-                if (AllowedMoves[i, j] != 0)
+                if (moves[i, j] != default(char))
+                {
                     hasAtleastOneMove = true;
+                    break;
+                }
             }
+            if (hasAtleastOneMove) break;
         }
-        if (!hasAtleastOneMove)
-            return;
 
-        selectedBreakman = Breakmans[x, y];
-        BoardHighlights.Instance.HighlightAllowedMoves(AllowedMoves);
+        if (!hasAtleastOneMove) return;
+
+        selectedPiece = Pieces[x, y];
+        BoardHighlights.Instance.HighlightAllowedMoves(moves);
 
         if (!isClicked)
         {
@@ -88,28 +171,28 @@ public class BoardManager : MonoBehaviour
 
     }
 
-    private void MoveBreakman(int x, int y)
+    private void MovePiece(int x, int y)
     {
         // TODO: Add winning conditions. Make in different functions.
-        if (AllowedMoves[x, y] != 0)
+        char temp = gameCore.PossibleMove(selectedPiece.isIce, selectedPiece.CurrentX, selectedPiece.CurrentY)[x, y];
+        if (temp != default(char))
         {
-            Piece b = Breakmans[x, y];
-            char temp = AllowedMoves[x, y];
-            if (b != null && b.isIce != isIceTurn)
+            Piece b = Pieces[x, y];
+            if (b != null && b.isIce != isMyTurn)
             {
                 // Capture a piece
-                activeBreakman.Remove(b.gameObject);
+                activePieces.Remove(b.gameObject);
                 Destroy(b.gameObject);
-                Piece.playAnimation(selectedBreakman, temp, x, y, true);
+                Piece.playAnimation(selectedPiece, temp, x, y, true);
             }
             else
             {
-                Piece.playAnimation(selectedBreakman, temp, x, y, false);
+                Piece.playAnimation(selectedPiece, temp, x, y, false);
             }
 
-            if (isIceTurn)
+            if (isMyTurn)
             {
-                if (selectedBreakman.CurrentY + 1 == 7)
+                if (selectedPiece.CurrentY + 1 == 7)
                 {
                     EndGame();
                     return;
@@ -117,23 +200,21 @@ public class BoardManager : MonoBehaviour
             }
             else
             {
-                if (selectedBreakman.CurrentY - 1 == 0)
+                if (selectedPiece.CurrentY - 1 == 0)
                 {
                     EndGame();
                     return;
                 }
             }
 
-            Breakmans[selectedBreakman.CurrentX, selectedBreakman.CurrentY] = null;
+            Pieces[selectedPiece.CurrentX, selectedPiece.CurrentY] = null;
 
-            selectedBreakman.transform.position = GetTileCenter(x, y);
-            selectedBreakman.SetPosition(x, y);
-            Breakmans[x, y] = selectedBreakman;
+            selectedPiece.transform.position = GetTileCenter(x, y);
+            selectedPiece.SetPosition(x, y);
+            Pieces[x, y] = selectedPiece;
 
-
-            isIceTurn = !isIceTurn;
-            ai.MakeAIMove();
-
+            isMyTurn = !isMyTurn;
+            //ai.GetMove(Pieces, FinishAIMove);
         }
 
         if (isClicked)
@@ -142,8 +223,25 @@ public class BoardManager : MonoBehaviour
         }
         BoardHighlights.Instance.HideHighlights();
 
-        selectedBreakman = null;
+        selectedPiece = null;
 
+    }
+
+    private void MakeLocalMove(int x, int y)
+    {
+        char moveDirection = gameCore.PossibleMove(selectedPiece.isIce, selectedPiece.CurrentX, selectedPiece.CurrentY)[x, y];
+        if (moveDirection != default(char) && isMyTurn) //If Valid Move
+        {
+            gameCore.UpdateBoard(selectedPiece.CurrentX, selectedPiece.CurrentY, x, y);                
+        }
+
+        if (isClicked)
+        {
+            isClicked = !isClicked;
+        }
+        BoardHighlights.Instance.HideHighlights();
+
+        selectedPiece = null;
     }
 
     private void UpdateSelection()
@@ -164,49 +262,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    private void DrawBoard()
-    {
-        Vector3 widthLine = Vector3.right * 8;
-        Vector3 heightLine = Vector3.forward * 8;
 
-        for (int i = 0; i <= 8; i++)
-        {
-            Vector3 start = Vector3.forward * i;
-            Debug.DrawLine(start, start + widthLine);
-            for (int j = 0; j <= 8; j++)
-            {
-                start = Vector3.right * j;
-                Debug.DrawLine(start, start + heightLine);
-            }
-        }
-
-        //Draw the Selection
-
-        if (selectionX >= 0 && selectionY >= 0)
-        {
-            Debug.DrawLine(
-                Vector3.forward * selectionY + Vector3.right * selectionX,
-                Vector3.forward * (selectionY + 1) + Vector3.right * (selectionX + 1));
-            Debug.DrawLine(
-                Vector3.forward * (selectionY + 1) + Vector3.right * selectionX,
-                Vector3.forward * selectionY + Vector3.right * (selectionX + 1));
-        }
-    }
-
-    public void SpawnBreakman(int index, int x, int y)
-    {
-        GameObject go = Instantiate(breakmanPrefabs[index], GetTileCenter(x, y), Quaternion.identity) as GameObject;
-        go.transform.SetParent(transform);
-        Breakmans[x, y] = go.GetComponent<Piece>();
-        Breakmans[x, y].SetPosition(x, y);
-        activeBreakman.Add(go);
-    }
-
-    private void SpawnBoardSpace(int index, int x, int y)
-    {
-        GameObject another = Instantiate(boardPrefabs[index], GetTileCenter(x, y), Quaternion.identity) as GameObject;
-        another.transform.SetParent(transform);
-    }
 
     public Vector3 GetTileCenter(int x, int y)
     {
@@ -215,51 +271,10 @@ public class BoardManager : MonoBehaviour
         origin.z += (TILE_SIZE * y) + TILE_OFFSET;
         return origin;
     }
-
-    private void SpawnAllBreakPieces()
-    {
-        activeBreakman = new List<GameObject>();
-        Breakmans = new Piece[8, 8];
-        //spawn Ice team
-        for (int i = 0; i < 8; i++)
-        {
-            SpawnBreakman(0, i, 0);
-            SpawnBreakman(0, i, 1);
-        }
-        //spawn Fire team
-        for (int i = 0; i < 8; i++)
-        {
-            SpawnBreakman(1, i, 6);
-            SpawnBreakman(1, i, 7);
-        }
-    }
-
-    private void SpawnAllBoardSpaces()
-    {
-        bool isBlackPiece = false;
-        Spacesboard = new bool[8, 8];
-        for (int i = 0; i < 8; i++)
-        {
-            for (int j = 0; j < 8; j++)
-            {
-                Spacesboard[i, j] = isBlackPiece;
-                if (!isBlackPiece)
-                {
-                    SpawnBoardSpace(1, i, j);
-                }
-                else
-                {
-                    SpawnBoardSpace(0, i, j);
-                }
-                isBlackPiece = !isBlackPiece;
-            }
-            isBlackPiece = !isBlackPiece;
-        }
-    }
-
+    
     public void EndGame()
     {
-        if (isIceTurn)
+        if (isMyTurn)
         {
             Debug.Log("Ice Wins!");
 
@@ -269,14 +284,41 @@ public class BoardManager : MonoBehaviour
             Debug.Log("Fire Wins!");
         }
 
-        foreach (GameObject go in activeBreakman)
+        foreach (GameObject go in activePieces)
         {
             Destroy(go);
         }
 
 
-        isIceTurn = true; //This is provoking an error Needs to have another winning conditions separetely
+        isMyTurn = true; //This is provoking an error Needs to have another winning conditions separetely
         BoardHighlights.Instance.HideHighlights();
-        SpawnAllBreakPieces();
+        SpawnAllPieces();
+        gameCore.CreateGameCore();
+    }
+
+    public void FinishAIMove(int fromX, int fromY, int toX, int toY)
+    {
+        bool takingPiece = Pieces[toX, toY] != null;
+        if (takingPiece)
+        {
+            activePieces.Remove(Pieces[toX, toY].gameObject);
+            Destroy(Pieces[toX, toY].gameObject, .5f);
+        }
+        Piece.playAnimation(Pieces[fromX, fromY], GetMoveDirection(fromX, toX), toX, toY, takingPiece);
+
+        Pieces[fromX, fromY].transform.position = GetTileCenter(toX, toY);
+        Pieces[fromX, fromY].SetPosition(toX, toY);
+        Pieces[toX, toY] = Pieces[fromX, fromY];
+        Pieces[fromX, fromY] = null;
+
+        if (toY == 0 || toY == 7) { EndGame(); return; } //If not returned then Fire will go first
+
+        isMyTurn = !isMyTurn;
+    }
+
+    private char GetMoveDirection(int fromX, int toX)
+    {
+        return fromX == toX ? 'm' :
+            fromX - 1 == toX ? 'l' : 'r';
     }
 }
