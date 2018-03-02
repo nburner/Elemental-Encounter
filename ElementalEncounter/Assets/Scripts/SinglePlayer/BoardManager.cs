@@ -293,6 +293,7 @@ public class BoardManager : MonoBehaviour
         isMyTurn = true; //This is provoking an error Needs to have another winning conditions separetely
         BoardHighlights.Instance.HideHighlights();
         SpawnAllPieces();
+        gameCore.CreateGameCore();
     }
 
     public void FinishAIMove(int fromX, int fromY, int toX, int toY)
@@ -310,7 +311,7 @@ public class BoardManager : MonoBehaviour
         Pieces[toX, toY] = Pieces[fromX, fromY];
         Pieces[fromX, fromY] = null;
 
-        if (toY == 0 || toY == 7) EndGame();
+        if (toY == 0 || toY == 7) { EndGame(); return; } //If not returned then Fire will go first
 
         isMyTurn = !isMyTurn;
     }

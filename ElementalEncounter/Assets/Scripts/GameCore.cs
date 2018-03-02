@@ -32,6 +32,11 @@ public class GameCore : MonoBehaviour
 
     void Start()
     {
+        CreateGameCore();
+    }
+
+    public void CreateGameCore()
+    {
         Pieces = new char[8, 8];
         for (int x = 0; x < 8; x++) for (int y = 0; y < 8; y++) Pieces[x, y] = default(char);
         for (int x = 0; x < 8; x++) for (int y = 0; y < 2; y++) Pieces[x, y] = 'W';
