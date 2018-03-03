@@ -10,9 +10,8 @@ namespace NetworkGame
         private GameCore gameCore;
         void LoadArena()
         {
-
             PhotonNetwork.LoadLevel("BreakGame");
-            GameObject core = GameObject.Find("GameCore");
+            GameObject core = null;
             if (core == null)
             {
                 gameCore = new GameObject("Temp Game Core").AddComponent<GameCore>();
@@ -27,7 +26,10 @@ namespace NetworkGame
             }
             Debug.Log("PhotonNetwork : Loading Level ");
         }
-
+        public GameCore GetGameCore()
+        {
+            return gameCore;
+        }
         #region Photon Messages
         public override void OnPhotonPlayerConnected(PhotonPlayer other)
         {
@@ -55,7 +57,10 @@ namespace NetworkGame
             PhotonNetwork.LoadLevel("Game_Lobby");
 
         }
-
+        public override void OnDisconnectedFromPhoton()
+        {
+            LeaveRoom();
+        }
         /// <summary>
         /// Called when the local player left the room. We need to load the launcher scene.
         /// </summary>

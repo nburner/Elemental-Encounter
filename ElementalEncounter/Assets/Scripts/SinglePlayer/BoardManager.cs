@@ -25,7 +25,7 @@ public class BoardManager : MonoBehaviour
     private GameCore gameCore;
     private AI.AI HinterXHinter;
     private Camera IceCamera, FireCamera;
-    private GameObject networkManager;
+    private NetworkGame.NetworkManager networkLogic;
 
     private void Start()
     {
@@ -37,13 +37,15 @@ public class BoardManager : MonoBehaviour
         {
             gameCore = new GameObject("Temp Game Core").AddComponent<GameCore>();
             gameCore.isSinglePlayer = true;
-            gameCore.aILevel = GameCore.AILevel.Easy;
+            gameCore.aILevel = GameCore.AILevel.Intermediate;
             gameCore.MySide = GameCore.Turn.ICE;
         }
         else gameCore = core.GetComponent<GameCore>();
-        if(gameCore.isSinglePlayer == false)
-        {
-            networkManager = GameObject.Find("");
+
+        if (gameCore.isSinglePlayer == false)
+        {   //Multiplayer
+            networkLogic = GameObject.Find("NetworkManager").GetComponent<NetworkGame.NetworkManager>();
+            gameCore = networkLogic.GetGameCore();
         }
 
         gameCore.boardManager = this;
@@ -373,7 +375,7 @@ public class BoardManager : MonoBehaviour
 
         if (toY == 0 || toY == 7) { EndGame(); return; } //If not returned then Fire will go first
 
-        isMyTurn = !isMyTurn;
+        //isMyTurn = !isMyTurn;
     }
 
     private char GetMoveDirection(int fromX, int toX)

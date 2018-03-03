@@ -1965,10 +1965,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isSinglePlayer: 1
-  MySide: 1
+  MySide: 0
   CurrentTurn: 0
   isMasterClient: 1
-  aILevel: 1
+  aILevel: 0
 --- !u!4 &1320354084
 Transform:
   m_ObjectHideFlags: 0
