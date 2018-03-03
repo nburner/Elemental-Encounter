@@ -174,22 +174,24 @@ namespace GameCore.Core
                 FirstPrint = false;
             }
 
-            //Clear Log
-            Console.CursorTop = PreviousTop + 11;
-            Console.CursorLeft = PreviousLeft + 11;
+			const int MESSAGE_SPACE = 7;
+
+			//Clear Log
+			Console.CursorTop = PreviousTop + 2 * MESSAGE_SPACE + 1;
+            Console.CursorLeft = PreviousLeft;
             Console.WriteLine(moveLog.Select((str) => { return String.Concat(Enumerable.Repeat(" ", str.Length)); }).Aggregate((str1, str2) => { return str1 + "\n" + str2; }));
             //Print Log
-            Console.CursorTop = PreviousTop + 11;
+            Console.CursorTop = PreviousTop + 2 * MESSAGE_SPACE + 1;
             Console.CursorLeft = PreviousLeft;
             Console.WriteLine("********************** LOG **********************");
             Console.WriteLine(moveLog.Aggregate((str1, str2) => { return str1 + "\n" + str2; }));
 
             //Clear the move space
-            Console.CursorTop = PreviousTop + (PlayerTurn == Turn.BLACK ? 5 : 0);
+            Console.CursorTop = PreviousTop + (PlayerTurn == Turn.BLACK ? MESSAGE_SPACE : 0);
             Console.CursorLeft = PreviousLeft;
             Console.WriteLine(String.Concat(Enumerable.Repeat(String.Concat(Enumerable.Repeat(" ", Console.WindowWidth - 7)) + "\n", 5)));        
             
-            Console.CursorTop = PreviousTop + (PlayerTurn == Turn.BLACK ? 5 : 0);
+            Console.CursorTop = PreviousTop + (PlayerTurn == Turn.BLACK ? MESSAGE_SPACE : 0);
             Console.CursorLeft = PreviousLeft;
 
             Console.WindowTop = 0;

@@ -4,7 +4,6 @@
 using namespace AI;
 typedef vector<Board>::iterator BoardIterator;
 
-static timer t;
 static int seekDepth = INT_MAX;
 static double seekTime = 4;
 

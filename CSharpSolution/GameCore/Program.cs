@@ -12,10 +12,31 @@ namespace GameCore
 		private static Game game = new Game();
 		private static Dictionary<AIType, int> wins = Enum.GetValues(typeof(AIType)).Cast<AIType>().ToDictionary<AIType, AIType, int>((a) => { return a; }, (a) => { return 0; });
 		static void Main(string[] args) {
-            functionForNathan();
+			functionForDaryl();
         }
+		private static void functionForDaryl() {
+			Console.WindowHeight = (int)(Console.LargestWindowHeight / 1.2);
 
-        private static void functionForNathan()
+			//This declares the players (one ai and one human who represents the opponents ai)
+			AI ai = new AI(AIType.SEEKER, true); //NOTE - Change AIType to DARYLS_PET if Seeker crashes or takes too long (hopefully shouldn't happen)
+			Daryl opponent = new Daryl();
+
+			//Fun instructions
+			Misc.Fun.TypeString("Hello Master. Welcome back.\n");
+			Misc.Fun.TypeString("Should I play as W or B?  ");
+
+			//This gets the user input for which side the ai is playing
+			char sideChar;
+			do {
+				sideChar = Char.ToUpper(Console.ReadKey().KeyChar);
+			} while (sideChar != 'W' && sideChar != 'B');
+			Console.WriteLine("\n");
+
+			//This starts the game based on which color the user selected. Note the order of the players is swapped in the two function calls
+			if (sideChar == 'W') game.newGame(ai, opponent, true);
+			else game.newGame(opponent, ai, true);
+		}
+		private static void functionForNathan()
         {
             Console.WindowHeight = (int)(Console.LargestWindowHeight / 1.2);
 

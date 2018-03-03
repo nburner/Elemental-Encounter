@@ -114,11 +114,12 @@ namespace AI {
 	protected:
 		//int alphabeta(Board board, int currentPly) const;
 		int MAX_SEEK_DEPTH 			;
-		int FINAL_ALPHA_BETA_TIME 	;
-		int SEEK_WIN 				;
-		int SEEK_OPPONENT_WIN_SHORT ;
-		int SEEK_OPPONENT_WIN_LONG 	;
-		int SEEK_BLOCKING_MOVE 		;
+		double FINAL_ALPHA_BETA_TIME 	;
+		double SEEK_WIN 				;
+		double SEEK_OPPONENT_WIN_SHORT ;
+		double SEEK_OPPONENT_WIN_LONG 	;
+		double SEEK_BLOCKING_MOVE 		;
+		mutable timer t;
 		move deepTimedSeek(const Board & b, double time, int depth) const;
 
 	public:
