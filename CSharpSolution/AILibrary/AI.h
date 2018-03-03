@@ -113,6 +113,13 @@ namespace AI {
 	class Seeker : public Prune {
 	protected:
 		//int alphabeta(Board board, int currentPly) const;
+		int MAX_SEEK_DEPTH 			;
+		int FINAL_ALPHA_BETA_TIME 	;
+		int SEEK_WIN 				;
+		int SEEK_OPPONENT_WIN_SHORT ;
+		int SEEK_OPPONENT_WIN_LONG 	;
+		int SEEK_BLOCKING_MOVE 		;
+		move deepTimedSeek(const Board & b, double time, int depth) const;
 
 	public:
 		Seeker();

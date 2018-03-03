@@ -8,27 +8,34 @@ static timer t;
 static int seekDepth = INT_MAX;
 static double seekTime = 4;
 
-static int MAX_SEEK_DEPTH = 20;
-static int FINAL_ALPHA_BETA_TIME = 5.88;
-static int SEEK_WIN = 2.5;
-static int SEEK_OPPONENT_WIN_SHORT = 1;
-static int SEEK_OPPONENT_WIN_LONG = 2.5;
-static int SEEK_BLOCKING_MOVE = 2;
+
 
 AI::Seeker::Seeker()
 {
 	t.start();
+	MAX_SEEK_DEPTH = 20;
+	FINAL_ALPHA_BETA_TIME = 5.88;
+	SEEK_WIN = 2.5;
+	SEEK_OPPONENT_WIN_SHORT = 1;
+	SEEK_OPPONENT_WIN_LONG = 2.5;
+	SEEK_BLOCKING_MOVE = 2;
 }
 
 AI::Seeker::Seeker(int) : Prune(0)
 {
 	t.start();
+	MAX_SEEK_DEPTH = 20;
+	FINAL_ALPHA_BETA_TIME = 5.88;
+	SEEK_WIN = 2.5;
+	SEEK_OPPONENT_WIN_SHORT = 1;
+	SEEK_OPPONENT_WIN_LONG = 2.5;
+	SEEK_BLOCKING_MOVE = 2;
 }
 
 AI::Seeker::Seeker(std::string hinter) : Prune(0)
 {
 	t.start();
-	MAX_SEEK_DEPTH = 6;
+	MAX_SEEK_DEPTH = 20;
 	SEEK_WIN = .5;
 	FINAL_ALPHA_BETA_TIME = 1;
 	SEEK_OPPONENT_WIN_SHORT = 1;
@@ -97,7 +104,7 @@ move seek(const Board& b, int movesMade, const timer& time) {
 	return { A1, A1 };
 }
 
-move deepTimedSeek(const Board& b, double time, int depth = 20) {
+move Seeker::deepTimedSeek(const Board& b, double time, int depth = 20) const {
 	move seekResult = { A1, A1 };
 	timer seekTimer; seekTimer.start(); seekTime = time;
 	for (seekDepth = 2; seekDepth < MAX_SEEK_DEPTH && seekTimer.read() < seekTime; seekDepth++) {
