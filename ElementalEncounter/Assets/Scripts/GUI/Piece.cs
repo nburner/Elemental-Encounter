@@ -4,32 +4,35 @@ using UnityEngine;
 
 public class Piece : MonoBehaviour
 {
-    public int CurrentX { set; get; }
-    public int CurrentY { set; get; }
+    public Coordinate Position { set; get; }
+    public int CurrentX { get { return Position.X; } }
+    public int CurrentY { get { return Position.Y; } }
     public bool isIce;
     public static BoardManager bm;
 
     public void SetPosition(int x,int y)
     {
-        CurrentX = x;
-        CurrentY = y;
-        
+        Position = new Coordinate(x, y);        
     }
-        
-    public static void playAnimation(Piece selectedPiece, char moveDirection, int x, int y, bool capture)
+    public void SetPosition(Coordinate c)
+    {
+        Position = c;
+    }
+
+    public static void playAnimation(Piece selectedPiece, Move m, bool capture)
     {
         bm = BoardManager.Instance;
 
         if (capture == false)
         {
             //If Movement is Left, plays left animation
-            if (moveDirection == 'l')
+            if (m.Direction == Move.Laterality.LEFT)
             {
                 selectedPiece.GetComponent<Animation>().Play("Left");
             }
 
             //If Movement is Right, plays right animation
-            else if (moveDirection == 'r')
+            else if (m.Direction == Move.Laterality.RIGHT)
             {
                 selectedPiece.GetComponent<Animation>().Play("Right");
             }
@@ -45,37 +48,37 @@ public class Piece : MonoBehaviour
             if (bm.isMyTurn == false)
             {
                 //If capture is Left, plays left capture animation
-                if (moveDirection == 'l')
+                if (m.Direction == Move.Laterality.LEFT)
                 {
                     selectedPiece.GetComponent<Animation>().Play("LeftBreak");
-                    bm.SpawnPiece(2, x, y);
-                    Destroy(bm.Pieces[x, y], 3f);
+                    bm.SpawnPiece(2, m.To);
+                    Destroy(bm.Pieces[m.To], 3f);
                 }
 
                 //If capture is Right, plays right capture animation
                 else
                 {
                     selectedPiece.GetComponent<Animation>().Play("RightBreak");
-                    bm.SpawnPiece(3, x, y);
-                    Destroy(bm.Pieces[x, y], 3f);
+                    bm.SpawnPiece(3, m.To);
+                    Destroy(bm.Pieces[m.To], 3f);
                 }
             }
             else
             {
                 //If capture is Left, plays left capture animation
-                if (moveDirection == 'l')
+                if (m.Direction == Move.Laterality.LEFT)
                 {
                     selectedPiece.GetComponent<Animation>().Play("LeftBreak");
-                    bm.SpawnPiece(5, x, y);
-                    Destroy(bm.Pieces[x, y], 3f);
+                    bm.SpawnPiece(5, m.To);
+                    Destroy(bm.Pieces[m.To], 3f);
                 }
 
                 //If capture is Right, plays right capture animation
                 else
                 {
                     selectedPiece.GetComponent<Animation>().Play("RightBreak");
-                    bm.SpawnPiece(4, x, y);
-                    Destroy(bm.Pieces[x, y], 3f);
+                    bm.SpawnPiece(4, m.To);
+                    Destroy(bm.Pieces[m.To], 3f);
                 }
             }
         }

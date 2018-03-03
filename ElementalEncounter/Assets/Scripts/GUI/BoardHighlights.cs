@@ -9,10 +9,23 @@ public class BoardHighlights : MonoBehaviour
     public GameObject highlightPrefab;
     private List<GameObject> highlights;
 
-    public void Start()
+    public void Awake()
     {
         Instance = this;
         highlights = new List<GameObject>();
+    }
+    public void Start()
+    {
+    }
+
+    private Color lerpedColor;
+    private Color baseColor;
+    public void Update()
+    {
+        for (int i = 0; i < highlights.Count; i++)
+        {
+            highlights[i].GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.white, baseColor, Mathf.PingPong(Time.time, 1));
+        }
     }
 
     private GameObject GetHighlightObject()
@@ -24,6 +37,16 @@ public class BoardHighlights : MonoBehaviour
             highlights.Add(go);
         }
         return go;
+    }
+    public void HighlightAllowedMoves(List<Move> moves)
+    {
+        HideHighlights();
+
+        for (int i = 0; i < moves.Count; i++){
+            GameObject go = GetHighlightObject();
+            go.SetActive(true);
+            go.transform.position = new Vector3(moves[i].To.X + 0.5f, 0.1f, moves[i].To.Y + 0.5f);
+        }
     }
     public void HighlightAllowedMoves(char[,] moves)
     {
@@ -41,6 +64,21 @@ public class BoardHighlights : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void HighlightHint(Move move)
+    {
+        HideHighlights();
+        GameObject go;
+        baseColor = new Color(0x35, 0xFF, 0x1A, 0xFF);
+
+        go = GetHighlightObject();
+        go.SetActive(true);
+        go.transform.position = new Vector3(move.To.X + 0.5f, 0.1f, move.To.Y + 0.5f);
+
+        go = GetHighlightObject();
+        go.SetActive(true);
+        go.transform.position = new Vector3(move.From.X + 0.5f, 0.1f, move.From.Y + 0.5f);
     }
 
     public void HideHighlights()

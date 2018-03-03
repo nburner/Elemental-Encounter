@@ -17,9 +17,9 @@ namespace AI
         {
             if (dllCaller != null)
             {
-                if (dllCaller.Update())
+                if (dllCaller.IsDone)
                 {
-                    Callback(dllCaller.fromX, dllCaller.fromY, dllCaller.toX, dllCaller.toY);
+                    Callback(dllCaller.Move);
                     dllCaller = null;
                 }
             }
@@ -27,12 +27,12 @@ namespace AI
 
         public Turn Color { get; private set; }
         public AIType Type { get; private set; }
-        private Action<int, int, int, int> Callback { get; set; }
+        private Action<Move> Callback { get; set; }
         private AIJob dllCaller;
 
-        public AI Initialize(AIType t, Turn color, Action<int, int, int, int> callback) { Type = t; Color = color; Callback = callback; return this; }
+        public AI Initialize(AIType t, Turn color, Action<Move> callback) { Type = t; Color = color; Callback = callback; return this; }
 
-		public void GetMove(char[,] pieces) {
+		public void GetMove(Board<char> pieces) {
 			bitboard white, black;
             ConvertToBitboards(pieces, out white, out black);
 
@@ -49,7 +49,7 @@ namespace AI
 			return GetType() + ": " + Type.ToString();
 		}
 
-        private void ConvertToBitboards(char[,] Pieces, out bitboard white, out bitboard black)
+        private void ConvertToBitboards(Board<char> Pieces, out bitboard white, out bitboard black)
         {
             white = 0; black = 0;
             for (int x = 0; x < 8; x++)

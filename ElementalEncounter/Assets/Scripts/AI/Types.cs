@@ -16,7 +16,7 @@ namespace AI
 	0  1  2  3  4  5  6  7
 
 	*/
-	internal enum Square : byte
+	public enum Square : byte
 	{
 		A8 = 56, B8, C8, D8, E8, F8, G8, H8,
 		A7 = 48, B7, C7, D7, E7, F7, G7, H7,
@@ -34,7 +34,7 @@ namespace AI
 
 	//Add a direction to a square and you get the square in that direction
 	//So A1 + NORTH is A2, while B4 + SOUTHEAST is C3
-	enum Direction : sbyte
+	public enum Direction : sbyte
 	{
 		NORTH = 8,
 		EAST = 1,

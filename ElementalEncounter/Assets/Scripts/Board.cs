@@ -2,7 +2,7 @@
 
 //This class abstracts a 2d array for the purpose of representing a board
 //Specifically so I can easily use a coordinate as an index
-class Board<T> 
+public class Board<T> 
 {
     private T[] innerBoard = new T[64];
 

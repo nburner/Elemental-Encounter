@@ -38,10 +38,7 @@ namespace AI
         public Turn Color;
         public AIType Type;
 
-        public int fromX;
-        public int fromY;
-        public int toX;
-        public int toY;
+        public Move Move { get; private set; }
 
         private bool m_IsDone = false;
         private object m_Handle = new object();
@@ -71,8 +68,8 @@ namespace AI
             m_Thread = new System.Threading.Thread(Run);
             m_Thread.Start();
         }
-
-        void ThreadFunction()
+        
+        private void Run()
         {
             int from = 0, to = 0;
             switch (Type)
@@ -90,25 +87,8 @@ namespace AI
                 default: break;
             }
 
-            toX = to % 8;
-            toY = to / 8;
-            fromX = from % 8;
-            fromY = from / 8;
-        }
-        protected virtual void OnFinished() { }
-        public virtual bool Update()
-        {
-            if (IsDone)
-            {
-                OnFinished();
-                return true;
-            }
-            return false;
-        }
+            Move = new Move(new Coordinate(from % 8, from / 8), new Coordinate(to % 8, to / 8));
 
-        private void Run()
-        {
-            ThreadFunction();
             IsDone = true;
         }
     }

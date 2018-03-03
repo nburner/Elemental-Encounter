@@ -14,7 +14,7 @@ public class GameCore : MonoBehaviour
     public Turn CurrentTurn;
     public bool isMasterClient;
     private AI.AI ai;
-    public char[,] Pieces;
+    public Board<char> Pieces;
     private int IcePieceCount;
     private int FirePieceCount;
     public BoardManager boardManager { get; set; }
@@ -39,7 +39,7 @@ public class GameCore : MonoBehaviour
 
     private void InitializeGameCore()
     {
-        Pieces = new char[8, 8];
+        Pieces = new Board<char>();
         for (int x = 0; x < 8; x++) for (int y = 0; y < 8; y++) Pieces[x, y] = default(char);
         for (int x = 0; x < 8; x++) for (int y = 0; y < 2; y++) Pieces[x, y] = 'W';
         for (int x = 0; x < 8; x++) for (int y = 6; y < 8; y++) Pieces[x, y] = 'B';
@@ -69,16 +69,19 @@ public class GameCore : MonoBehaviour
         }
     }
     
-    public void UpdateBoard(int fromX, int fromY, int toX, int toY)
+    public void UpdateBoard(Move move)
     {
-        if (Pieces[toX, toY] == 'W') IcePieceCount--;
-        if (Pieces[toX, toY] == 'B') FirePieceCount--;
+        if (Pieces[move.To] == 'W') IcePieceCount--;
+        if (Pieces[move.To] == 'B') FirePieceCount--;
 
-        Pieces[toX, toY] = Pieces[fromX, fromY];
-        Pieces[fromX, fromY] = default(char);
+        Pieces[move.To] = Pieces[move.From.X, move.From.Y];
+        Pieces[move.From] = default(char);
 
-        boardManager.UpdateGUI(fromX, fromY, toX, toY);
-        if (toY == 7 || toY == 0) return;
+        boardManager.UpdateGUI(move);
+        if (GameOver) {
+            boardManager.EndGame();
+            return;
+        }
 
         CurrentTurn = CurrentTurn == Turn.ICE ? Turn.FIRE : Turn.ICE;
         if (CurrentTurn == MySide) boardManager.GetLocalMove();
@@ -94,22 +97,22 @@ public class GameCore : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
-    public char[,] PossibleMove(bool isIce, int x, int y) { return PossibleMove(isIce ? Turn.ICE : Turn.FIRE, x, y); }
-    public char[,] PossibleMove(Turn turn, int x, int y)
+    public List<Move> PossibleMoves(bool isIce, Coordinate loc) { return PossibleMoves(isIce ? Turn.ICE : Turn.FIRE, loc); }
+    public List<Move> PossibleMoves(Turn turn, Coordinate loc)
     {
-        char[,] r = new char[8, 8];
+        List<Move> result = new List<Move>();
 
         int myForward = turn == Turn.ICE ? 1 : -1;
         int myTop = turn == Turn.ICE ? 7 : 0;
         char myPiece = turn == Turn.ICE ? 'W' : 'B';
 
         // Diagonal Left
-        if (x != 0 && y != myTop && Pieces[x - 1, y + myForward] != myPiece) r[x - 1, y + myForward] = 'l';
+        if (loc.X != 0 && loc.Y != myTop && Pieces[loc.X - 1, loc.Y + myForward] != myPiece) result.Add(new Move(loc, new Coordinate(loc.X - 1, loc.Y + myForward)));
         // Diagonal Right 
-        if (x != 7 && y != myTop && Pieces[x + 1, y + myForward] != myPiece) r[x + 1, y + myForward] = 'r';
+        if (loc.X != 7 && loc.Y != myTop && Pieces[loc.X + 1, loc.Y + myForward] != myPiece) result.Add(new Move(loc, new Coordinate(loc.X + 1, loc.Y + myForward)));
         // Middle
-        if (y != myTop && Pieces[x, y + myForward] == default(char)) r[x, y + myForward] = 'm';
+        if (loc.Y != myTop && Pieces[loc.X, loc.Y + myForward] == default(char)) result.Add(new Move(loc, new Coordinate(loc.X, loc.Y + myForward)));
 
-        return r;
+        return result;
     }    
 }
