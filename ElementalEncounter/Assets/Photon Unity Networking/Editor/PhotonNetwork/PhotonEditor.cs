@@ -151,7 +151,9 @@ public class PhotonEditor : EditorWindow
     {
         EditorApplication.projectWindowChanged += EditorUpdate;
         EditorApplication.hierarchyWindowChanged += EditorUpdate;
+        #pragma warning disable 0618
         EditorApplication.playmodeStateChanged += PlaymodeStateChanged;
+        #pragma warning restore 0618
         EditorApplication.update += OnUpdate;
 
         // detect optional packages

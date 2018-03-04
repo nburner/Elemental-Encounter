@@ -25,7 +25,7 @@ public class HUD : MonoBehaviour
 
     public void PlayerConfirmedQuit()
     {
-        SceneManager.LoadScene("MainMenu2");
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void PlayerDeniedQuit()
