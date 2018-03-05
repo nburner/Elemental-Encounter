@@ -43,44 +43,44 @@ public class Piece : MonoBehaviour
                 selectedPiece.GetComponent<Animation>().Play("Forward");
             }
         }
-        else
-        {
-            if (bm.isMyTurn == false)
-            {
-                //If capture is Left, plays left capture animation
-                if (m.Direction == Move.Laterality.LEFT)
-                {
-                    selectedPiece.GetComponent<Animation>().Play("LeftBreak");
-                    bm.SpawnPiece(2, m.To);
-                    Destroy(bm.Pieces[m.To], 3f);
-                }
+        //else
+        //{
+        //    if (bm.isMyTurn == false)
+        //    {
+        //        //If capture is Left, plays left capture animation
+        //        if (m.Direction == Move.Laterality.LEFT)
+        //        {
+        //            selectedPiece.GetComponent<Animation>().Play("LeftBreak");
+        //            bm.SpawnPiece(2, m.To);
+        //            Destroy(bm.Pieces[m.To], 3f);
+        //        }
 
-                //If capture is Right, plays right capture animation
-                else
-                {
-                    selectedPiece.GetComponent<Animation>().Play("RightBreak");
-                    bm.SpawnPiece(3, m.To);
-                    Destroy(bm.Pieces[m.To], 3f);
-                }
-            }
-            else
-            {
-                //If capture is Left, plays left capture animation
-                if (m.Direction == Move.Laterality.LEFT)
-                {
-                    selectedPiece.GetComponent<Animation>().Play("LeftBreak");
-                    bm.SpawnPiece(5, m.To);
-                    Destroy(bm.Pieces[m.To], 3f);
-                }
+        //        //If capture is Right, plays right capture animation
+        //        else
+        //        {
+        //            selectedPiece.GetComponent<Animation>().Play("RightBreak");
+        //            bm.SpawnPiece(3, m.To);
+        //            Destroy(bm.Pieces[m.To], 3f);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        //If capture is Left, plays left capture animation
+        //        if (m.Direction == Move.Laterality.LEFT)
+        //        {
+        //            selectedPiece.GetComponent<Animation>().Play("LeftBreak");
+        //            bm.SpawnPiece(5, m.To);
+        //            Destroy(bm.Pieces[m.To], 3f);
+        //        }
 
-                //If capture is Right, plays right capture animation
-                else
-                {
-                    selectedPiece.GetComponent<Animation>().Play("RightBreak");
-                    bm.SpawnPiece(4, m.To);
-                    Destroy(bm.Pieces[m.To], 3f);
-                }
-            }
-        }
+        //        //If capture is Right, plays right capture animation
+        //        else
+        //        {
+        //            selectedPiece.GetComponent<Animation>().Play("RightBreak");
+        //            bm.SpawnPiece(4, m.To);
+        //            Destroy(bm.Pieces[m.To], 3f);
+        //        }
+        //    }
+        //}
     }
 }
