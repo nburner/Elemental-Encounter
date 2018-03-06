@@ -9,6 +9,8 @@ public class BoardHighlights : MonoBehaviour
     public GameObject highlightPrefab;
     private List<GameObject> highlights;
 
+    public Color highlightPrefabColor { get { return highlightPrefab.GetComponent<MeshRenderer>().sharedMaterial.color; } }
+
     public void Awake()
     {
         Instance = this;
@@ -18,7 +20,6 @@ public class BoardHighlights : MonoBehaviour
     {
     }
 
-    private Color lerpedColor;
     private Color baseColor;
     public void Update()
     {
@@ -41,6 +42,7 @@ public class BoardHighlights : MonoBehaviour
     public void HighlightAllowedMoves(List<Move> moves)
     {
         HideHighlights();
+        baseColor = highlightPrefabColor;
 
         for (int i = 0; i < moves.Count; i++){
             GameObject go = GetHighlightObject();
@@ -51,6 +53,7 @@ public class BoardHighlights : MonoBehaviour
     public void HighlightAllowedMoves(char[,] moves)
     {
         HideHighlights();
+        baseColor = highlightPrefabColor;
 
         for (int i = 0; i < 8; i++)
         {
@@ -70,7 +73,7 @@ public class BoardHighlights : MonoBehaviour
     {
         HideHighlights();
         GameObject go;
-        baseColor = new Color(0x35, 0xFF, 0x1A, 0xFF);
+        baseColor = new Color((float)(0x35/255.0), 1, (float)(0x1A/255.0), (float).3);
 
         go = GetHighlightObject();
         go.SetActive(true);
