@@ -392,7 +392,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Player1
+  m_Text: Player
 --- !u!222 &335811320
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -603,6 +603,7 @@ MonoBehaviour:
   optionsPanel: {fileID: 433878844}
   hostGamePanel: {fileID: 1350179676}
   connectToGamePanel: {fileID: 2115071508}
+  roomName: {fileID: 2054506147}
 --- !u!4 &528933238
 Transform:
   m_ObjectHideFlags: 0
@@ -778,7 +779,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &687607743
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1086,7 +1087,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Choose your game connection
+  m_Text: Elemental Encounter Multiplayer
 --- !u!222 &942814812
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1316,7 +1317,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1037971892}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 528933237}
+        m_MethodName: CreateNewRoom
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1037971892
@@ -1600,7 +1612,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1350179677
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1694,7 +1706,7 @@ GameObject:
   - component: {fileID: 1358638836}
   - component: {fileID: 1358638835}
   m_Layer: 5
-  m_Name: RoomNameInput
+  m_Name: PlayerNameInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2220,7 +2232,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1689319467}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 528933237}
+        m_MethodName: Connect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1689319467
@@ -2738,7 +2761,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2027333666}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 528933237}
+        m_MethodName: CreateNewRoom
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &2027333666
@@ -2786,7 +2820,7 @@ GameObject:
   - component: {fileID: 2054506148}
   - component: {fileID: 2054506147}
   m_Layer: 5
-  m_Name: InputField
+  m_Name: RoomNameInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

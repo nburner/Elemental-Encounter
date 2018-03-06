@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+using UnityEngine.UI;
 
 namespace NetworkGame
 {
@@ -20,13 +20,14 @@ namespace NetworkGame
         public GameObject optionsPanel;
         public GameObject hostGamePanel;
         public GameObject connectToGamePanel;
-        private GameCore gameCore;
+        public InputField roomName;
 
         #endregion
 
         #region Private Variables
         // Update the game version everytime we create a new install
-        string _gameVersion = "0.1.0";
+        private string _gameVersion = "0.1.0";
+        private GameCore gameCore;
 
         #endregion
 
@@ -55,9 +56,9 @@ namespace NetworkGame
 
         void Start()
         {
+            //controlPanel.SetActive(true);
+            optionsPanel.SetActive(true);
             progressLabel.SetActive(false);
-            controlPanel.SetActive(true);
-            optionsPanel.SetActive(false);
             hostGamePanel.SetActive(false);
             connectToGamePanel.SetActive(false);
         }
@@ -72,13 +73,15 @@ namespace NetworkGame
         public void Connect()
         {
             isConnecting = true;
-            progressLabel.SetActive(true);
-            controlPanel.SetActive(false);
+            //progressLabel.SetActive(true);
+            optionsPanel.SetActive(false);
 
             //If connected, join random room
             if (PhotonNetwork.connected)
             {
-                PhotonNetwork.JoinRandomRoom();
+                //PhotonNetwork.JoinRandomRoom();
+                optionsPanel.SetActive(false);
+                hostGamePanel.SetActive(true);
             }
             else
             {
@@ -87,9 +90,11 @@ namespace NetworkGame
             }
         }
 
-        public void HostGame()
+        public void CreateNewRoom()
         {
-
+            PhotonNetwork.CreateRoom(roomName.text, new RoomOptions() { MaxPlayers = MaxPlayersPerRoom }, null);
+            hostGamePanel.SetActive(false);
+            progressLabel.SetActive(true);
         }
 
         public override void OnConnectedToMaster()
@@ -98,7 +103,9 @@ namespace NetworkGame
             if (isConnecting)
             {
                 // #Critical: The first we try to do is to join a potential existing room. If there is, good, else, we'll be called back with OnPhotonRandomJoinFailed()
-                PhotonNetwork.JoinRandomRoom();
+                //PhotonNetwork.JoinRandomRoom();
+                optionsPanel.SetActive(false);
+                hostGamePanel.SetActive(true);
             }
         }
 
