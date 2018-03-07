@@ -43,44 +43,116 @@ public class Piece : MonoBehaviour
                 selectedPiece.GetComponent<Animation>().Play("Forward");
             }
         }
-        //else
-        //{
-        //    if (bm.isMyTurn == false)
-        //    {
-        //        //If capture is Left, plays left capture animation
-        //        if (m.Direction == Move.Laterality.LEFT)
-        //        {
-        //            selectedPiece.GetComponent<Animation>().Play("LeftBreak");
-        //            bm.SpawnPiece(2, m.To);
-        //            Destroy(bm.Pieces[m.To], 3f);
-        //        }
+        else
+        {
+            System.Random rnd = new System.Random();
+            int captureChoice;
 
-        //        //If capture is Right, plays right capture animation
-        //        else
-        //        {
-        //            selectedPiece.GetComponent<Animation>().Play("RightBreak");
-        //            bm.SpawnPiece(3, m.To);
-        //            Destroy(bm.Pieces[m.To], 3f);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        //If capture is Left, plays left capture animation
-        //        if (m.Direction == Move.Laterality.LEFT)
-        //        {
-        //            selectedPiece.GetComponent<Animation>().Play("LeftBreak");
-        //            bm.SpawnPiece(5, m.To);
-        //            Destroy(bm.Pieces[m.To], 3f);
-        //        }
+            if (selectedPiece.isIce == false)
+            {
+                //If capture is Left, plays left capture animation
+                if (m.Direction == Move.Laterality.LEFT)
+                {
+                    captureChoice = rnd.Next(1, 5);
 
-        //        //If capture is Right, plays right capture animation
-        //        else
-        //        {
-        //            selectedPiece.GetComponent<Animation>().Play("RightBreak");
-        //            bm.SpawnPiece(4, m.To);
-        //            Destroy(bm.Pieces[m.To], 3f);
-        //        }
-        //    }
-        //}
+                    if (captureChoice == 2)
+                    {
+                        selectedPiece.GetComponent<Animation>().Play("Bounce - Left");
+                        bm.SpawnPiece(2, m.To);
+                        Destroy(bm.Pieces[m.To].gameObject, 3f);
+                    }
+                    else if (captureChoice == 3)
+                    {
+                        selectedPiece.GetComponent<Animation>().Play("Roll - Left");
+                        bm.SpawnPiece(3, m.To);
+                        Destroy(bm.Pieces[m.To].gameObject, 3f);
+                    }
+                    else
+                    {
+                        selectedPiece.GetComponent<Animation>().Play("Smash - Left");
+                        bm.SpawnPiece(4, m.To);
+                        Destroy(bm.Pieces[m.To].gameObject, 3f);
+                    }
+
+                }
+
+                //If capture is Right, plays right capture animation
+                else
+                {
+                    captureChoice = rnd.Next(4, 8);
+
+                    if (captureChoice == 5)
+                    {
+                        selectedPiece.GetComponent<Animation>().Play("Bounce - Right");
+                        bm.SpawnPiece(5, m.To);
+                        Destroy(bm.Pieces[m.To].gameObject, 3f);
+                    }
+                    else if (captureChoice == 6)
+                    {
+                        selectedPiece.GetComponent<Animation>().Play("Roll - Right");
+                        bm.SpawnPiece(6, m.To);
+                        Destroy(bm.Pieces[m.To].gameObject, 3f);
+                    }
+                    else
+                    {
+                        selectedPiece.GetComponent<Animation>().Play("Smash - Right");
+                        bm.SpawnPiece(7, m.To);
+                        Destroy(bm.Pieces[m.To].gameObject, 3f);
+                    }
+                }
+            }
+            else
+            {
+                //If capture is Left, plays left capture animation
+                if (m.Direction == Move.Laterality.LEFT)
+                {
+                    captureChoice = rnd.Next(7, 11);
+
+                    if (captureChoice == 8)
+                    {
+                        selectedPiece.GetComponent<Animation>().Play("Diagonal - Left");
+                        bm.SpawnPiece(8, m.To);
+                        Destroy(bm.Pieces[m.To].gameObject, 3f);
+                    }
+                    else if (captureChoice == 9)
+                    {
+                        selectedPiece.GetComponent<Animation>().Play("Dig - Left");
+                        bm.SpawnPiece(9, m.To);
+                        Destroy(bm.Pieces[m.To].gameObject, 3f);
+                    }
+                    else
+                    {
+                        selectedPiece.GetComponent<Animation>().Play("Top Pierce - Left");
+                        bm.SpawnPiece(10, m.To);
+                        Destroy(bm.Pieces[m.To].gameObject, 3f);
+                    }
+                }
+
+                //If capture is Right, plays right capture animation
+                else
+                {
+                    captureChoice = rnd.Next(10, 14);
+
+                    if (captureChoice == 11)
+                    {
+                        selectedPiece.GetComponent<Animation>().Play("Diagonal - Right");
+                        bm.SpawnPiece(11, m.To);
+                        Destroy(bm.Pieces[m.To].gameObject, 3f);
+                    }
+                    else if (captureChoice == 12)
+                    {
+                        selectedPiece.GetComponent<Animation>().Play("Dig - Right");
+                        bm.SpawnPiece(12, m.To);
+                        Destroy(bm.Pieces[m.To].gameObject, 3f);
+                    }
+                    else
+                    {
+                        selectedPiece.GetComponent<Animation>().Play("Top Pierce - Right");
+                        bm.SpawnPiece(13, m.To);
+                        Destroy(bm.Pieces[m.To].gameObject, 3f);
+                    }
+                }
+            }
+        }
     }
 }

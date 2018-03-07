@@ -199,6 +199,12 @@ Animation:
   - {fileID: 7400000, guid: 88d18e5fb5e7b8e41aac2cdb5b8e7455, type: 3}
   - {fileID: 7400002, guid: 88d18e5fb5e7b8e41aac2cdb5b8e7455, type: 3}
   - {fileID: 7400004, guid: 88d18e5fb5e7b8e41aac2cdb5b8e7455, type: 3}
+  - {fileID: 7400000, guid: 3cfbb8a0ee359d04f9ff37761495e268, type: 3}
+  - {fileID: 7400000, guid: 77ec9fcf440cb0e41852f07d7b1728cd, type: 3}
+  - {fileID: 7400000, guid: 7f9205f519fc555409aecc5551e4d6d1, type: 3}
+  - {fileID: 7400000, guid: 2e2b821d48b0ebf478160804f8866f27, type: 3}
+  - {fileID: 7400000, guid: 82f36ce9ea337f340b432a62b0e4aca3, type: 3}
+  - {fileID: 7400000, guid: 9546e768518f2e54eab3a6345f032046, type: 3}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0

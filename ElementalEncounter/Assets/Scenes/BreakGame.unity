@@ -244,10 +244,18 @@ MonoBehaviour:
   piecePrefabs:
   - {fileID: 1081819570631570, guid: 8a33cc82ef7eecf448e319a76f57c925, type: 2}
   - {fileID: 1848356010410964, guid: ecefcb705f84eac47a8a025fe76ec3e8, type: 2}
-  - {fileID: 1848356010410964, guid: fd74466a38bee474eb72705fa4751b08, type: 2}
-  - {fileID: 1848356010410964, guid: ecdc10a1bebecea4ea01a67b600352de, type: 2}
-  - {fileID: 1081819570631570, guid: 35f5c2518fe8f304a91210b62eae9924, type: 2}
-  - {fileID: 1081819570631570, guid: c568900a4dca1ea47861482de0707c81, type: 2}
+  - {fileID: 1081819570631570, guid: c3c2986aecf8e514989f0c1cf8c9b3ad, type: 2}
+  - {fileID: 1081819570631570, guid: 04838c6872423984c94316dc208e4b44, type: 2}
+  - {fileID: 1081819570631570, guid: 013f3a6024daa3746a32c82a358aa79f, type: 2}
+  - {fileID: 1081819570631570, guid: 0b65a511f1ce5d043a0a4e589d509e5e, type: 2}
+  - {fileID: 1081819570631570, guid: 689feaab5f5c02443920f039dad1dfe8, type: 2}
+  - {fileID: 1081819570631570, guid: 71fe19cd9b5076b4088f84032d43813a, type: 2}
+  - {fileID: 1848356010410964, guid: 9558157d2e2ff7a4b9306720ce1a7ba1, type: 2}
+  - {fileID: 1848356010410964, guid: 43a969319877a7b438bf646305ad8b73, type: 2}
+  - {fileID: 1848356010410964, guid: 8c3871d64d891354fa259b439994163c, type: 2}
+  - {fileID: 1848356010410964, guid: de9725edf11cc9641813c7a068a307a8, type: 2}
+  - {fileID: 1848356010410964, guid: a8d7adb5a9a198f46be81936957230b4, type: 2}
+  - {fileID: 1848356010410964, guid: b832563e94778114988c81c59aecdfe4, type: 2}
   boardPrefabs:
   - {fileID: 1523715143533048, guid: c34f65431586e7344b5d406eca69dafc, type: 2}
   - {fileID: 1643396766749774, guid: ee6ed1a904506db44b3f4a3153b3f90d, type: 2}
