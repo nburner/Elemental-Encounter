@@ -47,7 +47,7 @@ public class BoardHighlights : MonoBehaviour
         for (int i = 0; i < moves.Count; i++){
             GameObject go = GetHighlightObject();
             go.SetActive(true);
-            go.transform.position = new Vector3(moves[i].To.X + 0.5f, 0.1f, moves[i].To.Y + 0.5f);
+            go.transform.position = new Vector3(moves[i].To.X + 0.5f, 0.0501f, moves[i].To.Y + 0.5f);
         }
     }
     public void HighlightAllowedMoves(char[,] moves)
@@ -63,7 +63,7 @@ public class BoardHighlights : MonoBehaviour
                 {
                     GameObject go = GetHighlightObject();
                     go.SetActive(true);
-                    go.transform.position = new Vector3(i + 0.5f, 0.1f, j + 0.5f);
+                    go.transform.position = new Vector3(i + 0.5f, 0.0501f, j + 0.5f);
                 }
             }
         }
@@ -77,11 +77,11 @@ public class BoardHighlights : MonoBehaviour
 
         go = GetHighlightObject();
         go.SetActive(true);
-        go.transform.position = new Vector3(move.To.X + 0.5f, 0.1f, move.To.Y + 0.5f);
+        go.transform.position = new Vector3(move.To.X + 0.5f, 0.0501f, move.To.Y + 0.5f);
 
         go = GetHighlightObject();
         go.SetActive(true);
-        go.transform.position = new Vector3(move.From.X + 0.5f, 0.1f, move.From.Y + 0.5f);
+        go.transform.position = new Vector3(move.From.X + 0.5f, 0.0501f, move.From.Y + 0.5f);
     }
 
     public void HideHighlights()
