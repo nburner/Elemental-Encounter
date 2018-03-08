@@ -260,7 +260,7 @@ MonoBehaviour:
   - {fileID: 1523715143533048, guid: c34f65431586e7344b5d406eca69dafc, type: 2}
   - {fileID: 1643396766749774, guid: ee6ed1a904506db44b3f4a3153b3f90d, type: 2}
   activePieces: []
-  isMyTurn: 1
+  isMyTurn: 0
 --- !u!4 &18783751
 Transform:
   m_ObjectHideFlags: 0

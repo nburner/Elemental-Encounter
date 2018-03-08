@@ -51,7 +51,7 @@ public class Piece : MonoBehaviour
             if (selectedPiece.isIce == false)
             {
                 //If capture is Left, plays left capture animation
-                if (m.Direction == Move.Laterality.LEFT)
+                if (m.Direction != Move.Laterality.LEFT)
                 {
                     captureChoice = rnd.Next(1, 5);
 
@@ -122,7 +122,7 @@ public class Piece : MonoBehaviour
                     }
                     else
                     {
-                        selectedPiece.GetComponent<Animation>().Play("Top Pierce - Left");
+                        selectedPiece.GetComponent<Animation>().Play("Top - Left");
                         bm.SpawnPiece(10, m.To);
                         Destroy(bm.Pieces[m.To].gameObject, 3f);
                     }
@@ -147,7 +147,7 @@ public class Piece : MonoBehaviour
                     }
                     else
                     {
-                        selectedPiece.GetComponent<Animation>().Play("Top Pierce - Right");
+                        selectedPiece.GetComponent<Animation>().Play("Top - Right");
                         bm.SpawnPiece(13, m.To);
                         Destroy(bm.Pieces[m.To].gameObject, 3f);
                     }
