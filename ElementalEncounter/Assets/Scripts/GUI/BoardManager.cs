@@ -103,7 +103,6 @@ public class BoardManager : MonoBehaviour
         catch (ArgumentException e) {
             //Move constructor throws on invalid move
             Debug.Log(e.Message);
-            return;
         }
                         
         isClicked = false;
