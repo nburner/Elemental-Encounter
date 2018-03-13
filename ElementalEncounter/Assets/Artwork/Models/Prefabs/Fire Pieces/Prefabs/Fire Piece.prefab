@@ -199,11 +199,11 @@ Animation:
   - {fileID: 7400000, guid: ac1ecf1144dab684ea4bbeda7a8cd488, type: 3}
   - {fileID: 7400002, guid: ac1ecf1144dab684ea4bbeda7a8cd488, type: 3}
   - {fileID: 7400004, guid: ac1ecf1144dab684ea4bbeda7a8cd488, type: 3}
-  - {fileID: 7400000, guid: 36f5f0c25b03fab45af9d9d7762a4a6c, type: 3}
-  - {fileID: 7400000, guid: f48c7cc2cd5f9844d985a18d66605a71, type: 3}
-  - {fileID: 7400000, guid: f6a13527a6f5d59499603b14ed1e853d, type: 3}
-  - {fileID: 7400000, guid: af29416fa1edee948ae7bea37af845f8, type: 3}
+  - {fileID: 7400000, guid: 3db102143b5645d44a8e866c691a86fa, type: 3}
+  - {fileID: 7400000, guid: 850488903be0be54e83cd617a29ceb76, type: 3}
   - {fileID: 7400000, guid: 82e65418348544145a3549754e46138a, type: 3}
+  - {fileID: 7400000, guid: dabd9ae59214d7948913c749a1b8428b, type: 3}
+  - {fileID: 7400000, guid: e33378046f0e87645b74b9f36eecd898, type: 3}
   - {fileID: 7400000, guid: 228be19ffd06f014ba72896a1a00ff55, type: 3}
   m_WrapMode: 0
   m_PlayAutomatically: 1

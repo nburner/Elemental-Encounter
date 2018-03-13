@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: f6a13527a6f5d59499603b14ed1e853d
-timeCreated: 1520492673
+guid: 850488903be0be54e83cd617a29ceb76
+timeCreated: 1520970160
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -52,7 +52,7 @@ ModelImporter:
       name: Roll - Left
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 100
+      lastFrame: 100.00001
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

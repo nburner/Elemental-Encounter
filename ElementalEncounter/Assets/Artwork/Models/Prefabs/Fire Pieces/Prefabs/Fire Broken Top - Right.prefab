@@ -4150,9 +4150,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4775921199310792}
-  - component: {fileID: 111318823434179552}
-  - component: {fileID: 114740780658641676}
-  - component: {fileID: 114672445180879484}
+  - component: {fileID: 111933647259934484}
+  - component: {fileID: 114886014481184576}
+  - component: {fileID: 114085408547154384}
   m_Layer: 0
   m_Name: Fire Broken Top - Right
   m_TagString: Untagged
@@ -19914,7 +19914,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1698683560001866}
   m_Mesh: {fileID: 4300270, guid: e2ff00c14da7e5f4e989f82bb3a42342, type: 3}
---- !u!111 &111318823434179552
+--- !u!111 &111933647259934484
 Animation:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -19929,7 +19929,7 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
---- !u!114 &114672445180879484
+--- !u!114 &114085408547154384
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -19941,7 +19941,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isIce: 0
---- !u!114 &114740780658641676
+--- !u!114 &114886014481184576
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

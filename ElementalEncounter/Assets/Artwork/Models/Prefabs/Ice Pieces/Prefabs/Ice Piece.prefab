@@ -204,7 +204,7 @@ Animation:
   - {fileID: 7400000, guid: 368a5155c7b60224185e1989f3019c89, type: 3}
   - {fileID: 7400000, guid: 552cc865b8895334787afc8e998a6d7c, type: 3}
   - {fileID: 7400000, guid: f16ee06ce98634547be404e165cbee08, type: 3}
-  - {fileID: 7400000, guid: 5f2946f692c44ad4a9001f418ff86582, type: 3}
+  - {fileID: 7400000, guid: 1bdf1dcfff96ce449818fefa67267d98, type: 3}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0

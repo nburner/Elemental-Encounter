@@ -79,7 +79,7 @@ public class Piece : MonoBehaviour
                 //If capture is Right, plays right capture animation
                 else
                 {
-                    captureChoice = rnd.Next(4, 8);
+                    captureChoice = 6;
 
                     if (captureChoice == 5)
                     {
