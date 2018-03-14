@@ -34,7 +34,7 @@ public class BoardManager : MonoBehaviour
     {
         string time = DateTime.Now.ToString("h:mm:ss tt");
 
-        Debug.Log("Made it to the sart fuction at    " + time);
+        Debug.Log("Made it to the start function at    " + time);
 
         IceCamera = GameObject.Find("IceCamera").GetComponent<Camera>();
         FireCamera = GameObject.Find("FireCamera").GetComponent<Camera>();

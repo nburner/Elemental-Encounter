@@ -13,28 +13,36 @@ public class MainMenu : MonoBehaviour
 
     public GameObject mainMenu;
 
+    private bool startGame;
+
     private GameCore gameCore;
     void Start()
     {
         quitPanel.SetActive(false);
+        startGame = false;
+
         loadingScene = SceneManager.LoadSceneAsync("BreakGame", LoadSceneMode.Additive);
+
+        StartCoroutine(PlaySinglePlayerGame());
+        loadingScene.allowSceneActivation = false;
     }
 
     void Awake()
     {
+    
         gameCore = GameObject.Find("GameCore").GetComponent<GameCore>();
     }
 
     public void singlePlayerButtonClick()
     {
-        StartCoroutine(PlaySinglePlayerGame());
+        startGame = true;
     }
 
     public IEnumerator PlaySinglePlayerGame()
     {
-        string time = DateTime.Now.ToString("h:mm:ss tt");
+       // string time = DateTime.Now.ToString("h:mm:ss tt");
 
-        Debug.Log("started loading GameScene at" + time);
+        //Debug.Log("started loading GameScene at" + time);
         
 
         //gameCore.MySide = GameCore.Turn.ICE;
@@ -45,9 +53,11 @@ public class MainMenu : MonoBehaviour
         while (!loadingScene.isDone)
         {
             Debug.Log(loadingScene.progress);
+
+            if (startGame == true) loadingScene.allowSceneActivation = true;
+
             yield return null;
         }
-       
         
         SceneManager.SetActiveScene(SceneManager.GetSceneByName("BreakGame"));
         SceneManager.UnloadSceneAsync("MainMenu");
