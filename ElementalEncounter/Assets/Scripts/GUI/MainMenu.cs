@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,10 +9,15 @@ public class MainMenu : MonoBehaviour
     [Header("Set in Inspector")]
     public GameObject quitPanel;
 
+    AsyncOperation loadingScene;
+
+    public GameObject mainMenu;
+
     private GameCore gameCore;
     void Start()
     {
         quitPanel.SetActive(false);
+        loadingScene = SceneManager.LoadSceneAsync("BreakGame", LoadSceneMode.Additive);
     }
 
     void Awake()
@@ -19,13 +25,32 @@ public class MainMenu : MonoBehaviour
         gameCore = GameObject.Find("GameCore").GetComponent<GameCore>();
     }
 
-    public void PlaySinglePlayerGame()
+    public void singlePlayerButtonClick()
     {
+        StartCoroutine(PlaySinglePlayerGame());
+    }
+
+    public IEnumerator PlaySinglePlayerGame()
+    {
+        string time = DateTime.Now.ToString("h:mm:ss tt");
+
+        Debug.Log("started loading GameScene at" + time);
+        
+
         //gameCore.MySide = GameCore.Turn.ICE;
         //gameCore.aILevel = GameCore.AILevel.Intermediate;
         gameCore.isMasterClient = true;
         gameCore.isSinglePlayer = true;
-        SceneManager.LoadScene("BreakGame");
+
+        while (!loadingScene.isDone)
+        {
+            Debug.Log(loadingScene.progress);
+            yield return null;
+        }
+       
+        
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("BreakGame"));
+        SceneManager.UnloadSceneAsync("MainMenu");
     }
     public void PlayMultiplayerGame()
     {

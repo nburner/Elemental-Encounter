@@ -28,6 +28,8 @@ public class NetworkBoardManager : Photon.PunBehaviour
     public Turn WhoseTurn;
     private void Start()
     {
+        Debug.Log("Im the network boardManager");
+
         isMasterClient = PhotonNetwork.isMasterClient;
         Instance = this;
         SpawnAllBoardSpaces();

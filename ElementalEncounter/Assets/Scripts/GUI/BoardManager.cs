@@ -25,10 +25,17 @@ public class BoardManager : MonoBehaviour
     private AI.AI HinterXHinter;
     private Camera IceCamera, FireCamera;
     private NetworkGame.NetworkManager networkLogic;
+
+    public GameObject winMenu;
+    public GameObject loseMenu;
     #endregion
 
     private void Start()
     {
+        string time = DateTime.Now.ToString("h:mm:ss tt");
+
+        Debug.Log("Made it to the sart fuction at    " + time);
+
         IceCamera = GameObject.Find("IceCamera").GetComponent<Camera>();
         FireCamera = GameObject.Find("FireCamera").GetComponent<Camera>();
 
@@ -49,8 +56,10 @@ public class BoardManager : MonoBehaviour
         }
 
         gameCore.boardManager = this;
-        SpawnAllBoardSpaces();
+        //SpawnAllBoardSpaces();
+        //Debug.Log("Started RestAndInitilizeBoard funcion");
         ResetAndInitializeBoard();
+        //Debug.Log("Finishied RestAndInitilizeBoard funcion");
 
         if (gameCore.MySide == GameCore.Turn.ICE)
         {
@@ -62,6 +71,11 @@ public class BoardManager : MonoBehaviour
             IceCamera.gameObject.SetActive(false);
             FireCamera.gameObject.SetActive(true);
         }
+
+        time = DateTime.Now.ToString("h:mm:ss tt");
+
+        Debug.Log("Finished loading GameScene at   " + time);
+        
     }
 
     private void Awake()
@@ -73,13 +87,16 @@ public class BoardManager : MonoBehaviour
     }
     private void ResetAndInitializeBoard()
     {
+        
         foreach (GameObject go in activePieces)
         {
             Destroy(go);
         }
         BoardHighlights.Instance.HideHighlights();
 
+        Debug.Log("Started spawning Pieces");
         SpawnAllPieces();
+        Debug.Log("Finished spawning Pieces");
 
         if (HinterXHinter != null) Destroy(HinterXHinter);
 
@@ -131,13 +148,16 @@ public class BoardManager : MonoBehaviour
         //This Boolean is almost certainly wrong
         if (isMyTurn != (gameCore.MySide == GameCore.Turn.ICE))
         {
-            Debug.Log("Ice Wins!");
+            loseMenu.SetActive(true);
         }
         else
         {
-            Debug.Log("Fire Wins!");
+            winMenu.SetActive(true);
         }
+    }
 
+    public void ResetBoard()
+    {
         ResetAndInitializeBoard();
     }
 
