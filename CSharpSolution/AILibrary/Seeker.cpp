@@ -107,7 +107,7 @@ move Seeker::deepTimedSeek(const Board& b, double time, int depth = 20) const {
 	move seekResult = { A1, A1 };
 	timer seekTimer; seekTimer.start(); seekTime = time;
 	for (seekDepth = 2; seekDepth < MAX_SEEK_DEPTH && seekTimer.read() < seekTime; seekDepth++) {
-		move newResult = seek(b.ignoreBack(), 0, seekTimer);
+		move newResult = seek(b, 0, seekTimer);
 		seekResult = newResult.first == newResult.second ? seekResult : newResult;
 	}
 	return seekResult;
@@ -125,8 +125,10 @@ move AI::Seeker::operator()(const Board b) const
 	}
 	
 	//If you can't, look for a way to win
-	move seekResult = deepTimedSeek(b, SEEK_WIN);
-	if(t.read() > seekTime) cout << "Seek took " << t.read() << " and returned " << BoardHelpers::to_string(seekResult) << endl;
+	move seekResult = deepTimedSeek(b.onlyFront(), SEEK_WIN);
+	cout << "Seek took " << t.read() << " and returned " << BoardHelpers::to_string(seekResult) << endl;
+	if (t.read() < SEEK_WIN && seekResult.first == seekResult.second) seekResult = deepTimedSeek(b.onlyMiddle(), SEEK_WIN - t.read(), 40);
+	cout << "Mid Seek took " << t.read() << " and returned " << BoardHelpers::to_string(seekResult) << endl;
 
 	//Suppose you couldn't find a way to victory
 	if (seekResult.first == seekResult.second) {
@@ -135,7 +137,7 @@ move AI::Seeker::operator()(const Board b) const
 	//And ignore all the ones that would cause your enemy to win
 		double allottedTime = SEEK_OPPONENT_WIN_LONG / boards.size();
 		for (auto it = boards.begin(); it != boards.end(); ) {
-			move test = deepTimedSeek(it->ignoreBack(), allottedTime);
+			move test = deepTimedSeek(it->onlyFront(), allottedTime);
 			if (test.first != test.second) it = boards.erase(it);
 			else ++it;
 		}
@@ -158,7 +160,7 @@ move AI::Seeker::operator()(const Board b) const
 	//But if there is a way to victory, ensure it doesn't cost you the game
 	else {
 	//See if your enemy will have a way to victory after your move
-		move test = deepTimedSeek(b.makeMove(seekResult).ignoreBack(), SEEK_OPPONENT_WIN_SHORT);
+		move test = deepTimedSeek(b.makeMove(seekResult).onlyFront(), SEEK_OPPONENT_WIN_SHORT);
 	//If they don't, good for you!
 		if (test.first == test.second) {
 			cout << "This move took: " << t.read() << " seconds" << endl;
@@ -171,7 +173,7 @@ move AI::Seeker::operator()(const Board b) const
 			int maxMovesToWin = 0; int minMovesToWin = 165; move bestShot = { A1, A1 };
 			double allottedTime = SEEK_BLOCKING_MOVE / boards.size();
 			for (auto it = boards.begin(); it != boards.end(); ) {
-				move test = deepTimedSeek(it->ignoreBack(), allottedTime);
+				move test = deepTimedSeek(it->onlyFront(), allottedTime);
 				if (test.first != test.second) { 
 					minMovesToWin = (minMovesToWin > it->movesBeforeWin) ? it->movesBeforeWin : minMovesToWin;
 					if (maxMovesToWin < it->movesBeforeWin) {

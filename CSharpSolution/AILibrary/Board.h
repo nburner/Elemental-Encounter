@@ -282,7 +282,8 @@ namespace AI {
 		std::vector<Board> validAttackBoards() const;
 		std::vector<Board> validWinBoards() const;
 		Board makeMove(move) const;
-		Board ignoreBack() const;	
+		Board onlyFront() const;
+		Board onlyMiddle() const;
 
 		Square furthestPiece(Turn) const;
 

@@ -224,12 +224,22 @@ Board AI::Board::makeMove(move m) const
 	return newBoard;
 }
 
-Board AI::Board::ignoreBack() const
+Board AI::Board::onlyFront() const
 {
 	Board result = *this;
 
 	result.bb[this->_turn] &= this->_turn ? (row2 | row3 | row4) : (row5 | row6 | row7);
 	result.bb[!this->_turn] &= this->_turn ? (row1 | row2 | row3) : (row6 | row7 | row8);
+
+	return result;
+}
+
+Board AI::Board::onlyMiddle() const
+{
+	Board result = *this;
+
+	result.bb[this->_turn] &= this->_turn ? (row4 | row5 | row6) : (row3 | row4 | row5);
+	result.bb[!this->_turn] &= this->_turn ? (row3 | row4 | row5) : (row4 | row5 | row6);
 
 	return result;
 }
