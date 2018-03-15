@@ -3,6 +3,7 @@ guid: bdae6b22634a9c04cafbf3f4592b18f9
 timeCreated: 1501009143
 licenseType: Store
 SubstanceImporter:
+  externalObjects: {}
   serializedVersion: 5
   materialInstances:
   - serializedVersion: 16
@@ -21,6 +22,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: $randomseed
       value:
         scalar[0]: 0
@@ -28,6 +30,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: Hue
       value:
         scalar[0]: 0.5
@@ -35,6 +38,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: Cracks
       value:
         scalar[0]: 0
@@ -42,6 +46,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     materialInformation:
       serializedVersion: 5
       offset: {x: 0, y: 0}
@@ -135,12 +140,12 @@ SubstanceImporter:
       aniso: 1
       wrapMode: 0
     textureAssignments:
-    - shaderProp: _BumpMap
-      material: {instanceID: 0}
-      baseUID: 3892603222
     - shaderProp: _MainTex
       material: {instanceID: 0}
       baseUID: 3892603220
+    - shaderProp: _BumpMap
+      material: {instanceID: 0}
+      baseUID: 3892603222
     - shaderProp: _MetallicGlossMap
       material: {instanceID: 0}
       baseUID: 3892603218
@@ -173,6 +178,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: $randomseed
       value:
         scalar[0]: 0
@@ -180,6 +186,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: Hue
       value:
         scalar[0]: 0.5
@@ -187,6 +194,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: Cracks
       value:
         scalar[0]: 0.3
@@ -194,6 +202,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     materialInformation:
       serializedVersion: 5
       offset: {x: 0, y: 0}
@@ -287,12 +296,12 @@ SubstanceImporter:
       aniso: 1
       wrapMode: 0
     textureAssignments:
-    - shaderProp: _BumpMap
-      material: {instanceID: 0}
-      baseUID: 1896691948
     - shaderProp: _MainTex
       material: {instanceID: 0}
       baseUID: 1896691950
+    - shaderProp: _BumpMap
+      material: {instanceID: 0}
+      baseUID: 1896691948
     - shaderProp: _MetallicGlossMap
       material: {instanceID: 0}
       baseUID: 1896691944
@@ -325,6 +334,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: $randomseed
       value:
         scalar[0]: 0
@@ -332,6 +342,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: Hue
       value:
         scalar[0]: 0.5
@@ -339,6 +350,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: Cracks
       value:
         scalar[0]: 0
@@ -346,6 +358,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     materialInformation:
       serializedVersion: 5
       offset: {x: 0, y: 0}
@@ -439,12 +452,12 @@ SubstanceImporter:
       aniso: 1
       wrapMode: 0
     textureAssignments:
-    - shaderProp: _BumpMap
-      material: {instanceID: 0}
-      baseUID: 101320826
     - shaderProp: _MainTex
       material: {instanceID: 0}
       baseUID: 101320824
+    - shaderProp: _BumpMap
+      material: {instanceID: 0}
+      baseUID: 101320826
     - shaderProp: _MetallicGlossMap
       material: {instanceID: 0}
       baseUID: 101320830
@@ -477,6 +490,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: $randomseed
       value:
         scalar[0]: 0
@@ -484,6 +498,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: Hue
       value:
         scalar[0]: 0.5
@@ -491,6 +506,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: Cracks
       value:
         scalar[0]: 0.08
@@ -498,6 +514,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     materialInformation:
       serializedVersion: 5
       offset: {x: 0, y: 0}
@@ -591,12 +608,12 @@ SubstanceImporter:
       aniso: 1
       wrapMode: 0
     textureAssignments:
-    - shaderProp: _BumpMap
-      material: {instanceID: 0}
-      baseUID: 2557386201
     - shaderProp: _MainTex
       material: {instanceID: 0}
       baseUID: 2557386203
+    - shaderProp: _BumpMap
+      material: {instanceID: 0}
+      baseUID: 2557386201
     - shaderProp: _MetallicGlossMap
       material: {instanceID: 0}
       baseUID: 2557386205
@@ -629,6 +646,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: $randomseed
       value:
         scalar[0]: 0
@@ -636,6 +654,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: Hue
       value:
         scalar[0]: 0.5
@@ -643,6 +662,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: Cracks
       value:
         scalar[0]: 0
@@ -650,6 +670,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     materialInformation:
       serializedVersion: 5
       offset: {x: 0, y: 0}
@@ -743,12 +764,12 @@ SubstanceImporter:
       aniso: 1
       wrapMode: 0
     textureAssignments:
-    - shaderProp: _BumpMap
-      material: {instanceID: 0}
-      baseUID: 4016680271
     - shaderProp: _MainTex
       material: {instanceID: 0}
       baseUID: 4016680269
+    - shaderProp: _BumpMap
+      material: {instanceID: 0}
+      baseUID: 4016680271
     - shaderProp: _MetallicGlossMap
       material: {instanceID: 0}
       baseUID: 4016680267
@@ -781,6 +802,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: $randomseed
       value:
         scalar[0]: 0
@@ -788,6 +810,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: Hue
       value:
         scalar[0]: 0.5
@@ -795,6 +818,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: Cracks
       value:
         scalar[0]: 0
@@ -802,6 +826,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     materialInformation:
       serializedVersion: 5
       offset: {x: 0, y: 0}
@@ -895,12 +920,12 @@ SubstanceImporter:
       aniso: 1
       wrapMode: 0
     textureAssignments:
-    - shaderProp: _BumpMap
-      material: {instanceID: 0}
-      baseUID: 1986067701
     - shaderProp: _MainTex
       material: {instanceID: 0}
       baseUID: 1986067703
+    - shaderProp: _BumpMap
+      material: {instanceID: 0}
+      baseUID: 1986067701
     - shaderProp: _MetallicGlossMap
       material: {instanceID: 0}
       baseUID: 1986067697
@@ -933,6 +958,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: $randomseed
       value:
         scalar[0]: 0
@@ -940,6 +966,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: Hue
       value:
         scalar[0]: 0.5
@@ -947,6 +974,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: Cracks
       value:
         scalar[0]: 0
@@ -954,6 +982,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     materialInformation:
       serializedVersion: 5
       offset: {x: 0, y: 0}
@@ -1047,12 +1076,12 @@ SubstanceImporter:
       aniso: 1
       wrapMode: 0
     textureAssignments:
-    - shaderProp: _BumpMap
-      material: {instanceID: 0}
-      baseUID: 23579747
     - shaderProp: _MainTex
       material: {instanceID: 0}
       baseUID: 23579745
+    - shaderProp: _BumpMap
+      material: {instanceID: 0}
+      baseUID: 23579747
     - shaderProp: _MetallicGlossMap
       material: {instanceID: 0}
       baseUID: 23579751
@@ -1085,6 +1114,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: $randomseed
       value:
         scalar[0]: 0
@@ -1092,6 +1122,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: Hue
       value:
         scalar[0]: 0.5
@@ -1099,6 +1130,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: Cracks
       value:
         scalar[0]: 0
@@ -1106,6 +1138,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     materialInformation:
       serializedVersion: 5
       offset: {x: 0, y: 0}
@@ -1199,12 +1232,12 @@ SubstanceImporter:
       aniso: 1
       wrapMode: 0
     textureAssignments:
-    - shaderProp: _BumpMap
-      material: {instanceID: 0}
-      baseUID: 2446905842
     - shaderProp: _MainTex
       material: {instanceID: 0}
       baseUID: 2446905840
+    - shaderProp: _BumpMap
+      material: {instanceID: 0}
+      baseUID: 2446905842
     - shaderProp: _MetallicGlossMap
       material: {instanceID: 0}
       baseUID: 2446905846
@@ -1237,6 +1270,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: $randomseed
       value:
         scalar[0]: 0
@@ -1244,6 +1278,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: Hue
       value:
         scalar[0]: 0.5
@@ -1251,6 +1286,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: Cracks
       value:
         scalar[0]: 0
@@ -1258,6 +1294,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     materialInformation:
       serializedVersion: 5
       offset: {x: 0, y: 0}
@@ -1351,12 +1388,12 @@ SubstanceImporter:
       aniso: 1
       wrapMode: 0
     textureAssignments:
-    - shaderProp: _BumpMap
-      material: {instanceID: 0}
-      baseUID: 3873431908
     - shaderProp: _MainTex
       material: {instanceID: 0}
       baseUID: 3873431910
+    - shaderProp: _BumpMap
+      material: {instanceID: 0}
+      baseUID: 3873431908
     - shaderProp: _MetallicGlossMap
       material: {instanceID: 0}
       baseUID: 3873431904
@@ -1389,6 +1426,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: $randomseed
       value:
         scalar[0]: 0
@@ -1396,6 +1434,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: Hue
       value:
         scalar[0]: 0.5
@@ -1403,6 +1442,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     - name: Cracks
       value:
         scalar[0]: 0
@@ -1410,6 +1450,7 @@ SubstanceImporter:
         scalar[2]: 0
         scalar[3]: 0
         texture: {instanceID: 0}
+        stringvalue: 
     materialInformation:
       serializedVersion: 5
       offset: {x: 0, y: 0}
@@ -1503,12 +1544,12 @@ SubstanceImporter:
       aniso: 1
       wrapMode: 0
     textureAssignments:
-    - shaderProp: _BumpMap
-      material: {instanceID: 0}
-      baseUID: 906997699
     - shaderProp: _MainTex
       material: {instanceID: 0}
       baseUID: 906997697
+    - shaderProp: _BumpMap
+      material: {instanceID: 0}
+      baseUID: 906997699
     - shaderProp: _MetallicGlossMap
       material: {instanceID: 0}
       baseUID: 906997703
