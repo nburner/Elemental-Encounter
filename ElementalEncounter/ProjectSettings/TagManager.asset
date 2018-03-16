@@ -8,6 +8,9 @@ TagManager:
   - Music
   - FireCamera
   - IceCamera
+  - FireTerrain
+  - IceTerrain
+  - MixedTerrain
   layers:
   - Default
   - TransparentFX
