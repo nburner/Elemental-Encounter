@@ -36,8 +36,8 @@ namespace NetworkGame
 
         void Awake()
         {
-            // No need to be in lobby to view list of available games
-            PhotonNetwork.autoJoinLobby = false;
+            // We need this to be true becuase we do NOT want random matchmaking
+            PhotonNetwork.autoJoinLobby = true;
             
             // Allows all clients in same room to have their levels synced
             PhotonNetwork.automaticallySyncScene = true;
@@ -61,6 +61,7 @@ namespace NetworkGame
             progressLabel.SetActive(false);
             hostGamePanel.SetActive(false);
             connectToGamePanel.SetActive(false);
+            Connect();
         }
 
         #endregion
@@ -75,11 +76,9 @@ namespace NetworkGame
             isConnecting = true;
             //progressLabel.SetActive(true);
             optionsPanel.SetActive(false);
-
-            //If connected, join random room
+            
             if (PhotonNetwork.connected)
             {
-                //PhotonNetwork.JoinRandomRoom();
                 optionsPanel.SetActive(false);
                 hostGamePanel.SetActive(true);
             }
@@ -97,16 +96,11 @@ namespace NetworkGame
             progressLabel.SetActive(true);
         }
 
-        public override void OnConnectedToMaster()
+        public override void OnJoinedLobby()
         {
-            Debug.Log("OnConnectedToMaster() called.");
-            if (isConnecting)
-            {
-                // #Critical: The first we try to do is to join a potential existing room. If there is, good, else, we'll be called back with OnPhotonRandomJoinFailed()
-                //PhotonNetwork.JoinRandomRoom();
-                optionsPanel.SetActive(false);
-                hostGamePanel.SetActive(true);
-            }
+            Debug.Log("OnJoinedLobby() called.");
+            optionsPanel.SetActive(false);
+            hostGamePanel.SetActive(true);
         }
 
         public override void OnDisconnectedFromPhoton()
