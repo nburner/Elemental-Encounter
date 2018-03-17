@@ -15,11 +15,7 @@ namespace NetworkGame
         #region Public Variables
         public PhotonLogLevel LogLevel = PhotonLogLevel.ErrorsOnly;
         public byte MaxPlayersPerRoom = 2;
-        public GameObject controlPanel;
-        public GameObject progressLabel;
-        public GameObject optionsPanel;
-        public GameObject hostGamePanel;
-        public GameObject connectToGamePanel;
+        public LobbyCanvas lc;
         public InputField roomName;
 
         #endregion
@@ -56,11 +52,8 @@ namespace NetworkGame
 
         void Start()
         {
-            //controlPanel.SetActive(true);
-            optionsPanel.SetActive(true);
-            progressLabel.SetActive(false);
-            hostGamePanel.SetActive(false);
-            connectToGamePanel.SetActive(false);
+            lc = GameObject.Find("Canvas").GetComponent<LobbyCanvas>();
+            lc.DisplayProgressPanel();
             Connect();
         }
 
@@ -73,16 +66,8 @@ namespace NetworkGame
         /// </summary>
         public void Connect()
         {
-            isConnecting = true;
-            //progressLabel.SetActive(true);
-            optionsPanel.SetActive(false);
-            
-            if (PhotonNetwork.connected)
-            {
-                optionsPanel.SetActive(false);
-                hostGamePanel.SetActive(true);
-            }
-            else
+            isConnecting = true;            
+            if (!PhotonNetwork.connected)
             {
                 //Connect to online server
                 PhotonNetwork.ConnectUsingSettings(_gameVersion);
@@ -92,39 +77,30 @@ namespace NetworkGame
         public void CreateNewRoom()
         {
             PhotonNetwork.CreateRoom(roomName.text, new RoomOptions() { MaxPlayers = MaxPlayersPerRoom }, null);
-            hostGamePanel.SetActive(false);
-            progressLabel.SetActive(true);
+            lc.DisplayProgressPanel();
+        }
+
+        public void JoinARoom()
+        {
+            lc.DisplayJoinRoomPanel();
         }
 
         public override void OnJoinedLobby()
         {
-            Debug.Log("OnJoinedLobby() called.");
-            optionsPanel.SetActive(false);
-            hostGamePanel.SetActive(true);
+            lc.DisplayOptionsPanel();
         }
 
         public override void OnDisconnectedFromPhoton()
         {
-            progressLabel.SetActive(true);
-            controlPanel.SetActive(false);
-            Debug.LogWarning("OnDisconnectedFromPhoton() called.");
-        }
-
-        public override void OnPhotonRandomJoinFailed(object[] codeAndMsg)
-        {
-            PhotonNetwork.CreateRoom(null, new RoomOptions() { MaxPlayers = MaxPlayersPerRoom }, null);
+            lc.DisplayProgressPanel();
         }
 
         public override void OnJoinedRoom()
         {
-            // #Critical: We only load if we are the first player, else we rely on  PhotonNetwork.automaticallySyncScene to sync our instance scene.
-            if (PhotonNetwork.room.PlayerCount == 2)
+            lc.DisplayProgressPanel();
+            if (PhotonNetwork.room.PlayerCount == MaxPlayersPerRoom)
             {
-                // #Critical
-                // Load the Room Level. 
                 PhotonNetwork.LoadLevel("BreakGame");
-                gameCore.isMasterClient = true;
-                gameCore.isSinglePlayer = true;
             }
         }
 

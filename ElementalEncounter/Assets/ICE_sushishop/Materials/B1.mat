@@ -72,16 +72,16 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.64
     - _GlossyReflections: 1
-    - _Ice_fresnel: 3
+    - _Ice_fresnel: 2.94
     - _LocalGlobal: 0
-    - _Metallic: 0
+    - _Metallic: 0.16
     - _Mode: 3
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _Transparency: -0.049
+    - _Transparency: 0.1
     - _UVSec: 0
     - _ZWrite: 0
     - _snow_slider: 6.36
