@@ -5,11 +5,9 @@ using UnityEngine;
 public class LobbyCanvas : MonoBehaviour
 {
     [Header("Set in Inspector")]
-    public GameObject controlPanel;
-    public GameObject progressLabel;
-    public GameObject optionsPanel;
-    public GameObject createRoomPanel;
-    public GameObject joinRoomPanel;
+    public GameObject menuPanel;
+    public GameObject hostGamePanel;
+    public GameObject joinGamePanel;
 
     // Use this for initialization
     void Start ()
@@ -17,39 +15,24 @@ public class LobbyCanvas : MonoBehaviour
 		
 	}
 
-    public void DisplayOptionsPanel()
+    public void DisplayMenuPanel()
     {
-        optionsPanel.SetActive(true);
-        controlPanel.SetActive(false);
-        progressLabel.SetActive(false);
-        createRoomPanel.SetActive(false);
-        joinRoomPanel.SetActive(false);
+        menuPanel.SetActive(true);
+        hostGamePanel.SetActive(false);
+        joinGamePanel.SetActive(false);
     }
 
-    public void DisplayProgressPanel()
+    public void DisplayHostGamePanel()
     {
-        optionsPanel.SetActive(false);
-        controlPanel.SetActive(false);
-        progressLabel.SetActive(true);
-        createRoomPanel.SetActive(false);
-        joinRoomPanel.SetActive(false);
+        menuPanel.SetActive(false);
+        hostGamePanel.SetActive(true);
+        joinGamePanel.SetActive(false);
     }
 
-    public void DisplayCreateRoomPanel()
+    public void DisplayJoinGamePanel()
     {
-        optionsPanel.SetActive(false);
-        controlPanel.SetActive(false);
-        progressLabel.SetActive(false);
-        createRoomPanel.SetActive(true);
-        joinRoomPanel.SetActive(false);
-    }
-
-    public void DisplayJoinRoomPanel()
-    {
-        optionsPanel.SetActive(false);
-        controlPanel.SetActive(false);
-        progressLabel.SetActive(false);
-        createRoomPanel.SetActive(false);
-        joinRoomPanel.SetActive(true);
+        menuPanel.SetActive(false);
+        hostGamePanel.SetActive(false);
+        joinGamePanel.SetActive(true);
     }
 }

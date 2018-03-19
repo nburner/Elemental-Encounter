@@ -5,36 +5,28 @@ namespace NetworkGame
 {
     public class Launcher : Photon.PunBehaviour 
     {
-        /// <summary>
-        /// Keep track of the current process. Since connection is asynchronous and is based on several callbacks from Photon, 
-        /// we need to keep track of this to properly adjust the behavior when we receive call back by Photon.
-        /// Typically this is used for the OnConnectedToMaster() callback.
-        /// </summary>
-        bool isConnecting;
 
         #region Public Variables
         public PhotonLogLevel LogLevel = PhotonLogLevel.ErrorsOnly;
         public byte MaxPlayersPerRoom = 2;
         public LobbyCanvas lc;
-        public InputField roomName;
 
         #endregion
 
         #region Private Variables
+
         // Update the game version everytime we create a new install
         private string _gameVersion = "0.1.0";
         private GameCore gameCore;
 
         #endregion
 
-
         #region MonoBehaviour CallBacks
 
         void Awake()
         {
-            // We need this to be true becuase we do NOT want random matchmaking
-            PhotonNetwork.autoJoinLobby = true;
-            
+            // Speeds up client connection
+            PhotonNetwork.autoJoinLobby = false;            
             // Allows all clients in same room to have their levels synced
             PhotonNetwork.automaticallySyncScene = true;
 
@@ -53,7 +45,6 @@ namespace NetworkGame
         void Start()
         {
             lc = GameObject.Find("Canvas").GetComponent<LobbyCanvas>();
-            lc.DisplayProgressPanel();
             Connect();
         }
 
@@ -62,11 +53,10 @@ namespace NetworkGame
         #region Public Methods
 
         /// <summary>
-        /// Attempt connection to Photon Cloud Network. If already connected, join random room.
+        /// Attempt connection to Photon Cloud Network.
         /// </summary>
         public void Connect()
         {
-            isConnecting = true;            
             if (!PhotonNetwork.connected)
             {
                 //Connect to online server
@@ -74,30 +64,33 @@ namespace NetworkGame
             }
         }
 
-        public void CreateNewRoom()
+        public void OnHostGame_Click()
         {
-            PhotonNetwork.CreateRoom(roomName.text, new RoomOptions() { MaxPlayers = MaxPlayersPerRoom }, null);
-            lc.DisplayProgressPanel();
+            PhotonNetwork.CreateRoom("Test", new RoomOptions() { MaxPlayers = MaxPlayersPerRoom }, null);
         }
 
-        public void JoinARoom()
+        public void OnJoinGame_Click()
         {
-            lc.DisplayJoinRoomPanel();
+            lc.DisplayJoinGamePanel();
         }
 
-        public override void OnJoinedLobby()
+        public override void OnConnectedToMaster()
         {
-            lc.DisplayOptionsPanel();
+            lc.DisplayMenuPanel();
         }
 
         public override void OnDisconnectedFromPhoton()
         {
-            lc.DisplayProgressPanel();
+
+        }
+
+        public override void OnCreatedRoom()
+        {
+            Debug.Log("Room created successfully.");
         }
 
         public override void OnJoinedRoom()
         {
-            lc.DisplayProgressPanel();
             if (PhotonNetwork.room.PlayerCount == MaxPlayersPerRoom)
             {
                 PhotonNetwork.LoadLevel("BreakGame");
