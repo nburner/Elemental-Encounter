@@ -8,6 +8,7 @@ public class LobbyCanvas : MonoBehaviour
     public GameObject menuPanel;
     public GameObject hostGamePanel;
     public GameObject joinGamePanel;
+    public GameObject connectionGamePanel;
 
     // Use this for initialization
     void Start ()
@@ -20,6 +21,7 @@ public class LobbyCanvas : MonoBehaviour
         menuPanel.SetActive(true);
         hostGamePanel.SetActive(false);
         joinGamePanel.SetActive(false);
+        connectionGamePanel.SetActive(false);
     }
 
     public void DisplayHostGamePanel()
@@ -27,6 +29,7 @@ public class LobbyCanvas : MonoBehaviour
         menuPanel.SetActive(false);
         hostGamePanel.SetActive(true);
         joinGamePanel.SetActive(false);
+        connectionGamePanel.SetActive(false);
     }
 
     public void DisplayJoinGamePanel()
@@ -34,5 +37,14 @@ public class LobbyCanvas : MonoBehaviour
         menuPanel.SetActive(false);
         hostGamePanel.SetActive(false);
         joinGamePanel.SetActive(true);
+        connectionGamePanel.SetActive(false);
+    }
+
+    public void DisplayConnectionPanel()
+    {
+        menuPanel.SetActive(false);
+        hostGamePanel.SetActive(false);
+        joinGamePanel.SetActive(true);
+        connectionGamePanel.SetActive(false);
     }
 }

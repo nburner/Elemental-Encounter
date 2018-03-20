@@ -64,24 +64,41 @@ namespace NetworkGame
             }
         }
 
+        #region Button Click Methods
+
         public void OnHostGame_Click()
         {
             PhotonNetwork.CreateRoom("Test", new RoomOptions() { MaxPlayers = MaxPlayersPerRoom }, null);
+            lc.DisplayHostGamePanel();
         }
 
         public void OnJoinGame_Click()
         {
             lc.DisplayJoinGamePanel();
+            PhotonNetwork.JoinRandomRoom();
         }
 
+        #endregion
+
+        #region Photon Methods
+
+        /// <summary>
+        /// Called when PhotonNetwork.autoJoinLobby is set to false.
+        /// </summary>
         public override void OnConnectedToMaster()
         {
+            Debug.Log("Connected to Photon server.");
             lc.DisplayMenuPanel();
         }
 
         public override void OnDisconnectedFromPhoton()
         {
+            Debug.Log("Disconnected from Photon server.");
+        }
 
+        public override void OnFailedToConnectToPhoton(DisconnectCause cause)
+        {
+            Debug.Log(cause);
         }
 
         public override void OnCreatedRoom()
@@ -89,6 +106,11 @@ namespace NetworkGame
             Debug.Log("Room created successfully.");
         }
 
+        /// <summary>
+        /// Called when a player has joined a room. When two players have connected, load the game scene.
+        /// The level will automatically load for both the MasterClient and the Client because
+        /// PhotonNetwork.automaticallySyncScene is set to true.
+        /// </summary>
         public override void OnJoinedRoom()
         {
             if (PhotonNetwork.room.PlayerCount == MaxPlayersPerRoom)
@@ -96,6 +118,13 @@ namespace NetworkGame
                 PhotonNetwork.LoadLevel("BreakGame");
             }
         }
+
+        public override void OnPhotonRandomJoinFailed(object[] codeAndMsg)
+        {
+            Debug.Log("Failed to join random room.");
+        }
+
+        #endregion
 
         #endregion
     }
