@@ -144,7 +144,8 @@ move AI::Seeker::operator()(const Board b) const
 	move seekResult = deepTimedSeek(b.onlyFront(), SEEK_WIN);
 	cout << "Seek took " << t.read() << " and returned " << BoardHelpers::to_string(seekResult) << endl;
 
-	double savedTime = std::max(.0, SEEK_WIN - t.read());
+	//double savedTime = std::max(.0, SEEK_WIN - t.read());
+	double savedTime = 0;
 	
 	//Suppose you couldn't find a way to victory
 	if (seekResult.first == seekResult.second) {
@@ -185,7 +186,7 @@ move AI::Seeker::operator()(const Board b) const
 	else {
 	//See if your enemy will have a way to victory after your move
 		move test = deepTimedSeek(b.makeMove(seekResult).onlyFront(), SEEK_OPPONENT_WIN_SHORT + savedTime);
-		savedTime = std::max(.0, SEEK_OPPONENT_WIN_SHORT + SEEK_WIN - t.read());
+		//savedTime = std::max(.0, SEEK_OPPONENT_WIN_SHORT + SEEK_WIN - t.read());		
 	//If they don't, good for you!
 		if (test.first == test.second) {
 			cout << "This move took: " << t.read() << " seconds" << endl;
