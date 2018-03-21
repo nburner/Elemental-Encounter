@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SeekerOptimization", "SeekerOptimization.vcxproj", "{7092F7F6-FAF0-4560-8D12-E57DE4969074}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7092F7F6-FAF0-4560-8D12-E57DE4969074}.Debug|x64.ActiveCfg = Debug|x64
+		{7092F7F6-FAF0-4560-8D12-E57DE4969074}.Debug|x64.Build.0 = Debug|x64
+		{7092F7F6-FAF0-4560-8D12-E57DE4969074}.Debug|x86.ActiveCfg = Debug|Win32
+		{7092F7F6-FAF0-4560-8D12-E57DE4969074}.Debug|x86.Build.0 = Debug|Win32
+		{7092F7F6-FAF0-4560-8D12-E57DE4969074}.Release|x64.ActiveCfg = Release|x64
+		{7092F7F6-FAF0-4560-8D12-E57DE4969074}.Release|x64.Build.0 = Release|x64
+		{7092F7F6-FAF0-4560-8D12-E57DE4969074}.Release|x86.ActiveCfg = Release|Win32
+		{7092F7F6-FAF0-4560-8D12-E57DE4969074}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DABF4ABC-2F58-4DF1-A0BD-CA86AB10482F}
+	EndGlobalSection
+EndGlobal
