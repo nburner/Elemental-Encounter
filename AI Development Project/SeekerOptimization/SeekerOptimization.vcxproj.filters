@@ -13,5 +13,54 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\External Code">
+      <UniqueIdentifier>{3afa7569-2753-4552-9ff1-27ba2650c61f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\External Code">
+      <UniqueIdentifier>{55a0a6f5-e10b-4921-8638-a3fc11e15020}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CSharpSolution\AILibrary\Board.cpp">
+      <Filter>Source Files\External Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CSharpSolution\AILibrary\FeatureFunctions.cpp">
+      <Filter>Source Files\External Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CSharpSolution\AILibrary\MemoryPet.cpp">
+      <Filter>Source Files\External Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CSharpSolution\AILibrary\Pet.cpp">
+      <Filter>Source Files\External Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CSharpSolution\AILibrary\Prune.cpp">
+      <Filter>Source Files\External Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CSharpSolution\AILibrary\Seeker.cpp">
+      <Filter>Source Files\External Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CSharpSolution\AILibrary\TestPet.cpp">
+      <Filter>Source Files\External Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CSharpSolution\AILibrary\timer.cpp">
+      <Filter>Source Files\External Code</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\CSharpSolution\AILibrary\Board.h">
+      <Filter>Header Files\External Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CSharpSolution\AILibrary\FeatureFunctions.h">
+      <Filter>Header Files\External Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CSharpSolution\AILibrary\timer.h">
+      <Filter>Header Files\External Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CSharpSolution\AILibrary\AI.h">
+      <Filter>Header Files\External Code</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -115,6 +115,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\CSharpSolution\AILibrary\Board.cpp" />
+    <ClCompile Include="..\..\CSharpSolution\AILibrary\FeatureFunctions.cpp" />
+    <ClCompile Include="..\..\CSharpSolution\AILibrary\MemoryPet.cpp" />
+    <ClCompile Include="..\..\CSharpSolution\AILibrary\Pet.cpp" />
+    <ClCompile Include="..\..\CSharpSolution\AILibrary\Prune.cpp" />
+    <ClCompile Include="..\..\CSharpSolution\AILibrary\Seeker.cpp" />
+    <ClCompile Include="..\..\CSharpSolution\AILibrary\TestPet.cpp" />
+    <ClCompile Include="..\..\CSharpSolution\AILibrary\timer.cpp" />
+    <ClCompile Include="Source.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\CSharpSolution\AILibrary\AI.h" />
+    <ClInclude Include="..\..\CSharpSolution\AILibrary\Board.h" />
+    <ClInclude Include="..\..\CSharpSolution\AILibrary\FeatureFunctions.h" />
+    <ClInclude Include="..\..\CSharpSolution\AILibrary\timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

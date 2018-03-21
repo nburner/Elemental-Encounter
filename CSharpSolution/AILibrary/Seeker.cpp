@@ -1,7 +1,9 @@
 #include "AI.h"
 #include "timer.h"
+#include <fstream>
 
 using namespace AI;
+using std::ifstream; using std::ofstream;
 typedef vector<Board>::iterator BoardIterator;
 
 static int seekDepth = INT_MAX;
@@ -108,11 +110,10 @@ move seek(const Board& b, int movesMade, const timer& time) {
 move Seeker::deepTimedSeek(const Board& b, double time, int depth = 40) const {
 	move seekResult = { A1, A1 };
 	timer seekTimer; seekTimer.start(); seekTime = time;
-	for (seekDepth = 2; seekDepth < MAX_SEEK_DEPTH && seekTimer.read() < seekTime; seekDepth++) {
+	for (seekDepth = 2; seekDepth < MAX_SEEK_DEPTH && seekTimer.read() < seekTime && cutShortByDepth; seekDepth++) {
 		cutShortByDepth = false;
 		move newResult = seek(b, 0, seekTimer);
 		seekResult = newResult.first == newResult.second ? seekResult : newResult;
-		if (!cutShortByDepth) break;
 	}
 	return seekResult;
 }
@@ -230,5 +231,40 @@ move AI::Seeker::operator()(const Board b) const
 	//if (t.read() > 6) 
 		cout << "This move took: " << t.read() << " seconds" << endl;
 	return std::max_element(boards.begin(), boards.end(), valueComparer)->lastMove;
+}
+
+void AI::Seeker::readWeights(int k)
+{
+	ifstream fin("weights" + std::to_string(k) + ".save");
+
+	if (fin.is_open())
+		for (int i = 0; i < NULL_FEATURE; i++)
+			for (int j = 0; j < NULL_FEATURE; j++) {
+				int _;
+				fin >> _;
+				weights[i][j] = _;
+			}
+	else throw std::invalid_argument("weights" + std::to_string(k) + ".save not found");
+}
+
+void AI::Seeker::writeWeights(int k)
+{
+	ofstream fout("weights" + std::to_string(k) + ".save");
+	for (int i = 0; i < NULL_FEATURE; i++) {
+		for (int j = 0; j < NULL_FEATURE; j++)
+			fout << std::to_string(weights[i][j]) << ' ';
+		fout << std::endl;
+	}
+}
+
+bool AI::Seeker::adjustWeight(BoardFeature f1, BoardFeature f2, int i)
+{
+	if ((weights[f1][f2] >= 127 && i > 0) || (weights[f1][f2] <= -127 && i < 0))return false;
+
+	weights[f1][f2] += i;
+	weights[f1][f2] = std::max(weights[f1][f2], (char)-127);
+	weights[f1][f2] = std::min(weights[f1][f2], (char)127);
+
+	return i != 0;
 }
 

@@ -113,12 +113,12 @@ namespace AI {
 	class Seeker : public Prune {
 	protected:
 		//int alphabeta(Board board, int currentPly) const;
-		int MAX_SEEK_DEPTH 			;
-		double FINAL_ALPHA_BETA_TIME 	;
-		double SEEK_WIN 				;
-		double SEEK_OPPONENT_WIN_SHORT ;
-		double SEEK_OPPONENT_WIN_LONG 	;
-		double SEEK_BLOCKING_MOVE 		;
+		int MAX_SEEK_DEPTH;
+		double FINAL_ALPHA_BETA_TIME;
+		double SEEK_WIN;
+		double SEEK_OPPONENT_WIN_SHORT;
+		double SEEK_OPPONENT_WIN_LONG;
+		double SEEK_BLOCKING_MOVE;
 		mutable timer t;
 		move deepTimedSeek(const Board & b, double time, int depth) const;
 
@@ -127,5 +127,9 @@ namespace AI {
 		Seeker(int);
 		Seeker(std::string hinter);
 		virtual move operator()(const Board b) const;
+
+		void readWeights(int);
+		void writeWeights(int);
+		bool adjustWeight(BoardFeature, BoardFeature, int);
 	};
 }
