@@ -6,8 +6,7 @@ typedef vector<Board>::iterator BoardIterator;
 
 static int seekDepth = INT_MAX;
 static double seekTime = 4;
-
-
+static bool cutShortByDepth = true;
 
 AI::Seeker::Seeker()
 {
@@ -66,7 +65,7 @@ bool stop(const Board& b, int movesMade, const timer& time) {
 		if (m.first == m.second) return true;
 	}
 
-	b.movesBeforeWin = maxMovesBeforeWin;
+	b.movesBeforeWin = maxMovesBeforeWin + 1;
 	return false;
 }
 
@@ -78,7 +77,10 @@ move seek(const Board& b, int movesMade, const timer& time) {
 	}
 	
 	//Seek Depth anchor point
-	if (++movesMade == seekDepth) return { A1, A1 };
+	if (++movesMade == seekDepth) {
+		cutShortByDepth = true;
+		return { A1, A1 };
+	}
 
 	//Timer break point
 	if (time.read() > seekTime) return { A1, A1 }; 
@@ -87,7 +89,7 @@ move seek(const Board& b, int movesMade, const timer& time) {
 	if (b.hasPawns(b.turn()) && !b.hasPawns(Turn(!b.turn()))) {
 		Square from = b.furthestPiece(b.turn() ? BLACK : WHITE);
 		Square to = Square(from + (b.turn() ? SOUTH : NORTH));
-		b.movesBeforeWin = 7 - from / 8;
+		b.movesBeforeWin = b.turn() ? from / 8 : 7 - from / 8;
 		return { from, to };
 	}
 	
@@ -103,16 +105,30 @@ move seek(const Board& b, int movesMade, const timer& time) {
 	return { A1, A1 };
 }
 
-move Seeker::deepTimedSeek(const Board& b, double time, int depth = 20) const {
+move Seeker::deepTimedSeek(const Board& b, double time, int depth = 40) const {
 	move seekResult = { A1, A1 };
 	timer seekTimer; seekTimer.start(); seekTime = time;
 	for (seekDepth = 2; seekDepth < MAX_SEEK_DEPTH && seekTimer.read() < seekTime; seekDepth++) {
+		cutShortByDepth = false;
 		move newResult = seek(b, 0, seekTimer);
 		seekResult = newResult.first == newResult.second ? seekResult : newResult;
+		if (!cutShortByDepth) break;
 	}
 	return seekResult;
 }
 
+//Decent outline of flow of this method:
+// - Win (no time)
+// - Seek to Win (SEEK_WIN)
+// ~ No way to win
+//    - Seek opponent's win after your move (SEEK_OPPONENT_WIN_LONG)
+//    - Alphabeta eval remaining moves (FINAL_ALPHA_BETA_TIME aka all remaining time)
+// ~ Some way to win
+//    - Seek opponent's win after your move (SEEK_OPPONENT_WIN_SHORT)
+//    ~ If they do have a way to win
+//       - Look for a way to block them (whatever that means) (SEEK_BLOCKING_MOVE)
+//       ~ If there's a way to block them
+//         - Alphabeta eval remaining moves (FINAL_ALPHA_BETA_TIME aka all remaining time)
 move AI::Seeker::operator()(const Board b) const
 {
 	t.reset(); 
@@ -127,15 +143,15 @@ move AI::Seeker::operator()(const Board b) const
 	//If you can't, look for a way to win
 	move seekResult = deepTimedSeek(b.onlyFront(), SEEK_WIN);
 	cout << "Seek took " << t.read() << " and returned " << BoardHelpers::to_string(seekResult) << endl;
-	if (t.read() < SEEK_WIN && seekResult.first == seekResult.second) seekResult = deepTimedSeek(b.onlyMiddle(), SEEK_WIN - t.read(), 40);
-	cout << "Mid Seek took " << t.read() << " and returned " << BoardHelpers::to_string(seekResult) << endl;
 
+	double savedTime = std::max(.0, SEEK_WIN - t.read());
+	
 	//Suppose you couldn't find a way to victory
 	if (seekResult.first == seekResult.second) {
 	//Then look at all the possible moves
 		boards = b.validNextBoards();
 	//And ignore all the ones that would cause your enemy to win
-		double allottedTime = SEEK_OPPONENT_WIN_LONG / boards.size();
+		double allottedTime = (SEEK_OPPONENT_WIN_LONG + savedTime) / boards.size();
 		for (auto it = boards.begin(); it != boards.end(); ) {
 			move test = deepTimedSeek(it->onlyFront(), allottedTime);
 			if (test.first != test.second) it = boards.erase(it);
@@ -144,11 +160,19 @@ move AI::Seeker::operator()(const Board b) const
 	//If there are no remaining options then sucks to suck lol, just race
 	//TODO - Currently this makes it obvious (to me at least) that you've got a solid victory lined up. I need a better defensive ploy too.
 		if (boards.empty()) {
-			cout << "This move took: " << t.read() << " seconds" << endl;
+			move result;
+	//NO! No more just racing! Now we attack! And if we can't then we race :P
+			boards = b.validAttackBoards();
+
+			if (!boards.empty()) result = boards[0].lastMove;
+			else {
+				result.first = b.furthestPiece(b.turn() ? BLACK : WHITE);
+				result.second = Square(result.first + (b.turn() ? SOUTH : NORTH) + (result.first % 8 == 0 ? EAST : WEST));
+			}			
+
 			cout << "Seeker: I think I'm screwed" << endl;
-			Square from = b.furthestPiece(b.turn() ? BLACK : WHITE);
-			Square to = Square(from + (b.turn() ? SOUTH : NORTH) + (from%8 == 0 ? EAST : WEST));
-			return { from, to };
+			cout << "This move took: " << t.read() << " seconds" << endl;
+			return result;
 		}
 	//Otherwise evaluate your remaining options
 		for (int i = 0; i < boards.size(); i++) {
@@ -160,7 +184,8 @@ move AI::Seeker::operator()(const Board b) const
 	//But if there is a way to victory, ensure it doesn't cost you the game
 	else {
 	//See if your enemy will have a way to victory after your move
-		move test = deepTimedSeek(b.makeMove(seekResult).onlyFront(), SEEK_OPPONENT_WIN_SHORT);
+		move test = deepTimedSeek(b.makeMove(seekResult).onlyFront(), SEEK_OPPONENT_WIN_SHORT + savedTime);
+		savedTime = std::max(.0, SEEK_OPPONENT_WIN_SHORT + SEEK_WIN - t.read());
 	//If they don't, good for you!
 		if (test.first == test.second) {
 			cout << "This move took: " << t.read() << " seconds" << endl;
@@ -171,7 +196,7 @@ move AI::Seeker::operator()(const Board b) const
 		else {
 			boards = b.validNextBoards();
 			int maxMovesToWin = 0; int minMovesToWin = 165; move bestShot = { A1, A1 };
-			double allottedTime = SEEK_BLOCKING_MOVE / boards.size();
+			double allottedTime = (SEEK_BLOCKING_MOVE + savedTime) / boards.size();
 			for (auto it = boards.begin(); it != boards.end(); ) {
 				move test = deepTimedSeek(it->onlyFront(), allottedTime);
 				if (test.first != test.second) { 
