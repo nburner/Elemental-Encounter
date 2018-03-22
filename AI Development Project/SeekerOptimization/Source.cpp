@@ -18,12 +18,14 @@ void evaluate(Specimen& s, bool black = true) {
 
 	while (++turnCount && !board.gameOver()) board.makeMove((*players[(turnCount + 1) % 2])(board));
 
-	s.second = turnCount - 1;
+	if (turnCount-- % 2 == black) s.second = INT_MIN - turnCount;
+	else s.second = INT_MIN + turnCount;
 
 	delete players[!black];
 }
 
 void main() {
+	srand(time(NULL));
 	bool alreadyMaxed[NULL_FEATURE][NULL_FEATURE] = { 0 };
 	int maxedCount = 0;
 	int bestScoreEvaa = INT_MIN;
@@ -40,12 +42,13 @@ void main() {
 		}
 	
 	while (maxedCount < NULL_FEATURE * NULL_FEATURE) {
-		//Then we evaluate them all
+		//Then we evaluate them all, well, not all anymore
 #pragma omp parallel for
 		for (int i = 0; i < NULL_FEATURE; i++)
 			for (int j = 0; j < NULL_FEATURE; j++)
 				if (!alreadyMaxed[i][j])
-					evaluate(weebs[i*NULL_FEATURE + j]);
+					if (rand() % 100 <= 400.0 / (NULL_FEATURE*NULL_FEATURE - maxedCount))
+						evaluate(weebs[i*NULL_FEATURE + j]);
 
 		//Then we see who did the best and is not already maxed
 		std::pair<int, int> best; int bestScore = INT_MIN;
@@ -71,6 +74,7 @@ void main() {
 				}
 
 		//Then we repeat
+		if (maxedCount % NULL_FEATURE == 1) bump = ++bump * .9375;
 		cout << "Repetition is good for the soul" << endl;
 	}
 
