@@ -10,6 +10,8 @@ static int seekDepth = INT_MAX;
 static double seekTime = 4;
 static bool cutShortByDepth = true;
 
+static bool verbose = false;
+
 AI::Seeker::Seeker()
 {
 	t.start();
@@ -137,13 +139,13 @@ move AI::Seeker::operator()(const Board b) const
 	//Always win if you can
 	auto boards = b.validWinBoards();
 	if (!boards.empty()) {
-		cout << "This move took: " << t.read() << " seconds" << endl;
+		if(verbose) cout << "This move took: " << t.read() << " seconds" << endl;
 		return boards[0].lastMove;
 	}
 	
 	//If you can't, look for a way to win
 	move seekResult = deepTimedSeek(b.onlyFront(), SEEK_WIN);
-	cout << "Seek took " << t.read() << " and returned " << BoardHelpers::to_string(seekResult) << endl;
+	if (verbose) cout << "Seek took " << t.read() << " and returned " << BoardHelpers::to_string(seekResult) << endl;
 
 	//double savedTime = std::max(.0, SEEK_WIN - t.read());
 	double savedTime = 0;
@@ -172,8 +174,8 @@ move AI::Seeker::operator()(const Board b) const
 				result.second = Square(result.first + (b.turn() ? SOUTH : NORTH) + (result.first % 8 == 0 ? EAST : WEST));
 			}			
 
-			cout << "Seeker: I think I'm screwed" << endl;
-			cout << "This move took: " << t.read() << " seconds" << endl;
+			if (verbose) cout << "Seeker: I think I'm screwed" << endl;
+			if (verbose) cout << "This move took: " << t.read() << " seconds" << endl;
 			return result;
 		}
 	//Otherwise evaluate your remaining options
@@ -190,8 +192,8 @@ move AI::Seeker::operator()(const Board b) const
 		//savedTime = std::max(.0, SEEK_OPPONENT_WIN_SHORT + SEEK_WIN - t.read());		
 	//If they don't, good for you!
 		if (test.first == test.second) {
-			cout << "This move took: " << t.read() << " seconds" << endl;
-			cout << "Seeker: I've got you now!" << endl;
+			if (verbose) cout << "This move took: " << t.read() << " seconds" << endl;
+			if (verbose) cout << "Seeker: I've got you now!" << endl;
 			return seekResult;
 		}
 	//If they do, see if there is a way to stop them
@@ -213,7 +215,7 @@ move AI::Seeker::operator()(const Board b) const
 			}
 	//If there's no way to stop them...
 			if (boards.empty()) {
-				cout << "This move took: " << t.read() << " seconds" << endl;
+				if (verbose) cout << "This move took: " << t.read() << " seconds" << endl;
 				//Maybe we can beat them to it
 				if (minMovesToWin >= b.movesBeforeWin) return seekResult;
 				//Maybe we can try to slow them down
@@ -229,7 +231,7 @@ move AI::Seeker::operator()(const Board b) const
 	}
 
 	//if (t.read() > 6) 
-		cout << "This move took: " << t.read() << " seconds" << endl;
+	if (verbose) cout << "This move took: " << t.read() << " seconds" << endl;
 	return std::max_element(boards.begin(), boards.end(), valueComparer)->lastMove;
 }
 
@@ -257,14 +259,18 @@ void AI::Seeker::writeWeights(int k)
 	}
 }
 
+const int MIN_WEIGHT = -128;
+const int MAX_WEIGHT = 127;
+
 bool AI::Seeker::adjustWeight(BoardFeature f1, BoardFeature f2, int i)
 {
-	if ((weights[f1][f2] >= 127 && i > 0) || (weights[f1][f2] <= -127 && i < 0))return false;
-
-	weights[f1][f2] += i;
-	weights[f1][f2] = std::max(weights[f1][f2], (char)-127);
-	weights[f1][f2] = std::min(weights[f1][f2], (char)127);
-
+	if ((weights[f1][f2] >= MAX_WEIGHT && i > 0) || (weights[f1][f2] <= MIN_WEIGHT && i < 0)) return false;
+	
+	int result = weights[f1][f2] + i;
+	result = std::max(result, MIN_WEIGHT);
+	result = std::min(result, MAX_WEIGHT);
+	
+	weights[f1][f2] = result;
 	return i != 0;
 }
 

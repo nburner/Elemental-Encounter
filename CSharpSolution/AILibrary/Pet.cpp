@@ -62,6 +62,7 @@ Pet::Pet() {
 	}
 
 	setFeatureCalculators();
+	seenBoards = set<Board>();
 }
 
 Pet::Pet(int)
@@ -116,11 +117,11 @@ Pet::Pet(int)
 
 
 	setFeatureCalculators();
+	seenBoards = set<Board>();
 }
 
 void Pet::evaluate(Board& board) const
-{
-	static set<Board> seenBoards = set<Board>();
+{	
 	auto insertionResult = seenBoards.insert(board);
 
 	if (insertionResult.second) {

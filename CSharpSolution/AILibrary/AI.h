@@ -4,6 +4,7 @@
 #include "timer.h"
 #include <algorithm>
 #include <vector>
+#include <set>
 
 using std::vector;
 using std::string;
@@ -62,6 +63,8 @@ namespace AI {
 		const int PLY_COUNT = 2;
 		__int8 weights[NULL_FEATURE][NULL_FEATURE];
 		static FeatureFunc featureCalculators[NULL_FEATURE];
+
+		mutable std::set<Board> seenBoards;
 
 		void evaluate(Board&) const;
 		int minmax(Board, int) const;
