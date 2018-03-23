@@ -16,7 +16,7 @@ void evaluate(Specimen& s, bool black = true) {
 
 	int turnCount = 0;
 
-	while (++turnCount && !board.gameOver()) board.makeMove((*players[(turnCount + 1) % 2])(board));
+	while (++turnCount && !board.gameOver()) board = board.makeMove((*players[(turnCount + 1) % 2])(board));
 
 	if (turnCount-- % 2 == black) s.second = INT_MIN - turnCount;
 	else s.second = INT_MIN + turnCount;
@@ -47,8 +47,10 @@ void main() {
 		for (int i = 0; i < NULL_FEATURE; i++)
 			for (int j = 0; j < NULL_FEATURE; j++)
 				if (!alreadyMaxed[i][j])
-					if (rand() % 100 <= 400.0 / (NULL_FEATURE*NULL_FEATURE - maxedCount))
+					if (rand() % 100 <= 50000.0 / (NULL_FEATURE*NULL_FEATURE - maxedCount))
 						evaluate(weebs[i*NULL_FEATURE + j]);
+					else weebs[i*NULL_FEATURE + j].second = INT_MIN;
+				else weebs[i*NULL_FEATURE + j].second = INT_MIN;
 
 		//Then we see who did the best and is not already maxed
 		std::pair<int, int> best; int bestScore = INT_MIN;
@@ -75,7 +77,7 @@ void main() {
 
 		//Then we repeat
 		if (maxedCount % NULL_FEATURE == 1) bump = ++bump * .9375;
-		cout << "Repetition is good for the soul" << endl;
+		cout << "Repetition is good for the soul: " << bestScoreEvaa << endl;
 	}
 
 	delete[] weebs;
