@@ -10,8 +10,7 @@ namespace NetworkGame
         private GameCore gameCore;
         void LoadArena()
         {
-            PhotonNetwork.LoadLevel("BreakGame");
-            GameObject core = null;
+            GameObject core = GameObject.Find("GameCore");
             if (core == null)
             {
                 gameCore = new GameObject("Temp Game Core").AddComponent<GameCore>();
@@ -19,12 +18,14 @@ namespace NetworkGame
                 gameCore.aILevel = GameCore.AILevel.Easy;
             }
             else gameCore = core.GetComponent<GameCore>();
+
             if (!PhotonNetwork.isMasterClient)
             {
                 gameCore.MySide = GameCore.Turn.FIRE;
                 Debug.LogError("PhotonNetwork : Trying to Load a level but we are not the master Client");
             }
             Debug.Log("PhotonNetwork : Loading Level ");
+            PhotonNetwork.LoadLevel("BreakGameMultiplayer");
         }
         public GameCore GetGameCore()
         {
