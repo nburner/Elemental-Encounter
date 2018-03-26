@@ -9,12 +9,15 @@ public class LobbyCanvas : MonoBehaviour
     public GameObject hostGamePanel;
     public GameObject joinGamePanel;
     public GameObject connectionGamePanel;
-
+    public GameObject launcher;
     // Use this for initialization
     void Start ()
     {
-		
-	}
+        DisplayMenuPanel();
+        launcher = GameObject.Find("Launcher");
+        NetworkGame.Launcher launcherobj = launcher.GetComponent<NetworkGame.Launcher>();
+        launcherobj.Connect();
+    }
 
     public void DisplayMenuPanel()
     {

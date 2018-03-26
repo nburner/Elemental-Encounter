@@ -44,8 +44,7 @@ namespace NetworkGame
 
         void Start()
         {
-            lc = GameObject.Find("Canvas").GetComponent<LobbyCanvas>();
-            Connect();
+
         }
 
         #endregion
@@ -61,6 +60,7 @@ namespace NetworkGame
             {
                 //Connect to online server
                 PhotonNetwork.ConnectUsingSettings(_gameVersion);
+                Debug.Log("Connected");
             }
         }
 

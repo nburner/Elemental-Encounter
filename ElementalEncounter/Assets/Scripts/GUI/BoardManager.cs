@@ -113,6 +113,7 @@ public class BoardManager : MonoBehaviour
 
             if (gameCore.PossibleMoves(selectedPiece.isIce, selectedPiece.Position).Contains(myMove)) //If Valid Move
             {
+                if (!gameCore.isSinglePlayer) networkLogic.SendMove(myMove,gameCore.MySide);
                 isMyTurn = false;
                 gameCore.UpdateBoard(myMove);
             }
@@ -128,6 +129,22 @@ public class BoardManager : MonoBehaviour
 
         selectedPiece = null;
     }
+
+    public void MakeNetworkMove(Coordinate From, Coordinate To)
+    {
+        Move myMove;
+        try
+        {
+            myMove = new Move(From, To);
+            gameCore.UpdateBoard(myMove);
+        }
+        catch (ArgumentException e)
+        {
+            //Move constructor throws on invalid move
+            Debug.Log(e.Message);
+        }
+    }
+
 
     #region Called By The Game Core
     //This function is used by the game core to tell the GUI that it is the local user's turn
@@ -154,6 +171,10 @@ public class BoardManager : MonoBehaviour
         {
             winMenu.SetActive(true);
         }
+    }
+    public void EndGameNetwork()
+    {
+        networkLogic.SendEndGame();
     }
 
     public void ResetBoard()

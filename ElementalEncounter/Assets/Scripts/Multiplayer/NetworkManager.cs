@@ -7,6 +7,7 @@ namespace NetworkGame
 {
     public class NetworkManager : Photon.PunBehaviour
     {
+        public enum Turn { ICE, FIRE };
         private GameCore gameCore;
         void LoadArena()
         {
@@ -15,6 +16,7 @@ namespace NetworkGame
             {
                 gameCore = new GameObject("Temp Game Core").AddComponent<GameCore>();
                 gameCore.isSinglePlayer = false;
+                gameCore.MySide = GameCore.Turn.ICE;
                 gameCore.aILevel = GameCore.AILevel.Easy;
             }
             else gameCore = core.GetComponent<GameCore>();
@@ -24,8 +26,9 @@ namespace NetworkGame
                 gameCore.MySide = GameCore.Turn.FIRE;
                 Debug.LogError("PhotonNetwork : Trying to Load a level but we are not the master Client");
             }
+            gameCore.isSinglePlayer = false;
             Debug.Log("PhotonNetwork : Loading Level ");
-            PhotonNetwork.LoadLevel("BreakGameMultiplayer");
+            PhotonNetwork.LoadLevel("BreakGame");
         }
         public GameCore GetGameCore()
         {
@@ -73,9 +76,41 @@ namespace NetworkGame
         public void LeaveRoom()
         {
             PhotonNetwork.LeaveRoom();
+            SceneManager.LoadScene("Game_Lobby");
         }
 
+        void Awake()
+        {
+            PhotonNetwork.OnEventCall += this.OnEvent;
+        }
 
+        public void SendMove(Move move, GameCore.Turn T)
+        {
+            int[] aData = { move.From.X, move.From.Y, move.To.X, move.To.Y, (int)T };
+            PhotonNetwork.RaiseEvent(0, aData, true, null);
+        }
+
+        public void SendEndGame()
+        {
+            PhotonNetwork.RaiseEvent(1, null, true, null);
+        }
+
+        public void OnEvent(byte eventcode, object content, int senderid)
+        {
+            int[] data = content as int[];
+            if (eventcode == 0)
+            {
+                Coordinate From = new Coordinate(data[0], data[1]);
+                Coordinate To = new Coordinate(data[2], data[3]);
+
+                BoardManager.Instance.MakeNetworkMove(From, To);
+            }
+            if (eventcode == 1)
+            {
+                BoardManager.Instance.EndGame();
+            }
+
+        }
         #endregion
     }
 }

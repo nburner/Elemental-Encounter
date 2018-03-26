@@ -301,6 +301,7 @@ MonoBehaviour:
   hostGamePanel: {fileID: 511794095}
   joinGamePanel: {fileID: 1235912359}
   connectionGamePanel: {fileID: 470584752}
+  launcher: {fileID: 0}
 --- !u!1 &261370933
 GameObject:
   m_ObjectHideFlags: 0
@@ -419,6 +420,17 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 528933237}
         m_MethodName: OnHostGame_Click
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 248415703}
+        m_MethodName: DisplayHostGamePanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -942,6 +954,17 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 528933237}
         m_MethodName: OnJoinGame_Click
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 248415703}
+        m_MethodName: DisplayJoinGamePanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

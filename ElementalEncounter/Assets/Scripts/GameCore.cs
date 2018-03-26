@@ -80,6 +80,7 @@ public class GameCore : MonoBehaviour
         boardManager.UpdateGUI(move);
         if (GameOver) {
             boardManager.EndGame();
+            if (!isSinglePlayer) boardManager.EndGameNetwork();
             return;
         }
 
