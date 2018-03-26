@@ -21,7 +21,7 @@ public class BoardManager : MonoBehaviour
     private bool isClicked = false;
     private const float TILE_SIZE = 1.0f;
     private const float TILE_OFFSET = 0.5f;
-    private GameCore gameCore;
+    public GameCore gameCore;
     private AI.AI HinterXHinter;
     private Camera IceCamera, FireCamera;
     private NetworkGame.NetworkManager networkLogic;
@@ -40,6 +40,7 @@ public class BoardManager : MonoBehaviour
         //FireCamera = GameObject.Find("FireCamera").GetComponent<Camera>();
 
         GameObject core = GameObject.Find("GameCore");
+        GameObject network = GameObject.Find("NetworkManager");
         if (core == null)
         {
             gameCore = new GameObject("Temp Game Core").AddComponent<GameCore>();
@@ -49,7 +50,7 @@ public class BoardManager : MonoBehaviour
         }
         else gameCore = core.GetComponent<GameCore>();
 
-        if (!gameCore.isSinglePlayer)
+        if (network != null)
         {   //Multiplayer
             networkLogic = GameObject.Find("NetworkManager").GetComponent<NetworkGame.NetworkManager>();
             gameCore = networkLogic.GetGameCore();

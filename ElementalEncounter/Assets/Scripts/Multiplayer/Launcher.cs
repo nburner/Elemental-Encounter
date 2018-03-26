@@ -113,6 +113,7 @@ namespace NetworkGame
             if (PhotonNetwork.room.PlayerCount == MaxPlayersPerRoom)
             {
                 PhotonNetwork.LoadLevel("BreakGame");
+                BoardManager.Instance.gameCore = gameCore;
             }
         }
 
