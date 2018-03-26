@@ -26,7 +26,7 @@ namespace NetworkGame
         void Awake()
         {
             // Speeds up client connection
-            PhotonNetwork.autoJoinLobby = false;            
+            PhotonNetwork.autoJoinLobby = true;          
             // Allows all clients in same room to have their levels synced
             PhotonNetwork.automaticallySyncScene = true;
 
@@ -68,13 +68,11 @@ namespace NetworkGame
 
         public void OnHostGame_Click()
         {
-            PhotonNetwork.CreateRoom("Test", new RoomOptions() { MaxPlayers = MaxPlayersPerRoom }, null);
-            lc.DisplayHostGamePanel();
+            PhotonNetwork.CreateRoom(null, new RoomOptions() { MaxPlayers = MaxPlayersPerRoom }, null);
         }
 
         public void OnJoinGame_Click()
         {
-            lc.DisplayJoinGamePanel();
             PhotonNetwork.JoinRandomRoom();
         }
 
@@ -88,7 +86,6 @@ namespace NetworkGame
         public override void OnConnectedToMaster()
         {
             Debug.Log("Connected to Photon server.");
-            lc.DisplayMenuPanel();
         }
 
         public override void OnDisconnectedFromPhoton()
@@ -122,6 +119,7 @@ namespace NetworkGame
         public override void OnPhotonRandomJoinFailed(object[] codeAndMsg)
         {
             Debug.Log("Failed to join random room.");
+            PhotonNetwork.LoadLevel("Game_Lobby");
         }
 
         #endregion

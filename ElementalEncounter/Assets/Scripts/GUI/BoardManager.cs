@@ -37,7 +37,7 @@ public class BoardManager : MonoBehaviour
         Debug.Log("Made it to the start function at    " + time);
 
         IceCamera = GameObject.Find("IceCamera").GetComponent<Camera>();
-        FireCamera = GameObject.Find("FireCamera").GetComponent<Camera>();
+        //FireCamera = GameObject.Find("FireCamera").GetComponent<Camera>();
 
         GameObject core = GameObject.Find("GameCore");
         if (core == null)
@@ -63,19 +63,19 @@ public class BoardManager : MonoBehaviour
 
         if (gameCore.MySide == GameCore.Turn.ICE)
         {
-            IceCamera.gameObject.SetActive(true);
-            FireCamera.gameObject.SetActive(false);
+            //IceCamera.gameObject.SetActive(true);
+            ////FireCamera.gameObject.SetActive(false);
         }
         else
         {
-            IceCamera.gameObject.SetActive(false);
-            FireCamera.gameObject.SetActive(true);
+            //IceCamera.gameObject.SetActive(false);
+            //FireCamera.gameObject.SetActive(true);
         }
 
         time = DateTime.Now.ToString("h:mm:ss tt");
 
         Debug.Log("Finished loading GameScene at   " + time);
-        
+
     }
 
     private void Awake()

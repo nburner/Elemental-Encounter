@@ -20,22 +20,22 @@ public class MainMenu : MonoBehaviour
     {
         quitPanel.SetActive(false);
         startGame = false;
+        //loadingScene = SceneManager.LoadSceneAsync("BreakGame", LoadSceneMode.Additive);
 
-        loadingScene = SceneManager.LoadSceneAsync("BreakGame", LoadSceneMode.Additive);
-
-        StartCoroutine(PlaySinglePlayerGame());
-        loadingScene.allowSceneActivation = false;
+        //StartCoroutine(PlaySinglePlayerGame());
+        //loadingScene.allowSceneActivation = false;
     }
 
     void Awake()
     {
     
-        gameCore = GameObject.Find("GameCore").GetComponent<GameCore>();
+        //gameCore = GameObject.Find("GameCore").GetComponent<GameCore>();
     }
 
     public void singlePlayerButtonClick()
     {
         startGame = true;
+        SceneManager.LoadScene("BreakGame");
     }
 
     public IEnumerator PlaySinglePlayerGame()
