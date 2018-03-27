@@ -41,8 +41,7 @@ public class BoardManager : MonoBehaviour
         IceCamera = GameObject.Find("IceCamera").GetComponent<Camera>();
         //FireCamera = GameObject.Find("FireCamera").GetComponent<Camera>();
 
-        GameObject core = GameObject.Find("GameCore");
-        GameObject network = GameObject.Find("NetworkManager");
+        GameObject core = GameObject.Find("Temp Game Core");
         if (core == null)
         {
             gameCore = new GameObject("Temp Game Core").AddComponent<GameCore>();
@@ -52,10 +51,9 @@ public class BoardManager : MonoBehaviour
         }
         else gameCore = core.GetComponent<GameCore>();
 
-        if (network != null)
+        if (!gameCore.isSinglePlayer)
         {   //Multiplayer
             networkLogic = GameObject.Find("NetworkManager").GetComponent<NetworkGame.NetworkManager>();
-            if(networkLogic.isConnected()) gameCore = networkLogic.GetGameCore();
         }
 
         gameCore.boardManager = this;
@@ -66,11 +64,13 @@ public class BoardManager : MonoBehaviour
 
         if (gameCore.MySide == GameCore.Turn.ICE)
         {
+            isMyTurn = true;
             //IceCamera.gameObject.SetActive(true);
             ////FireCamera.gameObject.SetActive(false);
         }
         else
         {
+            isMyTurn = false;
             //IceCamera.gameObject.SetActive(false);
             //FireCamera.gameObject.SetActive(true);
         }
@@ -139,6 +139,7 @@ public class BoardManager : MonoBehaviour
         try
         {
             myMove = new Move(From, To);
+            isMyTurn = true;
             gameCore.UpdateBoard(myMove);
         }
         catch (ArgumentException e)

@@ -4487,7 +4487,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1157395590197736, guid: 4ab8f348aa531b741a450039d47deb36, type: 2}
       propertyPath: m_Name
-      value: NetManager
+      value: NetworkManager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4ab8f348aa531b741a450039d47deb36, type: 2}
