@@ -47,7 +47,10 @@ namespace NetworkGame
                 LoadArena();
             }
         }
-
+        public bool isConnected()
+        {
+            return PhotonNetwork.connected;
+        }
         
         public override void OnPhotonPlayerDisconnected(PhotonPlayer other)
         {

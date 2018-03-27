@@ -54,8 +54,8 @@ public class BoardManager : MonoBehaviour
 
         if (network != null)
         {   //Multiplayer
-            //networkLogic = GameObject.Find("NetworkManager").GetComponent<NetworkGame.NetworkManager>();
-            //gameCore = networkLogic.GetGameCore();
+            networkLogic = GameObject.Find("NetworkManager").GetComponent<NetworkGame.NetworkManager>();
+            if(networkLogic.isConnected()) gameCore = networkLogic.GetGameCore();
         }
 
         gameCore.boardManager = this;

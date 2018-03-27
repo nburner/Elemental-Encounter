@@ -31,7 +31,7 @@ namespace NetworkGame
             PhotonNetwork.automaticallySyncScene = true;
 
             PhotonNetwork.logLevel = LogLevel;
-            GameObject core = GameObject.Find("GameCore");
+            GameObject core = GameObject.Find("Temp Game Core");
             if (core == null)
             {
                 gameCore = new GameObject("Temp Game Core").AddComponent<GameCore>();
@@ -61,6 +61,7 @@ namespace NetworkGame
                 //Connect to online server
                 PhotonNetwork.ConnectUsingSettings(_gameVersion);
                 Debug.Log("Connected");
+                
             }
         }
 
@@ -113,7 +114,6 @@ namespace NetworkGame
             if (PhotonNetwork.room.PlayerCount == MaxPlayersPerRoom)
             {
                 PhotonNetwork.LoadLevel("BreakGame");
-                BoardManager.Instance.gameCore = gameCore;
             }
         }
 
