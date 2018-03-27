@@ -26,6 +26,8 @@ public class BoardManager : MonoBehaviour
     private Camera IceCamera, FireCamera;
     private NetworkGame.NetworkManager networkLogic;
 
+    public AudioClip captureSound;
+
     public GameObject winMenu;
     public GameObject loseMenu;
     #endregion
@@ -191,6 +193,7 @@ public class BoardManager : MonoBehaviour
         {
             activePieces.Remove(Pieces[move.To].gameObject);
             Destroy(Pieces[move.To].gameObject, .5f);
+            Pieces[move.From].GetComponent<AudioSource>().PlayDelayed(1.5F);
         }
         Piece.playAnimation(Pieces[move.From], move, takingPiece);
 
@@ -224,6 +227,7 @@ public class BoardManager : MonoBehaviour
     {
         GameObject go = Instantiate(piecePrefabs[index], GetTileCenter(x, y), Quaternion.identity) as GameObject;
         go.transform.SetParent(transform);
+        go.AddComponent<AudioSource>().clip = captureSound;        
         Pieces[x, y] = go.GetComponent<Piece>();
         Pieces[x, y].SetPosition(x, y);
         activePieces.Add(go);
