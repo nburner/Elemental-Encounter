@@ -70,6 +70,7 @@ namespace NetworkGame
         public void OnHostGame_Click()
         {
             PhotonNetwork.CreateRoom(null, new RoomOptions() { MaxPlayers = MaxPlayersPerRoom }, null);
+            gameCore.MySide = GameCore.Turn.ICE;
         }
 
         public void OnJoinGame_Click()
@@ -113,6 +114,7 @@ namespace NetworkGame
         {
             if (PhotonNetwork.room.PlayerCount == MaxPlayersPerRoom)
             {
+                gameCore.MySide = GameCore.Turn.FIRE;
                 PhotonNetwork.LoadLevel("BreakGame");
             }
         }
