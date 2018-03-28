@@ -10,12 +10,13 @@ public class BoardManager : MonoBehaviour
     //List of Gameobject for spawning pieces on the board
     public List<GameObject> piecePrefabs;
     public List<GameObject> boardPrefabs;
-    public List<GameObject> activePieces;
+    private List<GameObject> activePieces = new List<GameObject>();
 
 
     public static BoardManager Instance { set; get; }
     public Board<Piece> Pieces { set; get; }
     public bool isMyTurn = true;
+    public bool testing = false;
 
     private Piece selectedPiece;
     private bool isClicked = false;
@@ -25,9 +26,7 @@ public class BoardManager : MonoBehaviour
     private AI.AI HinterXHinter;
     private Camera IceCamera, FireCamera;
     private NetworkGame.NetworkManager networkLogic;
-
-    public AudioClip captureSound;
-
+    
     public GameObject winMenu;
     public GameObject loseMenu;
     #endregion
@@ -185,6 +184,11 @@ public class BoardManager : MonoBehaviour
     {
         ResetAndInitializeBoard();
     }
+    public IEnumerator PlayCaptureSound(Piece p)
+    {
+        for (int i = 0; i < 60; i++) yield return null;    //This waits for a number of frames (animations go for 100)
+        AudioSource.PlayClipAtPoint(p.captureSound, p.transform.position);
+    }
 
     //This function is called by the Game Core to tell the GUI that a valid move has been made, and the screen needs to be updated
     public void UpdateGUI(Move move)
@@ -193,9 +197,10 @@ public class BoardManager : MonoBehaviour
         if (takingPiece)
         {
             activePieces.Remove(Pieces[move.To].gameObject);
-            Destroy(Pieces[move.To].gameObject, .5f);
-            Pieces[move.From].GetComponent<AudioSource>().PlayDelayed(1.5F);
+            StartCoroutine(PlayCaptureSound(Pieces[move.To]));
+            Destroy(Pieces[move.To].gameObject, 1.4f);
         }
+        StartCoroutine(Pieces[move.From].PlayMoveSound());
         Piece.playAnimation(Pieces[move.From], move, takingPiece);
 
         Pieces[move.From].transform.position = GetTileCenter(move.To);
@@ -213,22 +218,21 @@ public class BoardManager : MonoBehaviour
         //spawn Ice team
         for (int i = 0; i < 8; i++)
         {
-            SpawnPiece(0, i, 0);
-            SpawnPiece(0, i, 1);
+            SpawnPiece(0, i, testing ? 2 : 0);
+            SpawnPiece(0, i, testing ? 3 : 1);
         }
         //spawn Fire team
         for (int i = 0; i < 8; i++)
         {
-            SpawnPiece(1, i, 6);
-            SpawnPiece(1, i, 7);
+            SpawnPiece(1, i, testing ? 4 : 6);
+            SpawnPiece(1, i, testing ? 5 : 7);
         }
     }
     public void SpawnPiece(int index, Coordinate c) { SpawnPiece(index, c.X, c.Y); }
     public void SpawnPiece(int index, int x, int y)
     {
         GameObject go = Instantiate(piecePrefabs[index], GetTileCenter(x, y), Quaternion.identity) as GameObject;
-        go.transform.SetParent(transform);
-        go.AddComponent<AudioSource>().clip = captureSound;        
+        go.transform.SetParent(transform);    
         Pieces[x, y] = go.GetComponent<Piece>();
         Pieces[x, y].SetPosition(x, y);
         activePieces.Add(go);

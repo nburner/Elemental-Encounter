@@ -10,6 +10,8 @@ public class Piece : MonoBehaviour
     public bool isIce;
     public static BoardManager bm;
 
+    public AudioClip captureSound;
+
     public void SetPosition(int x,int y)
     {
         Position = new Coordinate(x, y);        
@@ -19,6 +21,13 @@ public class Piece : MonoBehaviour
         Position = c;
     }
 
+    public IEnumerator PlayMoveSound()
+    {
+        GetComponent<AudioSource>().Play();                 //This starts the sound
+        for (int i = 0; i < 120; i++) yield return null;    //This waits for a number of frames (animations go for 100)
+        GetComponent<AudioSource>().Stop();                 //This stops the sound
+    }
+    
     public static void playAnimation(Piece selectedPiece, Move m, bool capture)
     {
         bm = BoardManager.Instance;

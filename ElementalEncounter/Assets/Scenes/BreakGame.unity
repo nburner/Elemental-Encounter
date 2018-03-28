@@ -2331,6 +2331,16 @@ Prefab:
       propertyPath: captureSound
       value: 
       objectReference: {fileID: 8300000, guid: 5e602d7c5dde6664bb6c27b3eb9e5889, type: 3}
+    - target: {fileID: 114785667463668550, guid: 18a44d9e8300b20418c6f34e5e1eb1ae,
+        type: 2}
+      propertyPath: iceMoveSound
+      value: 
+      objectReference: {fileID: 8300000, guid: b115d34a0b81e994a9b64f798874e0ba, type: 3}
+    - target: {fileID: 114785667463668550, guid: 18a44d9e8300b20418c6f34e5e1eb1ae,
+        type: 2}
+      propertyPath: testing
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 18a44d9e8300b20418c6f34e5e1eb1ae, type: 2}
   m_IsPrefabParent: 0
