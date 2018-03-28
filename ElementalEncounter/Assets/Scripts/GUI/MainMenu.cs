@@ -28,13 +28,20 @@ public class MainMenu : MonoBehaviour
 
     void Awake()
     {
-    
-        //gameCore = GameObject.Find("GameCore").GetComponent<GameCore>();
+        GameObject core = GameObject.Find("GameCore");
+        if (core == null)
+        {
+            gameCore = new GameObject("GameCore").AddComponent<GameCore>();
+        }
+        else gameCore = core.GetComponent<GameCore>();
     }
 
     public void singlePlayerButtonClick()
     {
         startGame = true;
+        gameCore.isSinglePlayer = true;
+        gameCore.aILevel = GameCore.AILevel.Intermediate;
+        gameCore.MySide = GameCore.Turn.ICE;
         SceneManager.LoadScene("BreakGame");
     }
 

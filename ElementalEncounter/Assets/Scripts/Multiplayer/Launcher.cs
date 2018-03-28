@@ -25,26 +25,19 @@ namespace NetworkGame
 
         void Awake()
         {
+            lc = GameObject.Find("Canvas").GetComponent<LobbyCanvas>();
             // Speeds up client connection
             PhotonNetwork.autoJoinLobby = true;          
             // Allows all clients in same room to have their levels synced
             PhotonNetwork.automaticallySyncScene = true;
 
             PhotonNetwork.logLevel = LogLevel;
-            GameObject core = GameObject.Find("Temp Game Core");
-            if (core == null)
-            {
-                gameCore = new GameObject("Temp Game Core").AddComponent<GameCore>();
-                gameCore.isSinglePlayer = false;
-                gameCore.aILevel = GameCore.AILevel.Easy;
-                gameCore.MySide = GameCore.Turn.ICE;
-            }
-            else gameCore = core.GetComponent<GameCore>();
         }
 
         void Start()
         {
-
+            //Connect to online server
+            PhotonNetwork.ConnectUsingSettings(_gameVersion);
         }
 
         #endregion
@@ -60,8 +53,6 @@ namespace NetworkGame
             {
                 //Connect to online server
                 PhotonNetwork.ConnectUsingSettings(_gameVersion);
-                Debug.Log("Connected");
-                
             }
         }
 
@@ -85,8 +76,9 @@ namespace NetworkGame
         /// <summary>
         /// Called when PhotonNetwork.autoJoinLobby is set to false.
         /// </summary>
-        public override void OnConnectedToMaster()
+        public override void OnJoinedLobby()
         {
+            lc.DisplayMenuPanel();
             Debug.Log("Connected to Photon server.");
         }
 
@@ -115,7 +107,6 @@ namespace NetworkGame
             if (PhotonNetwork.room.PlayerCount == MaxPlayersPerRoom)
             {
                 gameCore.MySide = GameCore.Turn.FIRE;
-                PhotonNetwork.LoadLevel("BreakGame");
             }
         }
 
@@ -123,6 +114,11 @@ namespace NetworkGame
         {
             Debug.Log("Failed to join random room.");
             PhotonNetwork.LoadLevel("Game_Lobby");
+        }
+
+        public void ReturnToMainMenu()
+        {
+            PhotonNetwork.LoadLevel("MainMenu");
         }
 
         #endregion

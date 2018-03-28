@@ -9,15 +9,7 @@ public class LobbyCanvas : MonoBehaviour
     public GameObject hostGamePanel;
     public GameObject joinGamePanel;
     public GameObject connectionGamePanel;
-    public GameObject launcher;
-    // Use this for initialization
-    void Start ()
-    {
-        DisplayMenuPanel();
-        launcher = GameObject.Find("Launcher");
-        NetworkGame.Launcher launcherobj = launcher.GetComponent<NetworkGame.Launcher>();
-        launcherobj.Connect();
-    }
+    public GameObject errorGamePanel;
 
     public void DisplayMenuPanel()
     {
@@ -25,6 +17,7 @@ public class LobbyCanvas : MonoBehaviour
         hostGamePanel.SetActive(false);
         joinGamePanel.SetActive(false);
         connectionGamePanel.SetActive(false);
+        errorGamePanel.SetActive(false);
     }
 
     public void DisplayHostGamePanel()
@@ -33,6 +26,7 @@ public class LobbyCanvas : MonoBehaviour
         hostGamePanel.SetActive(true);
         joinGamePanel.SetActive(false);
         connectionGamePanel.SetActive(false);
+        errorGamePanel.SetActive(false);
     }
 
     public void DisplayJoinGamePanel()
@@ -41,6 +35,7 @@ public class LobbyCanvas : MonoBehaviour
         hostGamePanel.SetActive(false);
         joinGamePanel.SetActive(true);
         connectionGamePanel.SetActive(false);
+        errorGamePanel.SetActive(false);
     }
 
     public void DisplayConnectionPanel()
@@ -49,5 +44,15 @@ public class LobbyCanvas : MonoBehaviour
         hostGamePanel.SetActive(false);
         joinGamePanel.SetActive(true);
         connectionGamePanel.SetActive(false);
+        errorGamePanel.SetActive(false);
+    }
+
+    public void DisplayErrorPanel()
+    {
+        menuPanel.SetActive(false);
+        hostGamePanel.SetActive(false);
+        joinGamePanel.SetActive(false);
+        connectionGamePanel.SetActive(false);
+        errorGamePanel.SetActive(true);
     }
 }

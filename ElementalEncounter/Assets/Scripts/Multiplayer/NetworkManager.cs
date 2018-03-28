@@ -11,15 +11,7 @@ namespace NetworkGame
         private GameCore gameCore;
         void LoadArena()
         {
-            GameObject core = GameObject.Find("GameCore");
-            if (core == null)
-            {
-                gameCore = new GameObject("Temp Game Core").AddComponent<GameCore>();
-                gameCore.isSinglePlayer = false;
-                gameCore.MySide = GameCore.Turn.ICE;
-                gameCore.aILevel = GameCore.AILevel.Easy;
-            }
-            else gameCore = core.GetComponent<GameCore>();
+            gameCore = GameObject.Find("GameCore").GetComponent<GameCore>();
 
             if (!PhotonNetwork.isMasterClient)
             {
@@ -47,7 +39,7 @@ namespace NetworkGame
                 LoadArena();
             }
         }
-        public bool isConnected()
+        public bool IsConnected()
         {
             return PhotonNetwork.connected;
         }
@@ -103,10 +95,11 @@ namespace NetworkGame
             int[] data = content as int[];
             if (eventcode == 0)
             {
+                Move opponentMove = new Move(new Coordinate(data[0], data[1]), new Coordinate(data[2], data[3]));
                 Coordinate From = new Coordinate(data[0], data[1]);
                 Coordinate To = new Coordinate(data[2], data[3]);
 
-                BoardManager.Instance.MakeNetworkMove(From, To);
+                BoardManager.Instance.GetNetworkMove(From, To);
             }
             if (eventcode == 1)
             {

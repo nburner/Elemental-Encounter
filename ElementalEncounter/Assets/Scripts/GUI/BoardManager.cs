@@ -40,10 +40,10 @@ public class BoardManager : MonoBehaviour
         IceCamera = GameObject.Find("IceCamera").GetComponent<Camera>();
         //FireCamera = GameObject.Find("FireCamera").GetComponent<Camera>();
 
-        GameObject core = GameObject.Find("Temp Game Core");
+        GameObject core = GameObject.Find("GameCore");
         if (core == null)
         {
-            gameCore = new GameObject("Temp Game Core").AddComponent<GameCore>();
+            gameCore = new GameObject("GameCore").AddComponent<GameCore>();
             gameCore.isSinglePlayer = true;
             gameCore.aILevel = GameCore.AILevel.Intermediate;
             gameCore.MySide = GameCore.Turn.ICE;
@@ -132,7 +132,7 @@ public class BoardManager : MonoBehaviour
         selectedPiece = null;
     }
 
-    public void MakeNetworkMove(Coordinate From, Coordinate To)
+    public void GetNetworkMove(Coordinate From, Coordinate To)
     {
         Move myMove;
         try
@@ -197,10 +197,10 @@ public class BoardManager : MonoBehaviour
         if (takingPiece)
         {
             activePieces.Remove(Pieces[move.To].gameObject);
-            StartCoroutine(PlayCaptureSound(Pieces[move.To]));
+            StartCoroutine(PlayCaptureSound(Pieces[move.To])); //sound effect
             Destroy(Pieces[move.To].gameObject, 1.4f);
         }
-        StartCoroutine(Pieces[move.From].PlayMoveSound());
+        StartCoroutine(Pieces[move.From].PlayMoveSound()); //sound effect
         Piece.playAnimation(Pieces[move.From], move, takingPiece);
 
         Pieces[move.From].transform.position = GetTileCenter(move.To);
