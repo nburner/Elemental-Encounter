@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace NetworkGame
@@ -18,6 +21,7 @@ namespace NetworkGame
         // Update the game version everytime we create a new install
         private string _gameVersion = "0.1.0";
         private GameCore gameCore;
+        private bool connectionStatus;
 
         #endregion
 
@@ -37,7 +41,11 @@ namespace NetworkGame
         void Start()
         {
             //Connect to online server
-            PhotonNetwork.ConnectUsingSettings(_gameVersion);
+            StartCoroutine(CheckInternetConnection((isConnected) => {
+                // handle connection status here
+                connectionStatus = isConnected;
+            }));
+            if (connectionStatus) lc.DisplayErrorPanel();
         }
 
         #endregion
@@ -95,6 +103,21 @@ namespace NetworkGame
         public override void OnCreatedRoom()
         {
             Debug.Log("Room created successfully.");
+        }
+
+        IEnumerator CheckInternetConnection(Action<bool> action)
+        {
+            WWW www = new WWW("http://google.com");
+            yield return www;
+            if (www.error != null)
+            {
+                action(false);
+                lc.DisplayErrorPanel();
+            }
+            else
+            {
+                action(true);
+            }
         }
 
         /// <summary>
