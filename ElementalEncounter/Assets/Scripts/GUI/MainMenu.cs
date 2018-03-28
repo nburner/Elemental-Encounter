@@ -42,7 +42,7 @@ public class MainMenu : MonoBehaviour
         gameCore.isSinglePlayer = true;
         gameCore.aILevel = GameCore.AILevel.Intermediate;
         gameCore.MySide = GameCore.Turn.ICE;
-        SceneManager.LoadScene("BreakGame");
+        SceneManager.LoadScene("BreakGameMultiplayer");
     }
 
     public IEnumerator PlaySinglePlayerGame()

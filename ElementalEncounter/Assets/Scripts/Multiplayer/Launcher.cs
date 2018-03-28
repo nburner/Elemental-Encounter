@@ -19,9 +19,9 @@ namespace NetworkGame
         #region Private Variables
 
         // Update the game version everytime we create a new install
-        private string _gameVersion = "0.1.0";
-        private GameCore gameCore;
+        private string _gameVersion = "1";
         private bool connectionStatus;
+        public GameCore gameCore;
 
         #endregion
 
@@ -30,22 +30,32 @@ namespace NetworkGame
         void Awake()
         {
             lc = GameObject.Find("Canvas").GetComponent<LobbyCanvas>();
-            // Speeds up client connection
-            PhotonNetwork.autoJoinLobby = true;          
+            if (!PhotonNetwork.connected) { lc.DisplayConnectionPanel();}
+            else { lc.DisplayMenuPanel(); }
+                // Speeds up client connection
+                PhotonNetwork.autoJoinLobby = true;          
             // Allows all clients in same room to have their levels synced
             PhotonNetwork.automaticallySyncScene = true;
 
             PhotonNetwork.logLevel = LogLevel;
+            //Connect to online server
+            //StartCoroutine(CheckInternetConnection((isConnected) => {
+            //    // handle connection status here
+            //    lc.DisplayErrorPanel();
+            //}));
+            //if (connectionStatus) lc.DisplayErrorPanel();
+            //else Connect();
+        }
+
+        private void Update()
+        {
+
         }
 
         void Start()
         {
-            //Connect to online server
-            StartCoroutine(CheckInternetConnection((isConnected) => {
-                // handle connection status here
-                connectionStatus = isConnected;
-            }));
-            if (connectionStatus) lc.DisplayErrorPanel();
+            gameCore = GameObject.Find("GameCore").GetComponent<GameCore>();
+            Connect();
         }
 
         #endregion
@@ -70,11 +80,13 @@ namespace NetworkGame
         {
             PhotonNetwork.CreateRoom(null, new RoomOptions() { MaxPlayers = MaxPlayersPerRoom }, null);
             gameCore.MySide = GameCore.Turn.ICE;
+            lc.DisplayHostGamePanel();
         }
 
         public void OnJoinGame_Click()
         {
             PhotonNetwork.JoinRandomRoom();
+            lc.DisplayJoinGamePanel();
         }
 
         #endregion
@@ -98,6 +110,7 @@ namespace NetworkGame
         public override void OnFailedToConnectToPhoton(DisconnectCause cause)
         {
             Debug.Log(cause);
+            lc.DisplayErrorPanel();
         }
 
         public override void OnCreatedRoom()
@@ -112,7 +125,6 @@ namespace NetworkGame
             if (www.error != null)
             {
                 action(false);
-                lc.DisplayErrorPanel();
             }
             else
             {

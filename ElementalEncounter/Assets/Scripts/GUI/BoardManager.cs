@@ -64,12 +64,14 @@ public class BoardManager : MonoBehaviour
         if (gameCore.MySide == GameCore.Turn.ICE)
         {
             isMyTurn = true;
-            //IceCamera.gameObject.SetActive(true);
+            ///IceCamera.gameObject.SetActive(true);
             ////FireCamera.gameObject.SetActive(false);
         }
         else
         {
             isMyTurn = false;
+            IceCamera.transform.position = new Vector3(IceCamera.transform.position.x, IceCamera.transform.position.y, 15);
+            IceCamera.transform.rotation = Quaternion.Euler(IceCamera.transform.rotation.eulerAngles.x, 180f, 0f);
             //IceCamera.gameObject.SetActive(false);
             //FireCamera.gameObject.SetActive(true);
         }
@@ -203,10 +205,10 @@ public class BoardManager : MonoBehaviour
         StartCoroutine(Pieces[move.From].PlayMoveSound()); //sound effect
         Piece.playAnimation(Pieces[move.From], move, takingPiece);
 
-        Pieces[move.From].transform.position = GetTileCenter(move.To);
+        Pieces[move.From].transform.position = GetTileCenter(move.To); // Getting the center of the tile where the piece is moving
         Pieces[move.From].SetPosition(move.To);
         Pieces[move.To] = Pieces[move.From];
-        Pieces[move.From] = null;
+        Pieces[move.From] = null; // Removing the piece from the 
     }
     #endregion
 

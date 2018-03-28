@@ -13,11 +13,11 @@ namespace NetworkGame
         {
             gameCore = GameObject.Find("GameCore").GetComponent<GameCore>();
 
-            if (!PhotonNetwork.isMasterClient)
-            {
-                gameCore.MySide = GameCore.Turn.FIRE;
-                Debug.LogError("PhotonNetwork : Trying to Load a level but we are not the master Client");
-            }
+            //if (!PhotonNetwork.isMasterClient)
+            //{
+            //    gameCore.MySide = GameCore.Turn.FIRE;
+            //    Debug.LogError("PhotonNetwork : Trying to Load a level but we are not the master Client");
+            //}
             gameCore.isSinglePlayer = false;
             Debug.Log("PhotonNetwork : Loading Level ");
             PhotonNetwork.LoadLevel("BreakGame");
@@ -74,9 +74,13 @@ namespace NetworkGame
             SceneManager.LoadScene("Game_Lobby");
         }
 
-        void Awake()
+        void OnEnable()
         {
             PhotonNetwork.OnEventCall += this.OnEvent;
+        }
+        void OnDisable()
+        {
+            PhotonNetwork.OnEventCall -= this.OnEvent;
         }
 
         public void SendMove(Move move, GameCore.Turn T)
@@ -99,7 +103,7 @@ namespace NetworkGame
                 Coordinate From = new Coordinate(data[0], data[1]);
                 Coordinate To = new Coordinate(data[2], data[3]);
 
-                BoardManager.Instance.GetNetworkMove(From, To);
+                BoardManager.Instance.gameCore.UpdateBoard(opponentMove);
             }
             if (eventcode == 1)
             {
