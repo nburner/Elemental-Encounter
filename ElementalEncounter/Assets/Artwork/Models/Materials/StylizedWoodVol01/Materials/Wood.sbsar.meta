@@ -161,7 +161,7 @@ SubstanceImporter:
       textureWidth: 2048
       textureHeight: 2048
       textureFormat: 0
-      loadingBehavior: 1
+      loadingBehavior: 3
   - serializedVersion: 16
     name: Wood1
     prototypeName: Wood1
@@ -1097,7 +1097,7 @@ SubstanceImporter:
       textureWidth: 2048
       textureHeight: 2048
       textureFormat: 0
-      loadingBehavior: 1
+      loadingBehavior: 3
   - serializedVersion: 16
     name: Wood7
     prototypeName: Wood7
@@ -1565,7 +1565,7 @@ SubstanceImporter:
       textureWidth: 2048
       textureHeight: 2048
       textureFormat: 0
-      loadingBehavior: 1
+      loadingBehavior: 3
   deletedPrototypes: []
   userData: 
   assetBundleName: 

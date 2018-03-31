@@ -9,7 +9,7 @@ public class BoardManager : MonoBehaviour
     #region Common Properties and Fields
     //List of Gameobject for spawning pieces on the board
     public List<GameObject> piecePrefabs;
-    public List<GameObject> boardPrefabs;
+    //public List<GameObject> boardPrefabs;
     private List<GameObject> activePieces = new List<GameObject>();
     public GameObject Timer;
     private Text networkTimer;
@@ -49,7 +49,6 @@ public class BoardManager : MonoBehaviour
         }
 
         gameCore.boardManager = this;
-        //SpawnAllBoardSpaces();
         //Debug.Log("Started RestAndInitilizeBoard funcion");
         ResetAndInitializeBoard();
         //Debug.Log("Finishied RestAndInitilizeBoard funcion");
@@ -61,7 +60,7 @@ public class BoardManager : MonoBehaviour
         else
         {
             isMyTurn = false;
-            MainCamera.transform.position = new Vector3(MainCamera.transform.position.x, MainCamera.transform.position.y, 15);
+            MainCamera.transform.position = new Vector3(MainCamera.transform.position.x, MainCamera.transform.position.y, 12);
             MainCamera.transform.rotation = Quaternion.Euler(MainCamera.transform.rotation.eulerAngles.x, 180f, 0f);
         }
 
@@ -90,7 +89,7 @@ public class BoardManager : MonoBehaviour
     }
     private void ResetAndInitializeBoard()
     {
-        
+
         foreach (GameObject go in activePieces)
         {
             Destroy(go);
@@ -238,34 +237,6 @@ public class BoardManager : MonoBehaviour
         Pieces[x, y] = go.GetComponent<Piece>();
         Pieces[x, y].SetPosition(x, y);
         activePieces.Add(go);
-    }
-
-    private void SpawnAllBoardSpaces()
-    {
-        bool isBlackPiece = false;
-        bool[,] Spacesboard = new bool[8, 8];
-        for (int i = 0; i < 8; i++)
-        {
-            for (int j = 0; j < 8; j++)
-            {
-                Spacesboard[i, j] = isBlackPiece;
-                if (!isBlackPiece)
-                {
-                    SpawnBoardSpace(1, i, j);
-                }
-                else
-                {
-                    SpawnBoardSpace(0, i, j);
-                }
-                isBlackPiece = !isBlackPiece;
-            }
-            isBlackPiece = !isBlackPiece;
-        }
-    }
-    private void SpawnBoardSpace(int index, int x, int y)
-    {
-        GameObject another = Instantiate(boardPrefabs[index], GetTileCenter(x, y), Quaternion.identity) as GameObject;
-        another.transform.SetParent(transform);
     }
 
     #endregion

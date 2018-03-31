@@ -27,7 +27,7 @@ public class Piece : MonoBehaviour
         for (int i = 0; i < 120; i++) yield return null;    //This waits for a number of frames (animations go for 100)
         GetComponent<AudioSource>().Stop();                 //This stops the sound
     }
-    
+
     public static void playAnimation(Piece selectedPiece, Move m, bool capture)
     {
         bm = BoardManager.Instance;
