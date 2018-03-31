@@ -19,12 +19,13 @@ public class BoardManager : MonoBehaviour
     public bool testing = false;
 
     private Piece selectedPiece;
-    private bool isClicked = false;
     private const float TILE_SIZE = 1.0f;
     private const float TILE_OFFSET = 0.5f;
     public GameCore gameCore;
     private AI.AI HinterXHinter;
-    private Camera IceCamera, FireCamera;
+    private Camera MainCamera;
+    private bool isClicked = false;
+    private GameCore.Turn LastTurn;
     private NetworkGame.NetworkManager networkLogic;
     
     public GameObject winMenu;
@@ -37,8 +38,7 @@ public class BoardManager : MonoBehaviour
 
         Debug.Log("Made it to the start function at    " + time);
 
-        IceCamera = GameObject.Find("IceCamera").GetComponent<Camera>();
-        //FireCamera = GameObject.Find("FireCamera").GetComponent<Camera>();
+        MainCamera = GameObject.Find("IceCamera").GetComponent<Camera>();
 
         GameObject core = GameObject.Find("GameCore");
         if (core == null)
@@ -64,16 +64,12 @@ public class BoardManager : MonoBehaviour
         if (gameCore.MySide == GameCore.Turn.ICE)
         {
             isMyTurn = true;
-            ///IceCamera.gameObject.SetActive(true);
-            ////FireCamera.gameObject.SetActive(false);
         }
         else
         {
             isMyTurn = false;
-            IceCamera.transform.position = new Vector3(IceCamera.transform.position.x, IceCamera.transform.position.y, 15);
-            IceCamera.transform.rotation = Quaternion.Euler(IceCamera.transform.rotation.eulerAngles.x, 180f, 0f);
-            //IceCamera.gameObject.SetActive(false);
-            //FireCamera.gameObject.SetActive(true);
+            MainCamera.transform.position = new Vector3(MainCamera.transform.position.x, MainCamera.transform.position.y, 15);
+            MainCamera.transform.rotation = Quaternion.Euler(MainCamera.transform.rotation.eulerAngles.x, 180f, 0f);
         }
 
         time = DateTime.Now.ToString("h:mm:ss tt");
@@ -167,8 +163,8 @@ public class BoardManager : MonoBehaviour
     //This function is called by the Game Core to tell the GUI that the game is over
     public void EndGame()
     {
-        //This Boolean is almost certainly wrong
-        if (isMyTurn != (gameCore.MySide == GameCore.Turn.ICE))
+        //This Boolean is almost certainly wrong (you are right -Derick)
+        if (LastTurn != gameCore.MySide)
         {
             loseMenu.SetActive(true);
         }
@@ -209,6 +205,7 @@ public class BoardManager : MonoBehaviour
         Pieces[move.From].SetPosition(move.To);
         Pieces[move.To] = Pieces[move.From];
         Pieces[move.From] = null; // Removing the piece from the 
+        LastTurn = gameCore.CurrentTurn;
     }
     #endregion
 

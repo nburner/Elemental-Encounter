@@ -39,7 +39,8 @@ namespace NetworkGame
 
             PhotonNetwork.logLevel = LogLevel;
             //Connect to online server
-            //StartCoroutine(CheckInternetConnection((isConnected) => {
+            //StartCoroutine(CheckInternetConnection((isConnected) =>
+            //{
             //    // handle connection status here
             //    lc.DisplayErrorPanel();
             //}));

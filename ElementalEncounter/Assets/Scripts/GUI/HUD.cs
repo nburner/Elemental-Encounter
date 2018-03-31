@@ -30,4 +30,11 @@ public class HUD : MonoBehaviour
     {
         quitPanel.SetActive(false);
     }
+
+    public void RestartGame()
+    {
+        BoardManager.Instance.ResetBoard();
+        BoardManager.Instance.winMenu.SetActive(false);
+        BoardManager.Instance.loseMenu.SetActive(false);
+    }
 }
