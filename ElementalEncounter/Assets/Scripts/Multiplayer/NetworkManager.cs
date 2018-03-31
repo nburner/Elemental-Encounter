@@ -94,6 +94,11 @@ namespace NetworkGame
             PhotonNetwork.RaiseEvent(1, null, true, null);
         }
 
+        public void TimeOut()
+        {
+            PhotonNetwork.RaiseEvent(2, null, true, null);
+        }
+
         public void OnEvent(byte eventcode, object content, int senderid)
         {
             int[] data = content as int[];
@@ -107,6 +112,10 @@ namespace NetworkGame
             if (eventcode == 1)
             {
                 BoardManager.Instance.EndGame();
+            }
+            if (eventcode == 2)
+            {
+                BoardManager.Instance.TimeOut();
             }
 
         }

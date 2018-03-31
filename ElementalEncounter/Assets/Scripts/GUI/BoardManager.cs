@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class BoardManager : MonoBehaviour
 {
     #region Common Properties and Fields
@@ -11,7 +11,8 @@ public class BoardManager : MonoBehaviour
     public List<GameObject> piecePrefabs;
     public List<GameObject> boardPrefabs;
     private List<GameObject> activePieces = new List<GameObject>();
-
+    public GameObject Timer;
+    private Text networkTimer;
 
     public static BoardManager Instance { set; get; }
     public Board<Piece> Pieces { set; get; }
@@ -25,6 +26,7 @@ public class BoardManager : MonoBehaviour
     private AI.AI HinterXHinter;
     private Camera MainCamera;
     private bool isClicked = false;
+    private float timerCount = 60f;
     private GameCore.Turn LastTurn;
     private NetworkGame.NetworkManager networkLogic;
     
@@ -35,24 +37,15 @@ public class BoardManager : MonoBehaviour
     private void Start()
     {
         string time = DateTime.Now.ToString("h:mm:ss tt");
-
         Debug.Log("Made it to the start function at    " + time);
 
         MainCamera = GameObject.Find("IceCamera").GetComponent<Camera>();
 
-        GameObject core = GameObject.Find("GameCore");
-        if (core == null)
-        {
-            gameCore = new GameObject("GameCore").AddComponent<GameCore>();
-            gameCore.isSinglePlayer = true;
-            gameCore.aILevel = GameCore.AILevel.Intermediate;
-            gameCore.MySide = GameCore.Turn.ICE;
-        }
-        else gameCore = core.GetComponent<GameCore>();
-
         if (!gameCore.isSinglePlayer)
         {   //Multiplayer
             networkLogic = GameObject.Find("NetworkManager").GetComponent<NetworkGame.NetworkManager>();
+            Timer.SetActive(true);
+            networkTimer = Timer.GetComponent<Text>();
         }
 
         gameCore.boardManager = this;
@@ -84,6 +77,16 @@ public class BoardManager : MonoBehaviour
         {
             Instance = this;
         }
+
+        GameObject core = GameObject.Find("GameCore");
+        if (core == null)
+        {
+            gameCore = new GameObject("GameCore").AddComponent<GameCore>();
+            gameCore.isSinglePlayer = true;
+            gameCore.aILevel = GameCore.AILevel.Intermediate;
+            gameCore.MySide = GameCore.Turn.ICE;
+        }
+        else gameCore = core.GetComponent<GameCore>();
     }
     private void ResetAndInitializeBoard()
     {
@@ -163,21 +166,21 @@ public class BoardManager : MonoBehaviour
     //This function is called by the Game Core to tell the GUI that the game is over
     public void EndGame()
     {
-        //This Boolean is almost certainly wrong (you are right -Derick)
-        if (LastTurn != gameCore.MySide)
-        {
-            loseMenu.SetActive(true);
-        }
-        else
-        {
-            winMenu.SetActive(true);
-        }
+        if (LastTurn != gameCore.MySide) loseMenu.SetActive(true);
+        else winMenu.SetActive(true);
     }
     public void EndGameNetwork()
     {
         networkLogic.SendEndGame();
     }
-
+    public void TimeOut()
+    {
+        networkLogic.TimeOut();
+    }
+    public void TimeOutPeer()
+    {
+        EndGame();
+    }
     public void ResetBoard()
     {
         ResetAndInitializeBoard();
@@ -289,6 +292,19 @@ public class BoardManager : MonoBehaviour
         {
             if (selectedPiece == null) SelectPiece(cursorLocation);
             else MakeLocalMove(cursorLocation);
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if(Timer.activeInHierarchy != false)
+        {
+            timerCount -= Time.deltaTime;
+            networkTimer.text = Mathf.RoundToInt(timerCount).ToString();
+            if (timerCount < 0)
+            {
+
+            }
         }
     }
     private void SelectPiece(Coordinate loc)
