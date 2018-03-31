@@ -100,8 +100,7 @@ namespace NetworkGame
             if (eventcode == 0)
             {
                 Move opponentMove = new Move(new Coordinate(data[0], data[1]), new Coordinate(data[2], data[3]));
-                Coordinate From = new Coordinate(data[0], data[1]);
-                Coordinate To = new Coordinate(data[2], data[3]);
+
 
                 BoardManager.Instance.gameCore.UpdateBoard(opponentMove);
             }
