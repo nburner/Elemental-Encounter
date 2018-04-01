@@ -32,10 +32,10 @@ namespace NetworkGame
             lc = GameObject.Find("Canvas").GetComponent<LobbyCanvas>();
             if (!PhotonNetwork.connected) { lc.DisplayConnectionPanel();}
             else { lc.DisplayMenuPanel(); }
-                // Speeds up client connection
-                PhotonNetwork.autoJoinLobby = true;          
+            // Speeds up client connection
+            PhotonNetwork.autoJoinLobby = true;          
             // Allows all clients in same room to have their levels synced
-            PhotonNetwork.automaticallySyncScene = true;
+            PhotonNetwork.automaticallySyncScene = false;
 
             PhotonNetwork.logLevel = LogLevel;
             //Connect to online server
@@ -46,11 +46,6 @@ namespace NetworkGame
             //}));
             //if (connectionStatus) lc.DisplayErrorPanel();
             //else Connect();
-        }
-
-        private void Update()
-        {
-
         }
 
         void Start()
@@ -140,9 +135,18 @@ namespace NetworkGame
         /// </summary>
         public override void OnJoinedRoom()
         {
-            if (PhotonNetwork.room.PlayerCount == MaxPlayersPerRoom)
+            if (PhotonNetwork.isMasterClient)
+            {
+                gameCore.MySide = GameCore.Turn.ICE;
+            }
+            else
             {
                 gameCore.MySide = GameCore.Turn.FIRE;
+            }
+
+            if (PhotonNetwork.room.PlayerCount == MaxPlayersPerRoom)
+            {
+                PhotonNetwork.LoadLevel("BreakGame");
             }
         }
 

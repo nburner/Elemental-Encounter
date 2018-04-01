@@ -47,18 +47,17 @@ namespace NetworkGame
         public override void OnPhotonPlayerDisconnected(PhotonPlayer other)
         {
             Debug.Log("OnPhotonPlayerDisconnected() " + other.NickName); // seen when other disconnects
-
+            LeaveRoom();
 
             if (PhotonNetwork.isMasterClient)
             {
                 Debug.Log("OnPhotonPlayerDisonnected isMasterClient " + PhotonNetwork.isMasterClient); // called before OnPhotonPlayerDisconnected
             }
-            PhotonNetwork.LoadLevel("Game_Lobby");
 
         }
         public override void OnDisconnectedFromPhoton()
         {
-            LeaveRoom();
+            LeaveToMainMenu();
         }
         /// <summary>
         /// Called when the local player left the room. We need to load the launcher scene.
@@ -71,7 +70,12 @@ namespace NetworkGame
         public void LeaveRoom()
         {
             PhotonNetwork.LeaveRoom();
-            SceneManager.LoadScene("Game_Lobby");
+        }
+
+        public void LeaveToMainMenu()
+        {
+            PhotonNetwork.Disconnect();
+            SceneManager.LoadScene("MainMenu");
         }
 
         void OnEnable()
