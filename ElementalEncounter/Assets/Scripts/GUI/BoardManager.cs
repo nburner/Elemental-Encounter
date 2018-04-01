@@ -41,7 +41,7 @@ public class BoardManager : MonoBehaviour
         string time = DateTime.Now.ToString("h:mm:ss tt");
         Debug.Log("Made it to the start function at    " + time);
 
-        MainCamera = GameObject.Find("IceCamera").GetComponent<Camera>();
+        MainCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
 
         if (!gameCore.isSinglePlayer)
         {   //Multiplayer
@@ -58,6 +58,8 @@ public class BoardManager : MonoBehaviour
         if (gameCore.MySide == GameCore.Turn.ICE)
         {
             isMyTurn = true;
+            MainCamera.transform.position = new Vector3(MainCamera.transform.position.x, MainCamera.transform.position.y, -4);
+            MainCamera.transform.rotation = Quaternion.Euler(MainCamera.transform.rotation.eulerAngles.x, 0f, 0f);
         }
         else
         {
