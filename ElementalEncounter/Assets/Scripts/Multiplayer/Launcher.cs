@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace NetworkGame
@@ -51,6 +52,7 @@ namespace NetworkGame
         void Start()
         {
             gameCore = GameObject.Find("GameCore").GetComponent<GameCore>();
+            gameCore.isSinglePlayer = false;
             Connect();
         }
 
@@ -83,6 +85,12 @@ namespace NetworkGame
         {
             PhotonNetwork.JoinRandomRoom();
             lc.DisplayJoinGamePanel();
+        }
+
+        public void OnMainMenu_Click()
+        {
+            PhotonNetwork.Disconnect();
+            SceneManager.LoadScene("MainMenu");
         }
 
         #endregion

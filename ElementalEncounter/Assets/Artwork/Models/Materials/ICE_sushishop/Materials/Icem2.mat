@@ -107,7 +107,7 @@ Material:
     - _node_9046: 1.12
     - _snow_slider: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.716, g: 0.866, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _node_5379: {r: 1, g: 0.6397059, b: 0.6397059, a: 1}
     - _node_6644: {r: 0.5147059, g: 0.7389455, b: 1, a: 1}

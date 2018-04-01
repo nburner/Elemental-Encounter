@@ -6,8 +6,11 @@ public class HUD : MonoBehaviour
     [Header("Set in Inspector")]
     public GameObject quitPanel;
 
+    private GameCore gameCore;
+
     void Start()
     {
+        gameCore = GameObject.Find("GameCore").GetComponent<GameCore>();
         quitPanel.SetActive(false);
     }
 
@@ -23,7 +26,14 @@ public class HUD : MonoBehaviour
 
     public void PlayerConfirmedQuit()
     {
-        SceneManager.LoadScene("MainMenu");
+        if (gameCore.isSinglePlayer)
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+        else
+        {
+            SceneManager.LoadScene("Game_Lobby");
+        }
     }
 
     public void PlayerDeniedQuit()

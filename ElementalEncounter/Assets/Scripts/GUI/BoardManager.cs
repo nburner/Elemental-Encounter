@@ -7,31 +7,33 @@ using UnityEngine.UI;
 public class BoardManager : MonoBehaviour
 {
     #region Common Properties and Fields
+    #region public variables
     //List of Gameobject for spawning pieces on the board
     public List<GameObject> piecePrefabs;
     //public List<GameObject> boardPrefabs;
-    private List<GameObject> activePieces = new List<GameObject>();
     public GameObject Timer;
-    private Text networkTimer;
-
+    public GameObject winMenu;
+    public GameObject loseMenu;
     public static BoardManager Instance { set; get; }
     public Board<Piece> Pieces { set; get; }
     public bool isMyTurn = true;
     public bool testing = false;
-
+    public GameObject CurrentTurnText;
+    public GameCore gameCore;
+    #endregion
+    #region Private Variables
+    private List<GameObject> activePieces = new List<GameObject>();
+    private Text networkTimer;
     private Piece selectedPiece;
     private const float TILE_SIZE = 1.0f;
     private const float TILE_OFFSET = 0.5f;
-    public GameCore gameCore;
     private AI.AI HinterXHinter;
     private Camera MainCamera;
     private bool isClicked = false;
     private float timerCount = 60f;
     private GameCore.Turn LastTurn;
     private NetworkGame.NetworkManager networkLogic;
-    
-    public GameObject winMenu;
-    public GameObject loseMenu;
+    #endregion 
     #endregion
 
     private void Start()
@@ -63,7 +65,8 @@ public class BoardManager : MonoBehaviour
             MainCamera.transform.position = new Vector3(MainCamera.transform.position.x, MainCamera.transform.position.y, 12);
             MainCamera.transform.rotation = Quaternion.Euler(MainCamera.transform.rotation.eulerAngles.x, 180f, 0f);
         }
-
+        LastTurn = GameCore.Turn.FIRE;
+        CurrentTurnText.GetComponent<Text>().text = (gameCore.CurrentTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Ice Turn";
         time = DateTime.Now.ToString("h:mm:ss tt");
 
         Debug.Log("Finished loading GameScene at   " + time);
@@ -207,6 +210,7 @@ public class BoardManager : MonoBehaviour
         Pieces[move.From].SetPosition(move.To);
         Pieces[move.To] = Pieces[move.From];
         Pieces[move.From] = null; // Removing the piece from the 
+        CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Ice Turn";
         LastTurn = gameCore.CurrentTurn;
     }
     #endregion

@@ -20,10 +20,10 @@ public class MainMenu : MonoBehaviour
     {
         quitPanel.SetActive(false);
         startGame = false;
-        //loadingScene = SceneManager.LoadSceneAsync("BreakGame", LoadSceneMode.Additive);
+        loadingScene = SceneManager.LoadSceneAsync("BreakGame", LoadSceneMode.Additive);
 
-        //StartCoroutine(PlaySinglePlayerGame());
-        //loadingScene.allowSceneActivation = false;
+        StartCoroutine(PlaySinglePlayerGame());
+        loadingScene.allowSceneActivation = false;
     }
 
     void Awake()
@@ -54,7 +54,6 @@ public class MainMenu : MonoBehaviour
 
         //gameCore.MySide = GameCore.Turn.ICE;
         //gameCore.aILevel = GameCore.AILevel.Intermediate;
-        gameCore.isMasterClient = true;
         gameCore.isSinglePlayer = true;
 
         while (!loadingScene.isDone)
