@@ -42,8 +42,8 @@ public class LobbyCanvas : MonoBehaviour
     {
         menuPanel.SetActive(false);
         hostGamePanel.SetActive(false);
-        joinGamePanel.SetActive(true);
-        connectionGamePanel.SetActive(false);
+        joinGamePanel.SetActive(false);
+        connectionGamePanel.SetActive(true);
         errorGamePanel.SetActive(false);
     }
 

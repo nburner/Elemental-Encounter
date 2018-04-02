@@ -20,10 +20,10 @@ public class MainMenu : MonoBehaviour
     {
         quitPanel.SetActive(false);
         startGame = false;
-        loadingScene = SceneManager.LoadSceneAsync("BreakGame", LoadSceneMode.Additive);
+        //loadingScene = SceneManager.LoadSceneAsync("BreakGame", LoadSceneMode.Additive);
 
-        StartCoroutine(PlaySinglePlayerGame());
-        loadingScene.allowSceneActivation = false;
+        //StartCoroutine(PlaySinglePlayerGame());
+        //loadingScene.allowSceneActivation = false;
     }
 
     void Awake()
