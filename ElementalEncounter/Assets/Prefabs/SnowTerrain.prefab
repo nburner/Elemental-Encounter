@@ -268,15 +268,15 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4144037101596322}
-  - component: {fileID: 218165802052984410}
   - component: {fileID: 154407243804491994}
+  - component: {fileID: 218273676990353756}
   m_Layer: 0
   m_Name: SnowTerrain
   m_TagString: IceTerrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4019030429818360
 Transform:
   m_ObjectHideFlags: 1
@@ -1183,9 +1183,9 @@ TerrainCollider:
   m_GameObject: {fileID: 1779812993292048}
   m_Material: {fileID: 0}
   m_Enabled: 1
-  m_TerrainData: {fileID: 15600000, guid: c4ee4c19bcf16ec4493b56e1fbe1e3f5, type: 2}
+  m_TerrainData: {fileID: 15600000, guid: 21cf609fe76dc6c4bb384e00a963d52b, type: 2}
   m_EnableTreeColliders: 1
---- !u!218 &218165802052984410
+--- !u!218 &218273676990353756
 Terrain:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -1193,8 +1193,8 @@ Terrain:
   m_GameObject: {fileID: 1779812993292048}
   m_Enabled: 1
   serializedVersion: 3
-  m_TerrainData: {fileID: 15600000, guid: c4ee4c19bcf16ec4493b56e1fbe1e3f5, type: 2}
-  m_TreeDistance: 2000
+  m_TerrainData: {fileID: 15600000, guid: 21cf609fe76dc6c4bb384e00a963d52b, type: 2}
+  m_TreeDistance: 5000
   m_TreeBillboardDistance: 50
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 50
@@ -1214,5 +1214,5 @@ Terrain:
   m_LegacyShininess: 0.078125
   m_MaterialTemplate: {fileID: 0}
   m_BakeLightProbesForTrees: 1
-  m_ScaleInLightmap: 0.2048
+  m_ScaleInLightmap: 1
   m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
