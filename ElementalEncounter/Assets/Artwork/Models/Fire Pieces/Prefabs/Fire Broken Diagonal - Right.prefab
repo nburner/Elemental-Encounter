@@ -3829,7 +3829,6 @@ GameObject:
   - component: {fileID: 4775921199310792}
   - component: {fileID: 111734415207796742}
   - component: {fileID: 114308228039290546}
-  - component: {fileID: 114570760485938484}
   m_Layer: 0
   m_Name: Fire Broken Diagonal - Right
   m_TagString: Untagged
@@ -18573,15 +18572,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isIce: 0
---- !u!114 &114570760485938484
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1848356010410964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb030b085851196458cf070f963d1179, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isIce: 0
+  captureSound: {fileID: 0}

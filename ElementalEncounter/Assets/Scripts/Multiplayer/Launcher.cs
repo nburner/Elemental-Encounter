@@ -109,12 +109,14 @@ namespace NetworkGame
         public override void OnDisconnectedFromPhoton()
         {
             Debug.Log("Disconnected from Photon server.");
+            lc.DisplayErrorPanel();
         }
 
         public override void OnFailedToConnectToPhoton(DisconnectCause cause)
         {
             Debug.Log(cause);
             lc.DisplayErrorPanel();
+            PhotonNetwork.Disconnect();
         }
 
         public override void OnCreatedRoom()

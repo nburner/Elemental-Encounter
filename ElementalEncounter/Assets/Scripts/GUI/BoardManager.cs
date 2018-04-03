@@ -14,11 +14,11 @@ public class BoardManager : MonoBehaviour
     public GameObject Timer;
     public GameObject winMenu;
     public GameObject loseMenu;
+    public GameObject CurrentTurnText;
     public static BoardManager Instance { set; get; }
     public Board<Piece> Pieces { set; get; }
     public bool isMyTurn = true;
     public bool testing = false;
-    public GameObject CurrentTurnText;
     public GameCore gameCore;
     #endregion
     #region Private Variables
@@ -177,11 +177,11 @@ public class BoardManager : MonoBehaviour
     {
         networkLogic.SendEndGame();
     }
-    public void TimeOut()
+    public void SendTimeOut()
     {
         networkLogic.TimeOut();
     }
-    public void TimeOutPeer()
+    public void ReceiveTimeOut()
     {
         EndGame();
     }
@@ -280,7 +280,7 @@ public class BoardManager : MonoBehaviour
             networkTimer.text = Mathf.RoundToInt(timerCount).ToString();
             if (timerCount < 0)
             {
-
+                //SendTimeOut();
             }
         }
     }

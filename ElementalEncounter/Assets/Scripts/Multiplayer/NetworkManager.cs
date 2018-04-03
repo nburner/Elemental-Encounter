@@ -119,7 +119,7 @@ namespace NetworkGame
             }
             if (eventcode == 2)
             {
-                BoardManager.Instance.TimeOut();
+                BoardManager.Instance.ReceiveTimeOut();
             }
 
         }

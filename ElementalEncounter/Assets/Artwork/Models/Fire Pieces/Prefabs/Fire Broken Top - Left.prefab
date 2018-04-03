@@ -4118,7 +4118,6 @@ GameObject:
   - component: {fileID: 4775921199310792}
   - component: {fileID: 111156842003102990}
   - component: {fileID: 114242031600839702}
-  - component: {fileID: 114817350347837132}
   m_Layer: 0
   m_Name: Fire Broken Top - Left
   m_TagString: Untagged
@@ -19941,15 +19940,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isIce: 0
---- !u!114 &114817350347837132
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1848356010410964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb030b085851196458cf070f963d1179, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isIce: 0
+  captureSound: {fileID: 0}

@@ -208,7 +208,6 @@ GameObject:
   - component: {fileID: 4498736411091592}
   - component: {fileID: 111161525268223286}
   - component: {fileID: 114397084957425058}
-  - component: {fileID: 114827592214119350}
   m_Layer: 0
   m_Name: Ice Broken Roll - Right
   m_TagString: Untagged
@@ -5973,15 +5972,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isIce: 1
---- !u!114 &114827592214119350
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1081819570631570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb030b085851196458cf070f963d1179, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isIce: 1
+  captureSound: {fileID: 0}
