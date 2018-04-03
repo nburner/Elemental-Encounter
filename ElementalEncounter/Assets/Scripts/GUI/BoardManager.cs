@@ -15,6 +15,9 @@ public class BoardManager : MonoBehaviour
     public GameObject winMenu;
     public GameObject loseMenu;
     public GameObject CurrentTurnText;
+    public GameObject IceTerrain;
+    public GameObject FireTerrain;
+    public GameObject ClashTerrain;
     public static BoardManager Instance { set; get; }
     public Board<Piece> Pieces { set; get; }
     public bool isMyTurn = true;
@@ -42,6 +45,22 @@ public class BoardManager : MonoBehaviour
         Debug.Log("Made it to the start function at    " + time);
 
         MainCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
+
+        IceTerrain.SetActive(false);
+        FireTerrain.SetActive(false);
+        ClashTerrain.SetActive(false);
+        switch (gameCore.Map)
+        {
+            case GameCore.MapChoice.ICE:
+                IceTerrain.SetActive(true);
+                break;
+            case GameCore.MapChoice.FIRE:
+                FireTerrain.SetActive(true);
+                break;
+            case GameCore.MapChoice.CLASH:
+                ClashTerrain.SetActive(true);
+                break;
+        }
 
         if (!gameCore.isSinglePlayer)
         {   //Multiplayer

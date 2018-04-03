@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
@@ -12,14 +13,18 @@ public class MainMenu : MonoBehaviour
     AsyncOperation loadingScene;
 
     public GameObject mainMenu;
+    public GameObject gameOptions;
+    public ToggleGroup aiToggleGroup;
+    public ToggleGroup mapToggleGroup;
 
-    private bool startGame;
+    //private bool startGame;
 
     private GameCore gameCore;
     void Start()
     {
-        quitPanel.SetActive(false);
-        startGame = false;
+        mainMenu.SetActive(true);
+        gameOptions.SetActive(false);
+        //startGame = false;
         //loadingScene = SceneManager.LoadSceneAsync("BreakGame", LoadSceneMode.Additive);
         //StartCoroutine(PlaySinglePlayerGame());
         //loadingScene.allowSceneActivation = false;
@@ -37,36 +42,89 @@ public class MainMenu : MonoBehaviour
 
     public void singlePlayerButtonClick()
     {
-        startGame = true;
+        //startGame = true;
+        //gameCore.isSinglePlayer = true;
+        //gameCore.aILevel = GameCore.AILevel.Intermediate;
+        //gameCore.MySide = GameCore.Turn.ICE;
+        //SceneManager.LoadScene("BreakGame");
+
+        mainMenu.SetActive(false);
+        gameOptions.SetActive(true);
+    }
+
+    public void StartGame()
+    {
+        IEnumerable<Toggle> aiToggles = aiToggleGroup.ActiveToggles();
+        IEnumerable<Toggle> mapToggles = mapToggleGroup.ActiveToggles();
+        string aiText = "";
+        string mapText = "";
+        foreach (var toggle in aiToggles)
+        {
+            if (toggle.enabled)
+            {
+                aiText = toggle.ToString().Replace(" (UnityEngine.UI.Toggle)", "");
+            }
+        }
+        foreach (var toggle in mapToggles)
+        {
+            if (toggle.enabled)
+            {
+                mapText = toggle.ToString().Replace(" (UnityEngine.UI.Toggle)", "");
+            }
+        }
+
+        switch(aiText)
+        {
+            case "Easy":
+                gameCore.aILevel = GameCore.AILevel.Easy;
+                break;
+            case "Intermediate":
+                gameCore.aILevel = GameCore.AILevel.Intermediate;
+                break;
+        }
+
+        switch (mapText)
+        {
+            case "Ice":
+                gameCore.Map = GameCore.MapChoice.ICE;
+                break;
+            case "Fire":
+                gameCore.Map = GameCore.MapChoice.FIRE;
+                break;
+            case "Clash":
+                gameCore.Map = GameCore.MapChoice.CLASH;
+                break;
+        }
+
         gameCore.isSinglePlayer = true;
-        gameCore.aILevel = GameCore.AILevel.Intermediate;
         gameCore.MySide = GameCore.Turn.ICE;
+
         SceneManager.LoadScene("BreakGame");
     }
 
-    public IEnumerator PlaySinglePlayerGame()
-    {
-       // string time = DateTime.Now.ToString("h:mm:ss tt");
+    //public IEnumerator PlaySinglePlayerGame()
+    //{
+    //   // string time = DateTime.Now.ToString("h:mm:ss tt");
 
-        //Debug.Log("started loading GameScene at" + time);
-        
+    //    //Debug.Log("started loading GameScene at" + time);
 
-        //gameCore.MySide = GameCore.Turn.ICE;
-        //gameCore.aILevel = GameCore.AILevel.Intermediate;
-        gameCore.isSinglePlayer = true;
 
-        while (!loadingScene.isDone)
-        {
-            Debug.Log(loadingScene.progress);
+    //    //gameCore.MySide = GameCore.Turn.ICE;
+    //    //gameCore.aILevel = GameCore.AILevel.Intermediate;
+    //    gameCore.isSinglePlayer = true;
 
-            if (startGame == true) loadingScene.allowSceneActivation = true;
+    //    while (!loadingScene.isDone)
+    //    {
+    //        Debug.Log(loadingScene.progress);
 
-            yield return null;
-        }
-        
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName("BreakGame"));
-        SceneManager.UnloadSceneAsync("MainMenu");
-    }
+    //        if (startGame == true) loadingScene.allowSceneActivation = true;
+
+    //        yield return null;
+    //    }
+
+    //    SceneManager.SetActiveScene(SceneManager.GetSceneByName("BreakGame"));
+    //    SceneManager.UnloadSceneAsync("MainMenu");
+    //}
     public void PlayMultiplayerGame()
     {
         SceneManager.LoadScene("Game_Lobby");

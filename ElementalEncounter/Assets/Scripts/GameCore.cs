@@ -8,10 +8,12 @@ public class GameCore : MonoBehaviour
 {
     public enum Turn { ICE, FIRE };
     public enum AILevel { Intermediate, Easy };
+    public enum MapChoice { ICE, FIRE, CLASH };
 
     public bool isSinglePlayer;
     public Turn MySide;
     public Turn CurrentTurn;
+    public MapChoice Map;
     public bool isMasterClient;
     private AI.AI ai;
     public Board<char> Pieces;

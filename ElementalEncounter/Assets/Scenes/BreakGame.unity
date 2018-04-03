@@ -481,6 +481,9 @@ MonoBehaviour:
   winMenu: {fileID: 1017735148}
   loseMenu: {fileID: 1406503022}
   CurrentTurnText: {fileID: 1773515966}
+  IceTerrain: {fileID: 1029501579}
+  FireTerrain: {fileID: 711309670}
+  ClashTerrain: {fileID: 1405176940}
   isMyTurn: 1
   testing: 0
   gameCore: {fileID: 0}
@@ -4024,6 +4027,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5d2a80a45297ea340b2f309b992b6c51, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &711309670 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1279094832750006, guid: 5d2a80a45297ea340b2f309b992b6c51,
+    type: 2}
+  m_PrefabInternal: {fileID: 711309669}
 --- !u!1 &711345447
 GameObject:
   m_ObjectHideFlags: 0
@@ -9253,6 +9261,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8a33b7edfad485148b3566f7522c5ce3, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1029501579 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1779812993292048, guid: 8a33b7edfad485148b3566f7522c5ce3,
+    type: 2}
+  m_PrefabInternal: {fileID: 1029501578}
 --- !u!1 &1030227721
 GameObject:
   m_ObjectHideFlags: 0
