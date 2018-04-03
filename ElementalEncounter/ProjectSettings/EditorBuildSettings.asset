@@ -15,11 +15,5 @@ EditorBuildSettings:
     path: Assets/Scenes/BreakGame.unity
     guid: 8ee257a0805228b47b4c34fbab0ed8a2
   - enabled: 1
-    path: Assets/Scenes/BreakGameMultiplayer.unity
-    guid: b6bda085e99202547b0b293a4270347a
-  - enabled: 1
     path: Assets/Scenes/Game_Lobby.unity
     guid: 3f207f5a84101ea4ab7b61c7f213481c
-  - enabled: 1
-    path: Assets/Scenes/NewGameSinglePlayer.unity
-    guid: e10442a21a860914585315e25fced7f8
