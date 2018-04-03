@@ -17,14 +17,17 @@ namespace AI
         {
             if (dllCaller != null)
             {
-                if (dllCaller.IsDone)
+                if (FrameCounter < UInt32.MaxValue) FrameCounter++;
+                if (dllCaller.IsDone && FrameCounter > 120)
                 {
                     Callback(dllCaller.Move);
                     dllCaller = null;
+                    FrameCounter = 0;
                 }
             }
         }
 
+        private uint FrameCounter = 0;
         public Turn Color { get; private set; }
         public AIType Type { get; private set; }
         private Action<Move> Callback { get; set; }
