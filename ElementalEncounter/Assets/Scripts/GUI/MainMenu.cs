@@ -25,6 +25,7 @@ public class MainMenu : MonoBehaviour
     {
         mainMenu.SetActive(true);
         gameOptions.SetActive(false);
+        quitPanel.SetActive(false);
         //startGame = false;
         //loadingScene = SceneManager.LoadSceneAsync("BreakGame", LoadSceneMode.Additive);
         //StartCoroutine(PlaySinglePlayerGame());
