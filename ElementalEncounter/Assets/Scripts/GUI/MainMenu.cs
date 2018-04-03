@@ -16,6 +16,7 @@ public class MainMenu : MonoBehaviour
     public GameObject gameOptions;
     public ToggleGroup aiToggleGroup;
     public ToggleGroup mapToggleGroup;
+    public ToggleGroup turnToggleGroup;
 
     //private bool startGame;
 
@@ -56,8 +57,10 @@ public class MainMenu : MonoBehaviour
     {
         IEnumerable<Toggle> aiToggles = aiToggleGroup.ActiveToggles();
         IEnumerable<Toggle> mapToggles = mapToggleGroup.ActiveToggles();
+        IEnumerable<Toggle> turnToggles = turnToggleGroup.ActiveToggles();
         string aiText = "";
         string mapText = "";
+        string turnText = "";
         foreach (var toggle in aiToggles)
         {
             if (toggle.enabled)
@@ -72,8 +75,15 @@ public class MainMenu : MonoBehaviour
                 mapText = toggle.ToString().Replace(" (UnityEngine.UI.Toggle)", "");
             }
         }
+        foreach (var toggle in turnToggles)
+        {
+            if (toggle.enabled)
+            {
+                turnText = toggle.ToString().Replace(" (UnityEngine.UI.Toggle)", "");
+            }
+        }
 
-        switch(aiText)
+        switch (aiText)
         {
             case "Easy":
                 gameCore.aILevel = GameCore.AILevel.Easy;
@@ -96,8 +106,16 @@ public class MainMenu : MonoBehaviour
                 break;
         }
 
+        switch (turnText)
+        {
+            case "Ice":
+                gameCore.MySide = GameCore.Turn.ICE;
+                break;
+            case "Fire":
+                gameCore.MySide = GameCore.Turn.FIRE;
+                break;
+        }
         gameCore.isSinglePlayer = true;
-        gameCore.MySide = GameCore.Turn.ICE;
 
         SceneManager.LoadScene("BreakGame");
     }
