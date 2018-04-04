@@ -1,4 +1,5 @@
 #include "..\..\CSharpSolution\AILibrary\AI.h"
+#include <map>
 using namespace AI;
 
 const int BEST_WEIGHTS = -1 * INT_MAX;
@@ -154,6 +155,7 @@ string to_string(BoardFeature b) {
 
 struct featureSet {
 	mutable double similarity;
+	std::pair<BoardFeature, BoardFeature> features() { return{ first,second }; }
 	string to_string() {
 		return "(" + ::to_string(first) + ", " + ::to_string(second) + ")";
 	}
@@ -223,7 +225,21 @@ void main() {
 				}
 			}
 
-	for (auto a : similarities) if (std::abs(a.similarity) >.97) cout << a.to_string() << ": " << a.similarity << endl;
+	int notSimilarCount[NULL_FEATURE];
+	double totalSimilarity[NULL_FEATURE];
+	for (auto a : similarities) if (std::abs(a.similarity) < .05) {
+		cout << a.to_string() << ": " << a.similarity << endl;
+		notSimilarCount[a.features().first]++;
+		notSimilarCount[a.features().second]++;
+	}
+	for (auto a : similarities){
+		totalSimilarity[a.features().first] += std::abs(a.similarity);
+		totalSimilarity[a.features().second] += std::abs(a.similarity);
+	}
+	
+	std::sort(totalSimilarity, totalSimilarity + NULL_FEATURE);
+	for (int i = 0; i < NULL_FEATURE; i++) cout << "Feature: " << to_string((BoardFeature)i) << ": " << totalSimilarity[i] << endl;
+
 
 	//for (int i = 0; i < boards.size(); i++) cout << featureVectors[MY_PAWN_COUNT][i] << "\t";
 	cout << boards.size() << endl;
