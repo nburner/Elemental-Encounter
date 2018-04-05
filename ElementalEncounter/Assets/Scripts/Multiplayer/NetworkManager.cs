@@ -120,6 +120,7 @@ namespace NetworkGame
             {
                 Move opponentMove = new Move(new Coordinate(data[0], data[1]), new Coordinate(data[2], data[3]));
                 BoardManager.Instance.gameCore.UpdateBoard(opponentMove);
+                BoardManager.Instance.Timer.SetActive(true);
             }
             if (eventcode == 1)
             {

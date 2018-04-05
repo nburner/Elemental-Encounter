@@ -207,6 +207,11 @@ namespace NetworkGame
             PhotonNetwork.LoadLevel("MainMenu");
         }
 
+        public void CancelHost()
+        {
+            PhotonNetwork.LeaveRoom();
+        }
+
         #endregion
 
         #endregion

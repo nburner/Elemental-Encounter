@@ -65,7 +65,6 @@ public class BoardManager : MonoBehaviour
         if (!gameCore.isSinglePlayer)
         {   //Multiplayer
             networkLogic = GameObject.Find("NetworkManager").GetComponent<NetworkGame.NetworkManager>();
-            Timer.SetActive(true);
             networkTimer = Timer.GetComponent<Text>();
             if (!gameCore.isMasterClient)
             {
@@ -140,25 +139,27 @@ public class BoardManager : MonoBehaviour
         isClicked = false;
         
         BoardHighlights.Instance.HideHighlights();
-
+        timerCount = 60f;
+        Timer.SetActive(false);
         selectedPiece = null;
     }
 
-    public void GetNetworkMove(Coordinate From, Coordinate To)
-    {
-        Move myMove;
-        try
-        {
-            myMove = new Move(From, To);
-            isMyTurn = true;
-            gameCore.UpdateBoard(myMove);
-        }
-        catch (ArgumentException e)
-        {
-            //Move constructor throws on invalid move
-            Debug.Log(e.Message);
-        }
-    }
+    //public void GetNetworkMove(Coordinate From, Coordinate To)
+    //{
+    //    Move myMove;
+    //    try
+    //    {
+    //        myMove = new Move(From, To);
+    //        isMyTurn = true;
+    //        gameCore.UpdateBoard(myMove);
+    //    }
+    //    catch (ArgumentException e)
+    //    {
+    //        //Move constructor throws on invalid move
+    //        Debug.Log(e.Message);
+    //    }
+    //    Timer.SetActive(true);
+    //}
 
     public void ChangeSide()
     {
@@ -172,12 +173,14 @@ public class BoardManager : MonoBehaviour
             isMyTurn = true;
             MainCamera.transform.position = new Vector3(MainCamera.transform.position.x, MainCamera.transform.position.y, -4);
             MainCamera.transform.rotation = Quaternion.Euler(MainCamera.transform.rotation.eulerAngles.x, 0f, 0f);
+            if(!gameCore.isSinglePlayer) Timer.SetActive(true);
         }
         else
         {
             isMyTurn = false;
             MainCamera.transform.position = new Vector3(MainCamera.transform.position.x, MainCamera.transform.position.y, 12);
             MainCamera.transform.rotation = Quaternion.Euler(MainCamera.transform.rotation.eulerAngles.x, 180f, 0f);
+            if (!gameCore.isSinglePlayer) Timer.SetActive(true);
         }
         LastTurn = GameCore.Turn.FIRE;
         CurrentTurnText.GetComponent<Text>().text = (gameCore.CurrentTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Ice Turn";
@@ -324,7 +327,7 @@ public class BoardManager : MonoBehaviour
             networkTimer.text = Mathf.RoundToInt(timerCount).ToString();
             if (timerCount < 0)
             {
-                //SendTimeOut();
+                SendTimeOut();
             }
         }
     }
