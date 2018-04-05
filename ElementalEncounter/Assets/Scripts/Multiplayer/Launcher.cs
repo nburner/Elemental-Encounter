@@ -14,6 +14,9 @@ namespace NetworkGame
         public PhotonLogLevel LogLevel = PhotonLogLevel.ErrorsOnly;
         public byte MaxPlayersPerRoom = 2;
         public LobbyCanvas lc;
+        public ToggleGroup mapToggleGroup;
+        public ToggleGroup turnToggleGroup;
+
 
         #endregion
 
@@ -76,8 +79,50 @@ namespace NetworkGame
 
         public void OnHostGame_Click()
         {
+            IEnumerable<Toggle> mapToggles = mapToggleGroup.ActiveToggles();
+            IEnumerable<Toggle> turnToggles = turnToggleGroup.ActiveToggles();
+            string mapText = "";
+            string turnText = "";
+            foreach (var toggle in mapToggles)
+            {
+                if (toggle.enabled)
+                {
+                    mapText = toggle.ToString().Replace(" (UnityEngine.UI.Toggle)", "");
+                }
+            }
+            foreach (var toggle in turnToggles)
+            {
+                if (toggle.enabled)
+                {
+                    turnText = toggle.ToString().Replace(" (UnityEngine.UI.Toggle)", "");
+                }
+            }
+
+
+            switch (mapText)
+            {
+                case "Ice":
+                    gameCore.Map = GameCore.MapChoice.ICE;
+                    break;
+                case "Fire":
+                    gameCore.Map = GameCore.MapChoice.FIRE;
+                    break;
+                case "Clash":
+                    gameCore.Map = GameCore.MapChoice.CLASH;
+                    break;
+            }
+
+            switch (turnText)
+            {
+                case "Ice":
+                    gameCore.MySide = GameCore.Turn.ICE;
+                    break;
+                case "Fire":
+                    gameCore.MySide = GameCore.Turn.FIRE;
+                    break;
+            }
+            gameCore.isMasterClient = true;
             PhotonNetwork.CreateRoom(null, new RoomOptions() { MaxPlayers = MaxPlayersPerRoom }, null);
-            gameCore.MySide = GameCore.Turn.ICE;
             lc.DisplayHostGamePanel();
         }
 
@@ -145,15 +190,6 @@ namespace NetworkGame
         /// </summary>
         public override void OnJoinedRoom()
         {
-            if (PhotonNetwork.isMasterClient)
-            {
-                gameCore.MySide = GameCore.Turn.ICE;
-            }
-            else
-            {
-                gameCore.MySide = GameCore.Turn.FIRE;
-            }
-
             if (PhotonNetwork.room.PlayerCount == MaxPlayersPerRoom)
             {
                 PhotonNetwork.LoadLevel("BreakGame");

@@ -163,4 +163,10 @@ public class MainMenu : MonoBehaviour
     {
         quitPanel.SetActive(false);
     }
+    public void ShowMainMenu()
+    {
+        mainMenu.SetActive(true);
+        gameOptions.SetActive(false);
+        quitPanel.SetActive(false);
+    }
 }

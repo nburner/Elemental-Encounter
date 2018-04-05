@@ -35,7 +35,7 @@ namespace NetworkGame
             if (PhotonNetwork.isMasterClient)
             {
                 Debug.Log("OnPhotonPlayerConnected isMasterClient " + PhotonNetwork.isMasterClient); // called before OnPhotonPlayerDisconnected
-                 
+
                 LoadArena();
             }
         }
@@ -102,15 +102,23 @@ namespace NetworkGame
         {
             PhotonNetwork.RaiseEvent(2, null, true, null);
         }
+        public void WhatSide(int side)
+        {
+            int[] aData = { side };
+            PhotonNetwork.RaiseEvent(3, aData, true, null);
+        }
+        public void RequestSide()
+        {
+            PhotonNetwork.RaiseEvent(4, null, true, null);
+        }
 
         public void OnEvent(byte eventcode, object content, int senderid)
         {
             int[] data = content as int[];
+            int[] data2 = content as int[];
             if (eventcode == 0)
             {
                 Move opponentMove = new Move(new Coordinate(data[0], data[1]), new Coordinate(data[2], data[3]));
-
-
                 BoardManager.Instance.gameCore.UpdateBoard(opponentMove);
             }
             if (eventcode == 1)
@@ -121,7 +129,15 @@ namespace NetworkGame
             {
                 BoardManager.Instance.ReceiveTimeOut();
             }
-
+            if(eventcode == 3)
+            {
+                int mySide = data2[0];
+                BoardManager.Instance.ReceiveSide(mySide);
+            }
+            if(eventcode == 4)
+            {
+                BoardManager.Instance.SendSide();
+            }
         }
         #endregion
     }

@@ -67,27 +67,15 @@ public class BoardManager : MonoBehaviour
             networkLogic = GameObject.Find("NetworkManager").GetComponent<NetworkGame.NetworkManager>();
             Timer.SetActive(true);
             networkTimer = Timer.GetComponent<Text>();
-        }
-
-        gameCore.boardManager = this;
-        //Debug.Log("Started RestAndInitilizeBoard funcion");
-        ResetAndInitializeBoard();
-        //Debug.Log("Finishied RestAndInitilizeBoard funcion");
-
-        if (gameCore.MySide == GameCore.Turn.ICE)
-        {
-            isMyTurn = true;
-            MainCamera.transform.position = new Vector3(MainCamera.transform.position.x, MainCamera.transform.position.y, -4);
-            MainCamera.transform.rotation = Quaternion.Euler(MainCamera.transform.rotation.eulerAngles.x, 0f, 0f);
+            if (!gameCore.isMasterClient)
+            {
+                WhatIsMySide();
+            }
         }
         else
         {
-            isMyTurn = false;
-            MainCamera.transform.position = new Vector3(MainCamera.transform.position.x, MainCamera.transform.position.y, 12);
-            MainCamera.transform.rotation = Quaternion.Euler(MainCamera.transform.rotation.eulerAngles.x, 180f, 0f);
+            ChangeSide();
         }
-        LastTurn = GameCore.Turn.FIRE;
-        CurrentTurnText.GetComponent<Text>().text = (gameCore.CurrentTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Ice Turn";
         time = DateTime.Now.ToString("h:mm:ss tt");
 
         Debug.Log("Finished loading GameScene at   " + time);
@@ -172,6 +160,28 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    public void ChangeSide()
+    {
+        gameCore.boardManager = this;
+        //Debug.Log("Started RestAndInitilizeBoard funcion");
+        ResetAndInitializeBoard();
+        //Debug.Log("Finishied RestAndInitilizeBoard funcion");
+
+        if (gameCore.MySide == GameCore.Turn.ICE)
+        {
+            isMyTurn = true;
+            MainCamera.transform.position = new Vector3(MainCamera.transform.position.x, MainCamera.transform.position.y, -4);
+            MainCamera.transform.rotation = Quaternion.Euler(MainCamera.transform.rotation.eulerAngles.x, 0f, 0f);
+        }
+        else
+        {
+            isMyTurn = false;
+            MainCamera.transform.position = new Vector3(MainCamera.transform.position.x, MainCamera.transform.position.y, 12);
+            MainCamera.transform.rotation = Quaternion.Euler(MainCamera.transform.rotation.eulerAngles.x, 180f, 0f);
+        }
+        LastTurn = GameCore.Turn.FIRE;
+        CurrentTurnText.GetComponent<Text>().text = (gameCore.CurrentTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Ice Turn";
+    }
 
     #region Called By The Game Core
     //This function is used by the game core to tell the GUI that it is the local user's turn
@@ -203,6 +213,21 @@ public class BoardManager : MonoBehaviour
     public void ReceiveTimeOut()
     {
         EndGame();
+    }
+    public void SendSide()
+    {
+        if(gameCore.MySide == GameCore.Turn.ICE) { networkLogic.WhatSide(0); }
+        else { networkLogic.WhatSide(1); }
+        ChangeSide();
+    }
+    public void ReceiveSide(int side)
+    {
+        if(side == 0) { gameCore.MySide = GameCore.Turn.FIRE; ChangeSide(); }
+        else { gameCore.MySide = GameCore.Turn.ICE; ChangeSide(); }
+    }
+    public void WhatIsMySide()
+    {
+        networkLogic.RequestSide();
     }
     public void ResetBoard()
     {
