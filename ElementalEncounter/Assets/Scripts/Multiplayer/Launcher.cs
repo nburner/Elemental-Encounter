@@ -79,10 +79,33 @@ namespace NetworkGame
 
         public void OnHostGame_Click()
         {
+            SetMapChoice();
+            SetTurnChoice();
+            gameCore.isMasterClient = true;
+            PhotonNetwork.CreateRoom(null, new RoomOptions() { MaxPlayers = MaxPlayersPerRoom }, null);
+            lc.DisplayHostGamePanel();
+        }
+
+        public void OnJoinGame_Click()
+        {
+            SetMapChoice();
+            gameCore.isMasterClient = false;
+            PhotonNetwork.JoinRandomRoom();
+            lc.DisplayJoinGamePanel();
+        }
+
+        public void OnMainMenu_Click()
+        {
+            PhotonNetwork.Disconnect();
+            SceneManager.LoadScene("MainMenu");
+        }
+
+        #endregion
+
+        private void SetMapChoice()
+        {
             IEnumerable<Toggle> mapToggles = mapToggleGroup.ActiveToggles();
-            IEnumerable<Toggle> turnToggles = turnToggleGroup.ActiveToggles();
             string mapText = "";
-            string turnText = "";
             foreach (var toggle in mapToggles)
             {
                 if (toggle.enabled)
@@ -90,15 +113,6 @@ namespace NetworkGame
                     mapText = toggle.ToString().Replace(" (UnityEngine.UI.Toggle)", "");
                 }
             }
-            foreach (var toggle in turnToggles)
-            {
-                if (toggle.enabled)
-                {
-                    turnText = toggle.ToString().Replace(" (UnityEngine.UI.Toggle)", "");
-                }
-            }
-
-
             switch (mapText)
             {
                 case "Ice":
@@ -111,7 +125,19 @@ namespace NetworkGame
                     gameCore.Map = GameCore.MapChoice.CLASH;
                     break;
             }
+        }
 
+        private void SetTurnChoice()
+        {
+            IEnumerable<Toggle> turnToggles = turnToggleGroup.ActiveToggles();
+            string turnText = "";
+            foreach (var toggle in turnToggles)
+            {
+                if (toggle.enabled)
+                {
+                    turnText = toggle.ToString().Replace(" (UnityEngine.UI.Toggle)", "");
+                }
+            }
             switch (turnText)
             {
                 case "Ice":
@@ -121,24 +147,7 @@ namespace NetworkGame
                     gameCore.MySide = GameCore.Turn.FIRE;
                     break;
             }
-            gameCore.isMasterClient = true;
-            PhotonNetwork.CreateRoom(null, new RoomOptions() { MaxPlayers = MaxPlayersPerRoom }, null);
-            lc.DisplayHostGamePanel();
         }
-
-        public void OnJoinGame_Click()
-        {
-            PhotonNetwork.JoinRandomRoom();
-            lc.DisplayJoinGamePanel();
-        }
-
-        public void OnMainMenu_Click()
-        {
-            PhotonNetwork.Disconnect();
-            SceneManager.LoadScene("MainMenu");
-        }
-
-        #endregion
 
         #region Photon Methods
 

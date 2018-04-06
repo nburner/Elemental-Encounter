@@ -12,6 +12,9 @@ public class LobbyCanvas : MonoBehaviour
     public GameObject connectionGamePanel;
     public GameObject errorGamePanel;
     public GameObject gameOptions;
+    public GameObject turnOptionPanel;
+    public GameObject createGameButton;
+    public GameObject joinGameButton;
 
     public void DisplayMenuPanel()
     {
@@ -62,7 +65,7 @@ public class LobbyCanvas : MonoBehaviour
         errorGamePanel.SetActive(true);
         gameOptions.SetActive(false);
     }
-    public void DisplayGameOptions()
+    public void DisplayHostGameOptions()
     {
         menuPanel.SetActive(false);
         hostGamePanel.SetActive(false);
@@ -70,5 +73,21 @@ public class LobbyCanvas : MonoBehaviour
         connectionGamePanel.SetActive(false);
         errorGamePanel.SetActive(false);
         gameOptions.SetActive(true);
+        turnOptionPanel.SetActive(true);
+        createGameButton.SetActive(true);
+        joinGameButton.SetActive(false);
+    }
+
+    public void DisplayJoinGameOptions()
+    {
+        menuPanel.SetActive(false);
+        hostGamePanel.SetActive(false);
+        joinGamePanel.SetActive(false);
+        connectionGamePanel.SetActive(false);
+        errorGamePanel.SetActive(false);
+        gameOptions.SetActive(true);
+        turnOptionPanel.SetActive(false);
+        createGameButton.SetActive(false);
+        joinGameButton.SetActive(true);
     }
 }

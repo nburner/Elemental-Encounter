@@ -26,6 +26,7 @@ namespace NetworkGame
         {
             return gameCore;
         }
+
         #region Photon Messages
         public override void OnPhotonPlayerConnected(PhotonPlayer other)
         {
