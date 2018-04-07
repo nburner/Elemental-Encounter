@@ -144,23 +144,6 @@ public class BoardManager : MonoBehaviour
         selectedPiece = null;
     }
 
-    //public void GetNetworkMove(Coordinate From, Coordinate To)
-    //{
-    //    Move myMove;
-    //    try
-    //    {
-    //        myMove = new Move(From, To);
-    //        isMyTurn = true;
-    //        gameCore.UpdateBoard(myMove);
-    //    }
-    //    catch (ArgumentException e)
-    //    {
-    //        //Move constructor throws on invalid move
-    //        Debug.Log(e.Message);
-    //    }
-    //    Timer.SetActive(true);
-    //}
-
     public void ChangeSide()
     {
         gameCore.boardManager = this;
@@ -202,9 +185,16 @@ public class BoardManager : MonoBehaviour
     //This function is called by the Game Core to tell the GUI that the game is over
     public void EndGame()
     {
-        if (LastTurn != gameCore.MySide) loseMenu.SetActive(true);
-        else winMenu.SetActive(true);
+        if (LastTurn != gameCore.MySide) StartCoroutine(ShowsAfterSeconds(3, loseMenu)) ;
+        else StartCoroutine(ShowsAfterSeconds(1, winMenu));
     }
+    //delays the Menu
+    IEnumerator ShowsAfterSeconds(int seconds, GameObject obj)
+    {
+        yield return new WaitForSeconds(seconds);
+        obj.SetActive(true);
+    }
+
     public void EndGameNetwork()
     {
         networkLogic.SendEndGame();
