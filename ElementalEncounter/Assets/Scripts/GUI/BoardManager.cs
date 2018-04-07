@@ -166,7 +166,20 @@ public class BoardManager : MonoBehaviour
             if (!gameCore.isSinglePlayer) Timer.SetActive(true);
         }
         LastTurn = GameCore.Turn.FIRE;
-        CurrentTurnText.GetComponent<Text>().text = (gameCore.CurrentTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Ice Turn";
+        if (gameCore.MySide == GameCore.Turn.ICE)
+        {
+            LastTurn = GameCore.Turn.ICE;
+            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Waiting for opponent" : "Ice Turn";
+            CurrentTurnText.GetComponent<Text>().color = (LastTurn == GameCore.Turn.FIRE) ? Color.black : Color.blue;
+            LastTurn = GameCore.Turn.FIRE;
+        }
+        else
+        {
+            LastTurn = GameCore.Turn.ICE;
+            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Waiting for opponent";
+            CurrentTurnText.GetComponent<Text>().color = (LastTurn == GameCore.Turn.FIRE) ? Color.red : Color.black;
+            LastTurn = GameCore.Turn.FIRE;
+        }
     }
 
     #region Called By The Game Core
@@ -250,7 +263,16 @@ public class BoardManager : MonoBehaviour
         Pieces[move.From].SetPosition(move.To);
         Pieces[move.To] = Pieces[move.From];
         Pieces[move.From] = null; // Removing the piece from the 
-        CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Ice Turn";
+        if(gameCore.MySide == GameCore.Turn.ICE)
+        {
+            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Waiting for opponent" : "Ice Turn";
+            CurrentTurnText.GetComponent<Text>().color = (LastTurn == GameCore.Turn.FIRE) ? Color.black : Color.blue;
+        }
+        else
+        {
+            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Waiting for opponent";
+            CurrentTurnText.GetComponent<Text>().color = (LastTurn == GameCore.Turn.FIRE) ? Color.red : Color.black;
+        }
         LastTurn = gameCore.CurrentTurn;
     }
     #endregion
