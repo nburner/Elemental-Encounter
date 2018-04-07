@@ -185,8 +185,9 @@ public class BoardManager : MonoBehaviour
     //This function is called by the Game Core to tell the GUI that the game is over
     public void EndGame()
     {
-        if (LastTurn != gameCore.MySide) StartCoroutine(ShowsAfterSeconds(3, loseMenu)) ;
-        else StartCoroutine(ShowsAfterSeconds(1, winMenu));
+        if (LastTurn != gameCore.MySide) StartCoroutine(ShowsAfterSeconds(2, loseMenu));
+        else StartCoroutine(ShowsAfterSeconds(2, winMenu));
+        isMyTurn = false;
     }
     //delays the Menu
     IEnumerator ShowsAfterSeconds(int seconds, GameObject obj)
