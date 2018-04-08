@@ -16,6 +16,7 @@ public class HUD : MonoBehaviour
 
     public void MainMenuClicked()
     {
+        BoardManager.Instance.panelContainer.SetActive(true);
         quitPanel.SetActive(true);
     }
 
@@ -38,6 +39,7 @@ public class HUD : MonoBehaviour
 
     public void PlayerDeniedQuit()
     {
+        BoardManager.Instance.panelContainer.SetActive(false);
         quitPanel.SetActive(false);
     }
 
@@ -46,5 +48,6 @@ public class HUD : MonoBehaviour
         BoardManager.Instance.ResetBoard();
         BoardManager.Instance.winMenu.SetActive(false);
         BoardManager.Instance.loseMenu.SetActive(false);
+        BoardManager.Instance.panelContainer.SetActive(false);
     }
 }
