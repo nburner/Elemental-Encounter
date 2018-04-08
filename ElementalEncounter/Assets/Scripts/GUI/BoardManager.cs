@@ -24,6 +24,7 @@ public class BoardManager : MonoBehaviour
     public GameObject IceTerrain;
     public GameObject FireTerrain;
     public GameObject ClashTerrain;
+    public GameObject UndoButton;
     public static BoardManager Instance { set; get; }
     public Board<Piece> Pieces { set; get; }
     public bool isMyTurn = true;
@@ -72,6 +73,7 @@ public class BoardManager : MonoBehaviour
         {   //Multiplayer
             networkLogic = GameObject.Find("NetworkManager").GetComponent<NetworkGame.NetworkManager>();
             networkTimer = Timer.GetComponent<Text>();
+            UndoButton.SetActive(false);
             if (!gameCore.isMasterClient)
             {
                 WhatIsMySide();

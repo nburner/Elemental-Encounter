@@ -593,6 +593,7 @@ MonoBehaviour:
   IceTerrain: {fileID: 1029501579}
   FireTerrain: {fileID: 711309670}
   ClashTerrain: {fileID: 1405176940}
+  UndoButton: {fileID: 2020184568}
   isMyTurn: 1
   testing: 0
   gameCore: {fileID: 0}
@@ -15364,7 +15365,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 18783750}
-        m_MethodName: GetHint
+        m_MethodName: UndoButtonClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
