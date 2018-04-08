@@ -178,17 +178,17 @@ private:
 	BoardFeature second;
 };
 
-void main() {
+void mainY(BoardFeature * bp, int wantCount) {
 	srand(time(NULL));
 	setFeatureCalculators();
 
 	//Gen board data
 	std::set<Board> boards;
 	Board currentBoard;
-	for (int i = 0; i < 2000 || boards.size() < 150000; ) {
+	while (boards.size() < 500000) {
 		auto b = currentBoard.validNextBoards();
 
-		if (b.empty()) { currentBoard = Board(); i++; }
+		if (b.empty()) currentBoard = Board();
 		else currentBoard = b[rand() % b.size()];
 
 		boards.insert(currentBoard);
@@ -208,7 +208,7 @@ void main() {
 		for (int e = 0; e < count; e++) featureVectors[i][e] /= maxel;
 	}
 
-	//calculate simularities
+	//calculate similarities
 	std::set<featureSet> similarities;
 	for (int i = 0; i < NULL_FEATURE; i++)
 		for (int j = 0; j < NULL_FEATURE; j++)
@@ -224,25 +224,54 @@ void main() {
 					insertion.first->similarity = dotProd / (sqrt(mag1) * sqrt(mag2));
 				}
 			}
-
-	int notSimilarCount[NULL_FEATURE];
-	double totalSimilarity[NULL_FEATURE];
-	for (auto a : similarities) if (std::abs(a.similarity) < .05) {
-		cout << a.to_string() << ": " << a.similarity << endl;
-		notSimilarCount[a.features().first]++;
-		notSimilarCount[a.features().second]++;
-	}
-	for (auto a : similarities){
+	
+	//Count total similarity
+	double totalSimilarity[NULL_FEATURE] = { 0 };
+	for (auto a : similarities) {
 		totalSimilarity[a.features().first] += std::abs(a.similarity);
 		totalSimilarity[a.features().second] += std::abs(a.similarity);
 	}
+
+	//std::sort(totalSimilarity, totalSimilarity + NULL_FEATURE);
+	double minSimilarity = INFINITY;
+	for (int i = 0; i < NULL_FEATURE; i++) if (totalSimilarity[i] < minSimilarity) {
+		cout << "Feature: " << to_string((BoardFeature)i) << ": " << totalSimilarity[i] << endl;
+		bp[0] = (BoardFeature)i;
+		minSimilarity = totalSimilarity[i];
+	}
+
+	for (int keptGuys = 1; keptGuys < wantCount; keptGuys++) {
+		double totalSimilarity[NULL_FEATURE] = { 0 };
+		for (int guysToCount = 0; guysToCount < keptGuys; guysToCount++) {
+			totalSimilarity[bp[guysToCount]] = INFINITY;
+			for (auto a : similarities) {
+				if (a.features().first == bp[guysToCount]) totalSimilarity[a.features().second] += std::abs(a.similarity);
+				if (a.features().second == bp[guysToCount]) totalSimilarity[a.features().first] += std::abs(a.similarity);
+			}
+		}
+		double minSimilarity = INFINITY;
+		for (int i = 0; i < NULL_FEATURE; i++) if (totalSimilarity[i] < minSimilarity) {
+			cout << "Feature: " << to_string((BoardFeature)i) << ": " << totalSimilarity[i] << endl;
+			bp[keptGuys] = (BoardFeature)i;
+			minSimilarity = totalSimilarity[i];
+		}
+		cout << endl;
+	}
+
+	for (int keptGuys = 0; keptGuys < wantCount; keptGuys++) cout << "Feature: " << to_string(bp[keptGuys]) << endl;
+
 	
-	std::sort(totalSimilarity, totalSimilarity + NULL_FEATURE);
-	for (int i = 0; i < NULL_FEATURE; i++) cout << "Feature: " << to_string((BoardFeature)i) << ": " << totalSimilarity[i] << endl;
+}
 
+void main(){
+	srand(time(NULL));
+	bool alreadyMaxed[NULL_FEATURE][NULL_FEATURE] = { 0 };
+	int maxedCount = 0;
+	int bestScoreEvaa = INT_MIN;
 
-	//for (int i = 0; i < boards.size(); i++) cout << featureVectors[MY_PAWN_COUNT][i] << "\t";
-	cout << boards.size() << endl;
+	//So we generate our weebs first
+	//And each weeb has their own feature bumped to start
+	Specimen * weebs = new Specimen[NULL_FEATURE * NULL_FEATURE];
 }
 
 void mainX() {
