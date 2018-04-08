@@ -81,6 +81,12 @@ public class GameCore : MonoBehaviour
     
     public void UpdateBoard(Move move)
     {
+        Log.Push(new LogEntry {
+            move = move,
+            turn = CurrentTurn,
+            capture = Pieces[move.To] == 'W' || Pieces[move.To] == 'B'
+        });
+
         if (Pieces[move.To] == 'W') IcePieceCount--;
         if (Pieces[move.To] == 'B') FirePieceCount--;
 
@@ -102,7 +108,7 @@ public class GameCore : MonoBehaviour
         }
     }
 
-	void Undo() {
+	public void Undo() {
 		if (Log.Count <= 1) return;
 
 		for (int i = 0; i < 2; i++) {

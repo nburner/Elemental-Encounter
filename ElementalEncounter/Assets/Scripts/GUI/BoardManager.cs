@@ -118,13 +118,17 @@ public class BoardManager : MonoBehaviour
         HinterXHinter = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.HINTER, gameCore.MySide == GameCore.Turn.ICE ? AI.Turn.ICE : AI.Turn.FIRE, UpdateHint);
     }
 
+    public void UndoButtonClick(){
+        gameCore.Undo();
+    }
+
 	internal void Undo(Move move, GameCore.Turn turn, bool capture) {
 		
 		if (capture) {
-		//	activePieces.Remove(Pieces[move.To].gameObject);
-		//	StartCoroutine(PlayCaptureSound(Pieces[move.To])); //sound effect
-		//	Destroy(Pieces[move.To].gameObject, 1.4f);
-		SpawnPiece()
+            //	activePieces.Remove(Pieces[move.To].gameObject);
+            //	StartCoroutine(PlayCaptureSound(Pieces[move.To])); //sound effect
+            //	Destroy(Pieces[move.To].gameObject, 1.4f);
+            SpawnPiece(turn == GameCore.Turn.ICE ? 1 : 0, move.To);
 		}
 		//StartCoroutine(Pieces[move.From].PlayMoveSound()); //sound effect
 		//Piece.playAnimation(Pieces[move.From], move, takingPiece);
