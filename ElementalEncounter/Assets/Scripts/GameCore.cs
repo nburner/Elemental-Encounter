@@ -4,6 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using bitboard = System.UInt64;
 
+class LogEntry
+{
+	public GameCore.Turn turn;
+	public Move move;
+	public bool capture;
+}
 public class GameCore : MonoBehaviour
 {
     public enum Turn { ICE, FIRE };
@@ -19,6 +25,7 @@ public class GameCore : MonoBehaviour
     public Board<char> Pieces;
     private int IcePieceCount;
     private int FirePieceCount;
+	private Stack<LogEntry> Log;
     public BoardManager boardManager { get; set; }
     public AILevel aILevel;
     // private GameCharacter character;
@@ -50,6 +57,7 @@ public class GameCore : MonoBehaviour
         FirePieceCount = 16;
 
         CurrentTurn = Turn.ICE;
+		Log = new Stack<LogEntry>();
     }
 
     public void Play()
@@ -93,6 +101,24 @@ public class GameCore : MonoBehaviour
             if (isSinglePlayer) ai.GetMove(Pieces);
         }
     }
+
+	void Undo() {
+		if (Log.Count <= 1) return;
+
+		for (int i = 0; i < 2; i++) {
+			LogEntry log = Log.Pop();
+
+			if (log.capture) {
+				if (log.turn == Turn.FIRE) IcePieceCount++;
+				else FirePieceCount++;
+			}
+
+			Pieces[log.move.To] = log.capture ? (log.turn == Turn.FIRE ? 'W' : 'B') : default(char);
+			Pieces[log.move.From] = log.turn == Turn.FIRE ? 'B' : 'W';
+
+			boardManager.Undo(log.move, log.turn, log.capture);
+		}
+	}
 
     // Use this for initialization
     void Awake()

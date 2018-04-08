@@ -117,8 +117,28 @@ public class BoardManager : MonoBehaviour
 
         HinterXHinter = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.HINTER, gameCore.MySide == GameCore.Turn.ICE ? AI.Turn.ICE : AI.Turn.FIRE, UpdateHint);
     }
-    //This function is used by the GUI to validate a potential move by the local user, and send it to the Game Core if it's good
-    private void MakeLocalMove(Coordinate to)
+
+	internal void Undo(Move move, GameCore.Turn turn, bool capture) {
+		
+		if (capture) {
+		//	activePieces.Remove(Pieces[move.To].gameObject);
+		//	StartCoroutine(PlayCaptureSound(Pieces[move.To])); //sound effect
+		//	Destroy(Pieces[move.To].gameObject, 1.4f);
+		SpawnPiece()
+		}
+		//StartCoroutine(Pieces[move.From].PlayMoveSound()); //sound effect
+		//Piece.playAnimation(Pieces[move.From], move, takingPiece);
+		
+		Pieces[move.To].transform.position = GetTileCenter(move.From); // Getting the center of the tile where the piece is moving
+		Pieces[move.To].SetPosition(move.From);
+		Pieces[move.From] = Pieces[move.To];
+		Pieces[move.To] = null; 
+		//CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Ice Turn";
+		//LastTurn = gameCore.CurrentTurn;
+	}
+
+	//This function is used by the GUI to validate a potential move by the local user, and send it to the Game Core if it's good
+	private void MakeLocalMove(Coordinate to)
     {
         Move myMove;
         try {
@@ -282,10 +302,10 @@ public class BoardManager : MonoBehaviour
             SpawnPiece(1, i, testing ? 5 : 7);
         }
     }
-    public void SpawnPiece(int index, Coordinate c) { SpawnPiece(index, c.X, c.Y); }
-    public void SpawnPiece(int index, int x, int y)
+    public void SpawnPiece(int prefab, Coordinate c) { SpawnPiece(prefab, c.X, c.Y); }
+    public void SpawnPiece(int prefab, int x, int y)
     {
-        GameObject go = Instantiate(piecePrefabs[index], GetTileCenter(x, y), Quaternion.identity) as GameObject;
+        GameObject go = Instantiate(piecePrefabs[prefab], GetTileCenter(x, y), Quaternion.identity) as GameObject;
         go.transform.SetParent(transform);    
         Pieces[x, y] = go.GetComponent<Piece>();
         Pieces[x, y].SetPosition(x, y);
