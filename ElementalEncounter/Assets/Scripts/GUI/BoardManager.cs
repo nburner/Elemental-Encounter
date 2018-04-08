@@ -18,6 +18,7 @@ public class BoardManager : MonoBehaviour
     public List<GameObject> piecePrefabs;
     //public List<GameObject> boardPrefabs;
     public GameObject Timer;
+    public GameObject panelContainer;
     public GameObject winMenu;
     public GameObject loseMenu;
     public GameObject CurrentTurnText;
@@ -256,6 +257,7 @@ public class BoardManager : MonoBehaviour
     IEnumerator ShowsAfterSeconds(int seconds, GameObject obj)
     {
         yield return new WaitForSeconds(seconds);
+        panelContainer.SetActive(true);
         obj.SetActive(true);
     }
 
@@ -377,7 +379,7 @@ public class BoardManager : MonoBehaviour
 
         UpdateSelection();
 
-        if (Input.GetMouseButtonDown(0) && cursorLocation != null && isMyTurn)
+        if (Input.GetMouseButtonDown(0) && cursorLocation != null && isMyTurn && !panelContainer.activeInHierarchy)
         {
             if (selectedPiece == null) SelectPiece(cursorLocation);
             else MakeLocalMove(cursorLocation);
