@@ -164,23 +164,6 @@ public class BoardManager : MonoBehaviour
         selectedPiece = null;
     }
 
-    //public void GetNetworkMove(Coordinate From, Coordinate To)
-    //{
-    //    Move myMove;
-    //    try
-    //    {
-    //        myMove = new Move(From, To);
-    //        isMyTurn = true;
-    //        gameCore.UpdateBoard(myMove);
-    //    }
-    //    catch (ArgumentException e)
-    //    {
-    //        //Move constructor throws on invalid move
-    //        Debug.Log(e.Message);
-    //    }
-    //    Timer.SetActive(true);
-    //}
-
     public void ChangeSide()
     {
         gameCore.boardManager = this;
@@ -203,7 +186,20 @@ public class BoardManager : MonoBehaviour
             if (!gameCore.isSinglePlayer) Timer.SetActive(true);
         }
         LastTurn = GameCore.Turn.FIRE;
-        CurrentTurnText.GetComponent<Text>().text = (gameCore.CurrentTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Ice Turn";
+        if (gameCore.MySide == GameCore.Turn.ICE)
+        {
+            LastTurn = GameCore.Turn.ICE;
+            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Waiting for opponent" : "Ice Turn";
+            CurrentTurnText.GetComponent<Text>().color = (LastTurn == GameCore.Turn.FIRE) ? Color.black : Color.blue;
+            LastTurn = GameCore.Turn.FIRE;
+        }
+        else
+        {
+            LastTurn = GameCore.Turn.ICE;
+            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Waiting for opponent";
+            CurrentTurnText.GetComponent<Text>().color = (LastTurn == GameCore.Turn.FIRE) ? Color.red : Color.black;
+            LastTurn = GameCore.Turn.FIRE;
+        }
     }
 
     #region Called By The Game Core
@@ -222,9 +218,17 @@ public class BoardManager : MonoBehaviour
     //This function is called by the Game Core to tell the GUI that the game is over
     public void EndGame()
     {
-        if (LastTurn != gameCore.MySide) loseMenu.SetActive(true);
-        else winMenu.SetActive(true);
+        if (LastTurn != gameCore.MySide) StartCoroutine(ShowsAfterSeconds(2, loseMenu));
+        else StartCoroutine(ShowsAfterSeconds(2, winMenu));
+        isMyTurn = false;
     }
+    //delays the Menu
+    IEnumerator ShowsAfterSeconds(int seconds, GameObject obj)
+    {
+        yield return new WaitForSeconds(seconds);
+        obj.SetActive(true);
+    }
+
     public void EndGameNetwork()
     {
         networkLogic.SendEndGame();
@@ -279,7 +283,16 @@ public class BoardManager : MonoBehaviour
         Pieces[move.From].SetPosition(move.To);
         Pieces[move.To] = Pieces[move.From];
         Pieces[move.From] = null; // Removing the piece from the 
-        CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Ice Turn";
+        if(gameCore.MySide == GameCore.Turn.ICE)
+        {
+            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Waiting for opponent" : "Ice Turn";
+            CurrentTurnText.GetComponent<Text>().color = (LastTurn == GameCore.Turn.FIRE) ? Color.black : Color.blue;
+        }
+        else
+        {
+            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Waiting for opponent";
+            CurrentTurnText.GetComponent<Text>().color = (LastTurn == GameCore.Turn.FIRE) ? Color.red : Color.black;
+        }
         LastTurn = gameCore.CurrentTurn;
     }
     #endregion
