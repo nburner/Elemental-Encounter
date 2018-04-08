@@ -25,6 +25,7 @@ public class BoardManager : MonoBehaviour
     public GameObject FireTerrain;
     public GameObject ClashTerrain;
     public GameObject UndoButton;
+    public GameObject DisconnectPanel;
     public static BoardManager Instance { set; get; }
     public Board<Piece> Pieces { set; get; }
     public bool isMyTurn = true;

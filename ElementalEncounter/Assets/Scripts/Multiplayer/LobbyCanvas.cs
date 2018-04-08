@@ -15,6 +15,7 @@ public class LobbyCanvas : MonoBehaviour
     public GameObject turnOptionPanel;
     public GameObject createGameButton;
     public GameObject joinGameButton;
+    public GameObject playerDisconnected;
 
     public void DisplayMenuPanel()
     {
@@ -24,6 +25,7 @@ public class LobbyCanvas : MonoBehaviour
         connectionGamePanel.SetActive(false);
         errorGamePanel.SetActive(false);
         gameOptions.SetActive(false);
+        playerDisconnected.SetActive(false);
     }
 
     public void DisplayHostGamePanel()
@@ -34,6 +36,7 @@ public class LobbyCanvas : MonoBehaviour
         connectionGamePanel.SetActive(false);
         errorGamePanel.SetActive(false);
         gameOptions.SetActive(false);
+        playerDisconnected.SetActive(false);
     }
 
     public void DisplayJoinGamePanel()
@@ -44,6 +47,7 @@ public class LobbyCanvas : MonoBehaviour
         connectionGamePanel.SetActive(false);
         errorGamePanel.SetActive(false);
         gameOptions.SetActive(false);
+        playerDisconnected.SetActive(false);
     }
 
     public void DisplayConnectionPanel()
@@ -54,6 +58,7 @@ public class LobbyCanvas : MonoBehaviour
         connectionGamePanel.SetActive(true);
         errorGamePanel.SetActive(false);
         gameOptions.SetActive(false);
+        playerDisconnected.SetActive(false);
     }
 
     public void DisplayErrorPanel()
@@ -64,6 +69,7 @@ public class LobbyCanvas : MonoBehaviour
         connectionGamePanel.SetActive(false);
         errorGamePanel.SetActive(true);
         gameOptions.SetActive(false);
+        playerDisconnected.SetActive(false);
     }
     public void DisplayHostGameOptions()
     {
@@ -76,6 +82,7 @@ public class LobbyCanvas : MonoBehaviour
         turnOptionPanel.SetActive(true);
         createGameButton.SetActive(true);
         joinGameButton.SetActive(false);
+        playerDisconnected.SetActive(false);
     }
 
     public void DisplayJoinGameOptions()
@@ -89,5 +96,6 @@ public class LobbyCanvas : MonoBehaviour
         turnOptionPanel.SetActive(false);
         createGameButton.SetActive(false);
         joinGameButton.SetActive(true);
+        playerDisconnected.SetActive(false);
     }
 }

@@ -48,7 +48,9 @@ namespace NetworkGame
         public override void OnPhotonPlayerDisconnected(PhotonPlayer other)
         {
             Debug.Log("OnPhotonPlayerDisconnected() " + other.NickName); // seen when other disconnects
-            LeaveRoom();
+            BoardManager.Instance.DisconnectPanel.SetActive(true);
+            BoardManager.Instance.isMyTurn = false;
+            //LeaveRoom();
 
             if (PhotonNetwork.isMasterClient)
             {
@@ -66,6 +68,7 @@ namespace NetworkGame
         public override void OnLeftRoom()
         {
             SceneManager.LoadScene("Game_Lobby");
+
         }
 
         public void LeaveRoom()
