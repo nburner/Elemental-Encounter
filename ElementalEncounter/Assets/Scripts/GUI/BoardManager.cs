@@ -4,6 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+class UndoEntry
+{
+    public GameCore.Turn turn;
+    public Move move;
+    public bool capture;
+}
 public class BoardManager : MonoBehaviour
 {
     #region Common Properties and Fields
@@ -100,6 +106,7 @@ public class BoardManager : MonoBehaviour
     }
     private void ResetAndInitializeBoard()
     {
+        UndoQueue = new Queue<UndoEntry>();
 
         foreach (GameObject go in activePieces)
         {
@@ -118,27 +125,41 @@ public class BoardManager : MonoBehaviour
         HinterXHinter = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.HINTER, gameCore.MySide == GameCore.Turn.ICE ? AI.Turn.ICE : AI.Turn.FIRE, UpdateHint);
     }
 
+    private Queue<UndoEntry> UndoQueue;
+    private bool UndoInProgress = false;
     public void UndoButtonClick(){
-        gameCore.Undo();
+        if(gameCore.CurrentTurn == gameCore.MySide) gameCore.Undo();
     }
 
-	internal void Undo(Move move, GameCore.Turn turn, bool capture) {
-		
-		if (capture) {
+    internal void QueueUndo(Move m, GameCore.Turn t, bool cap) {
+        UndoQueue.Enqueue(new UndoEntry {
+            move = m,
+            turn = t,
+            capture = cap
+        });
+    }
+    internal IEnumerator Undo() {
+        UndoInProgress = true;
+        UndoEntry entry = UndoQueue.Dequeue();
+
+		if (entry.capture) {
             //	activePieces.Remove(Pieces[move.To].gameObject);
             //	StartCoroutine(PlayCaptureSound(Pieces[move.To])); //sound effect
             //	Destroy(Pieces[move.To].gameObject, 1.4f);
-            SpawnPiece(turn == GameCore.Turn.ICE ? 1 : 0, move.To);
+            SpawnPiece(entry.turn == GameCore.Turn.ICE ? 0 : 1, entry.move.To);
 		}
 		//StartCoroutine(Pieces[move.From].PlayMoveSound()); //sound effect
 		//Piece.playAnimation(Pieces[move.From], move, takingPiece);
 		
-		Pieces[move.To].transform.position = GetTileCenter(move.From); // Getting the center of the tile where the piece is moving
-		Pieces[move.To].SetPosition(move.From);
-		Pieces[move.From] = Pieces[move.To];
-		Pieces[move.To] = null; 
-		//CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Ice Turn";
-		//LastTurn = gameCore.CurrentTurn;
+		Pieces[entry.move.To].transform.position = GetTileCenter(entry.move.From); // Getting the center of the tile where the piece is moving
+		Pieces[entry.move.To].SetPosition(entry.move.From);
+		Pieces[entry.move.From] = Pieces[entry.move.To];
+		Pieces[entry.move.To] = null;
+        //CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Ice Turn";
+        //LastTurn = gameCore.CurrentTurn;
+
+        yield return new WaitForSeconds(1.5f);
+        UndoInProgress = false;
 	}
 
 	//This function is used by the GUI to validate a potential move by the local user, and send it to the Game Core if it's good
@@ -347,6 +368,8 @@ public class BoardManager : MonoBehaviour
     }
     private void Update()
     {
+        if (UndoQueue.Count > 0 && !UndoInProgress) StartCoroutine(Undo());
+
         UpdateSelection();
 
         if (Input.GetMouseButtonDown(0) && cursorLocation != null && isMyTurn)

@@ -122,7 +122,7 @@ public class GameCore : MonoBehaviour
 			Pieces[log.move.To] = log.capture ? (log.turn == Turn.FIRE ? 'W' : 'B') : default(char);
 			Pieces[log.move.From] = log.turn == Turn.FIRE ? 'B' : 'W';
 
-			boardManager.Undo(log.move, log.turn, log.capture);
+			boardManager.QueueUndo(log.move, log.turn, log.capture);
 		}
 	}
 
