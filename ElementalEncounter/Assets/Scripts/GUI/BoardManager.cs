@@ -142,12 +142,6 @@ public class BoardManager : MonoBehaviour
         UndoInProgress = true;
         UndoEntry entry = UndoQueue.Dequeue();
 
-		if (entry.capture) {
-            //	activePieces.Remove(Pieces[move.To].gameObject);
-            //	StartCoroutine(PlayCaptureSound(Pieces[move.To])); //sound effect
-            //	Destroy(Pieces[move.To].gameObject, 1.4f);
-            SpawnPiece(entry.turn == GameCore.Turn.ICE ? 0 : 1, entry.move.To);
-		}
 		//StartCoroutine(Pieces[move.From].PlayMoveSound()); //sound effect
 		//Piece.playAnimation(Pieces[move.From], move, takingPiece);
 		
@@ -157,6 +151,14 @@ public class BoardManager : MonoBehaviour
 		Pieces[entry.move.To] = null;
         //CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Ice Turn";
         //LastTurn = gameCore.CurrentTurn;
+
+        if (entry.capture)
+        {
+            //	activePieces.Remove(Pieces[move.To].gameObject);
+            //	StartCoroutine(PlayCaptureSound(Pieces[move.To])); //sound effect
+            //	Destroy(Pieces[move.To].gameObject, 1.4f);
+            SpawnPiece(entry.turn == GameCore.Turn.ICE ? 1 : 0, entry.move.To);
+        }
 
         yield return new WaitForSeconds(1.5f);
         UndoInProgress = false;
