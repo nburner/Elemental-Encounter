@@ -110,6 +110,7 @@ public class BoardManager : MonoBehaviour
     private void ResetAndInitializeBoard()
     {
         UndoQueue = new Queue<UndoEntry>();
+        BreakAnimations = new Stack<int>();
 
         foreach (GameObject go in activePieces)
         {
@@ -129,6 +130,7 @@ public class BoardManager : MonoBehaviour
     }
 
     private Queue<UndoEntry> UndoQueue;
+    private Stack<int> BreakAnimations;
     private bool UndoInProgress = false;
     public void UndoButtonClick(){
         if(gameCore.CurrentTurn == gameCore.MySide) gameCore.Undo();
@@ -146,7 +148,7 @@ public class BoardManager : MonoBehaviour
         UndoEntry entry = UndoQueue.Dequeue();
 
 		//StartCoroutine(Pieces[move.From].PlayMoveSound()); //sound effect
-		//Piece.playAnimation(Pieces[move.From], move, takingPiece);
+		Piece.playAnimationReverse(Pieces[entry.move.To], entry.move);
 		
 		Pieces[entry.move.To].transform.position = GetTileCenter(entry.move.From); // Getting the center of the tile where the piece is moving
 		Pieces[entry.move.To].SetPosition(entry.move.From);
