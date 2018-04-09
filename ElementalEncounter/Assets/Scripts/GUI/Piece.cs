@@ -30,7 +30,7 @@ public class Piece : MonoBehaviour
         GetComponent<AudioSource>().Stop();                 //This stops the sound
     }
 
-    public static void playAnimation(Piece selectedPiece, Move m, bool capture)
+    public static int playAnimation(Piece selectedPiece, Move m, bool capture)
     {
         bm = BoardManager.Instance;
 
@@ -167,6 +167,8 @@ public class Piece : MonoBehaviour
                     }
                 }
             }
+            return captureChoice;
         }
+        return -1;
     }
 }

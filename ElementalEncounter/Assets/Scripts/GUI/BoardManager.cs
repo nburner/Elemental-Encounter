@@ -152,50 +152,64 @@ public class BoardManager : MonoBehaviour
         Pieces[entry.move.To].Undone = true;
 
         //StartCoroutine(Pieces[move.From].PlayMoveSound()); //sound effect
-        PlayUndoAnimation(Pieces[entry.move.To], entry.move);
-        yield return new WaitWhile(()=>Pieces[entry.move.To].GetComponent<Animation>().isPlaying);
+        PlayUndoAnimation(Pieces[entry.move.To], entry.move, entry.capture);
+        Pieces[entry.move.To].SetPosition(entry.move.From);
+        Pieces[entry.move.From] = Pieces[entry.move.To];
+        if(!entry.capture) Pieces[entry.move.To] = null;
                 
-		Pieces[entry.move.To].SetPosition(entry.move.From);
-		Pieces[entry.move.From] = Pieces[entry.move.To];
-		Pieces[entry.move.To] = null;
+        if (entry.capture)
+        {
+            //	StartCoroutine(PlayCaptureSound(Pieces[move.To])); //sound effect
+            
+            Destroy(Pieces[entry.move.To].gameObject, 1.4f);
+            activePieces.Remove(Pieces[entry.move.To].gameObject);
+
+            Piece replacements = SpawnPiece(entry.turn == GameCore.Turn.ICE ? 1 : 0, entry.move.To);
+            replacements.GetComponent<Animation>().playAutomatically = false;
+
+            yield return new WaitWhile(() => replacements.GetComponent<Animation>().isPlaying);
+        }
+        else
+            yield return new WaitWhile(() => Pieces[entry.move.From].GetComponent<Animation>().isPlaying);
+                
+		
         //CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Ice Turn";
         //LastTurn = gameCore.CurrentTurn;
 
-        if (entry.capture)
-        {
-            //	activePieces.Remove(Pieces[move.To].gameObject);
-            //	StartCoroutine(PlayCaptureSound(Pieces[move.To])); //sound effect
-            //	Destroy(Pieces[move.To].gameObject, 1.4f);
-            SpawnPiece(entry.turn == GameCore.Turn.ICE ? 1 : 0, entry.move.To);
-        }
+        
 
         //yield return new WaitForSeconds(1.5f);
         UndoInProgress = false;
 	}
 
-    void PlayUndoAnimation(Piece selectedPiece, Move m)
-    {        
-        if (m.Direction == Move.Laterality.LEFT)
-        {
-            selectedPiece.GetComponent<Animation>()["Left"].speed = -1;
-            selectedPiece.GetComponent<Animation>()["Left"].time = selectedPiece.GetComponent<Animation>()["Left"].length;
-            selectedPiece.GetComponent<Animation>().Play("Left");
+    void PlayUndoAnimation(Piece selectedPiece, Move m, bool capture)
+    {
+        if (!capture) { 
+            if (m.Direction == Move.Laterality.LEFT) {
+                selectedPiece.GetComponent<Animation>()["Left"].speed = -1;
+                selectedPiece.GetComponent<Animation>()["Left"].time = selectedPiece.GetComponent<Animation>()["Left"].length;
+                selectedPiece.GetComponent<Animation>().Play("Left");
+            }
+            else if (m.Direction == Move.Laterality.RIGHT) {
+                selectedPiece.GetComponent<Animation>()["Right"].speed = -1;
+                selectedPiece.GetComponent<Animation>()["Right"].time = selectedPiece.GetComponent<Animation>()["Right"].length;
+                selectedPiece.GetComponent<Animation>().Play("Right");
+            }
+            else {
+                selectedPiece.GetComponent<Animation>()["Forward"].speed = -1;
+                selectedPiece.GetComponent<Animation>()["Forward"].time = selectedPiece.GetComponent<Animation>()["Forward"].length;
+                selectedPiece.GetComponent<Animation>().Play("Forward");
+            }
         }
-        else if (m.Direction == Move.Laterality.RIGHT)
-        {
-            selectedPiece.GetComponent<Animation>()["Right"].speed = -1;
-            selectedPiece.GetComponent<Animation>()["Right"].time = selectedPiece.GetComponent<Animation>()["Right"].length;
-            selectedPiece.GetComponent<Animation>().Play("Right");
-            //selectedPiece.GetComponent<Animation>()["Right"].time = 0;
-        }
-        else
-        {
-            selectedPiece.GetComponent<Animation>()["Forward"].speed = -1;
-            selectedPiece.GetComponent<Animation>()["Forward"].time = selectedPiece.GetComponent<Animation>()["Forward"].length;
-            selectedPiece.GetComponent<Animation>().Play("Forward");
-            //selectedPiece.GetComponent<Animation>()["Forward"].time = 0;
-        }
+        else {
+            int breakAnimation = BreakAnimations.Pop();
+            Piece unbreakingPiece = SpawnPiece(breakAnimation, m.To);
 
+            string animation = unbreakingPiece.GetComponent<Animation>().clip.name;
+            //Debug.Log(animation);
+            unbreakingPiece.GetComponent<Animation>()[animation].speed = -1;
+            unbreakingPiece.GetComponent<Animation>()[animation].time = unbreakingPiece.GetComponent<Animation>()[animation].length;
+        }
         //System.Random rnd = new System.Random();
         //int captureChoice;
 
@@ -430,10 +444,10 @@ public class BoardManager : MonoBehaviour
     {
         ResetAndInitializeBoard();
     }
-    public IEnumerator PlayCaptureSound(Piece p)
+    public IEnumerator PlayCaptureSound(AudioClip captureSound, Vector3 position)
     {
         for (int i = 0; i < 60; i++) yield return null;    //This waits for a number of frames (animations go for 100)
-        AudioSource.PlayClipAtPoint(p.captureSound, p.transform.position);
+        AudioSource.PlayClipAtPoint(captureSound, position);
     }
 
     //This function is called by the Game Core to tell the GUI that a valid move has been made, and the screen needs to be updated
@@ -446,11 +460,13 @@ public class BoardManager : MonoBehaviour
         if (takingPiece)
         {
             activePieces.Remove(Pieces[move.To].gameObject);
-            StartCoroutine(PlayCaptureSound(Pieces[move.To])); //sound effect
+            StartCoroutine(PlayCaptureSound(Pieces[move.To].captureSound, Pieces[move.To].transform.position)); //sound effect
             Destroy(Pieces[move.To].gameObject, 1.4f);
         }
         StartCoroutine(Pieces[move.From].PlayMoveSound()); //sound effect
-        Piece.playAnimation(Pieces[move.From], move, takingPiece);
+        
+        int breakAnimation = Piece.playAnimation(Pieces[move.From], move, takingPiece);
+        if (breakAnimation > 0) BreakAnimations.Push(breakAnimation);
 
         Pieces[move.From].transform.position = GetTileCenter(move.To); // Getting the center of the tile where the piece is moving
         Pieces[move.From].SetPosition(move.To);
@@ -488,14 +504,15 @@ public class BoardManager : MonoBehaviour
             SpawnPiece(1, i, testing ? 5 : 7);
         }
     }
-    public void SpawnPiece(int prefab, Coordinate c) { SpawnPiece(prefab, c.X, c.Y); }
-    public void SpawnPiece(int prefab, int x, int y)
+    public Piece SpawnPiece(int prefab, Coordinate c) { return SpawnPiece(prefab, c.X, c.Y); }
+    public Piece SpawnPiece(int prefab, int x, int y)
     {
         GameObject go = Instantiate(piecePrefabs[prefab], GetTileCenter(x, y), Quaternion.identity) as GameObject;
         go.transform.SetParent(transform);    
         Pieces[x, y] = go.GetComponent<Piece>();
         Pieces[x, y].SetPosition(x, y);
         activePieces.Add(go);
+        return Pieces[x, y];
     }
 
     #endregion
