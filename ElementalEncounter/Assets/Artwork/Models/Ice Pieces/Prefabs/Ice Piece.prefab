@@ -301,4 +301,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isIce: 1
+  Undone: 0
   captureSound: {fileID: 8300000, guid: 5e602d7c5dde6664bb6c27b3eb9e5889, type: 3}
