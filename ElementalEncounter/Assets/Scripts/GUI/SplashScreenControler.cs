@@ -27,6 +27,8 @@ public class SplashScreenControler : MonoBehaviour
 
         videoPlayer.Play();
 
+        yield return new WaitForSeconds(15f);
+
         SceneManager.LoadScene(loadLevel);
 
     }
