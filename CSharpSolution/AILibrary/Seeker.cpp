@@ -36,9 +36,15 @@ AI::Seeker::Seeker(int) : Prune(0)
 
 AI::Seeker::Seeker(int, int i) : Prune(0)
 {
-	for (int a = 0; a < NULL_FEATURE; a++)
-		for (int b = 0; b < NULL_FEATURE; b++)
-			weights[a][b] = i;
+	t.start();
+	MAX_SEEK_DEPTH = 20;
+	FINAL_ALPHA_BETA_TIME = 5.88;
+	SEEK_WIN = 2.5;
+	SEEK_OPPONENT_WIN_SHORT = 1;
+	SEEK_OPPONENT_WIN_LONG = 2.5;
+	SEEK_BLOCKING_MOVE = 2;
+
+	readWeights(i);
 }
 
 AI::Seeker::Seeker(std::string hinter) : Prune(0)

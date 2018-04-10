@@ -12,13 +12,14 @@ namespace GameCore
 		private static Game game = new Game();
 		private static Dictionary<AIType, int> wins = Enum.GetValues(typeof(AIType)).Cast<AIType>().ToDictionary<AIType, AIType, int>((a) => { return a; }, (a) => { return 0; });
 		static void Main(string[] args) {
-			functionForDaryl();
+			//functionForDaryl();
+			aiCompare(AIType.SEEKER, AIType.L337);
         }
 		private static void functionForDaryl() {
 			Console.WindowHeight = (int)(Console.LargestWindowHeight / 1.2);
 
 			//This declares the players (one ai and one human who represents the opponents ai)
-			AI ai = new AI(AIType.SEEKER, true); //NOTE - Change AIType to DARYLS_PET if Seeker crashes or takes too long (hopefully shouldn't happen)
+			AI ai = new AI(AIType.L337, true); //NOTE - Change AIType to DARYLS_PET if Seeker crashes or takes too long (hopefully shouldn't happen)
 			Daryl opponent = new Daryl();
 
 			//Fun instructions
