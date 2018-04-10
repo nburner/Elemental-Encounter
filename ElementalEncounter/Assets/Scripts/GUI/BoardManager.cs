@@ -134,6 +134,7 @@ public class BoardManager : MonoBehaviour
     private Stack<int> BreakAnimations;
     private bool UndoInProgress = false;
     public void UndoButtonClick(){
+        BoardHighlights.Instance.HideHighlights();        
         if(gameCore.CurrentTurn == gameCore.MySide) gameCore.Undo();
     }
 
@@ -562,12 +563,15 @@ public class BoardManager : MonoBehaviour
         if (Pieces[loc] == null) return;
         //Check if piece "isIce" is the same as my "isIce" (aka, make sure it's my piece)
         if (Pieces[loc].isIce != (gameCore.MySide == GameCore.Turn.ICE)) return;
+        //Highlight the clicked space
+        BoardHighlights.Instance.HighlightClickedSpace(loc);
         //Check if piece has any possible 
         List<Move> moves = gameCore.PossibleMoves(Pieces[loc].isIce, loc);
         if (moves.Count == 0) return;
 
         selectedPiece = Pieces[loc];
         BoardHighlights.Instance.HighlightAllowedMoves(moves);
+        BoardHighlights.Instance.HighlightClickedSpace(loc);
                 
         isClicked = true;
     }
@@ -603,6 +607,7 @@ public class BoardManager : MonoBehaviour
         while (!hintReady) yield return null;
         
         BoardHighlights.Instance.HighlightHint(hintMove);
+        BoardHighlights.Instance.HighlightClickedSpace(hintMove);
         yield return null;
     }
     #endregion
