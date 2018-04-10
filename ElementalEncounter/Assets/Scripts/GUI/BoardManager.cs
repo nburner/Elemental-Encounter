@@ -161,13 +161,29 @@ public class BoardManager : MonoBehaviour
         PlayUndoAnimationMove(Pieces[entry.move.To], entry.move, entry.capture);
         Pieces[entry.move.To].SetPosition(entry.move.From);
         Pieces[entry.move.From] = Pieces[entry.move.To];
-
+        CurrentTurnText.GetComponent<Text>().text = "Undo in progress";
+        CurrentTurnText.GetComponent<Text>().color = Color.black;
         if (!entry.capture) Pieces[entry.move.To] = null;
         else yield return PlayUndoAnimationBreak(Pieces[entry.move.To], entry.move, entry.capture);
         
         yield return new WaitWhile(() => Pieces[entry.move.From].GetComponent<Animation>().isPlaying);
         
         UndoInProgress = false;
+
+        if (gameCore.MySide == GameCore.Turn.ICE)
+        {
+            LastTurn = GameCore.Turn.ICE;
+            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Waiting for opponent" : "Ice Turn";
+            CurrentTurnText.GetComponent<Text>().color = (LastTurn == GameCore.Turn.FIRE) ? Color.black : Color.blue;
+            LastTurn = GameCore.Turn.FIRE;
+        }
+        else
+        {
+            LastTurn = GameCore.Turn.ICE;
+            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Waiting for opponent";
+            CurrentTurnText.GetComponent<Text>().color = (LastTurn == GameCore.Turn.FIRE) ? Color.red : Color.black;
+            LastTurn = GameCore.Turn.FIRE;
+        }
     }
 
     void PlayUndoAnimationMove(Piece selectedPiece, Move m, bool capture)
@@ -451,7 +467,7 @@ public class BoardManager : MonoBehaviour
 
         UpdateSelection();
 
-        if (Input.GetMouseButtonDown(0) && cursorLocation != null && isMyTurn && !panelContainer.activeInHierarchy)
+        if (Input.GetMouseButtonDown(0) && cursorLocation != null && isMyTurn && !panelContainer.activeInHierarchy && !UndoInProgress)
         {
             if (selectedPiece == null) SelectPiece(cursorLocation);
             else MakeLocalMove(cursorLocation);

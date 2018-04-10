@@ -20,7 +20,7 @@ BoardFeature significantFeatures[FEATURE_COUNT] = {
 	H_FILE							,
 	A_FILE							,
 	ROW_4_THREATENED				,
-	PIECE_ADVANTAGE_B				,
+	PIECE_ADVANTAGE				,
 	PUSH_ADVANTAGE					,
 	THREATENED_SQUARES				,
 	ROW_3_THREATENED				,
@@ -67,19 +67,18 @@ void evaluate(Organism& s, bool black = true) {
 	Seeker * players[2];
 	players[!black] = new Seeker(0);
 
-	players[black] = new Seeker(0);
-	players[black]->readWeights(WEEB_WEIGHTS);
+	players[black] = new Seeker(0,WEEB_WEIGHTS);
 	for (int i = 0; i < FEATURE_COUNT*FEATURE_COUNT; i++) players[black]->adjustWeight((BoardFeature)significantFeatures[i / FEATURE_COUNT], (BoardFeature)significantFeatures[i % FEATURE_COUNT], s.first[i]);
 
 	int turnCount = 0;
 
 	while (++turnCount && !board.gameOver()) board = board.makeMove((*players[(turnCount + 1) % 2])(board));
-
-	if (turnCount-- % 2 == black) s.second = INT_MIN - turnCount;
+	
+	if (board.turn() ^ black) s.second = INT_MAX - turnCount;
 	else s.second = INT_MIN + turnCount;
 
-	delete players[!black];
-	delete players[black];
+	delete players[0];
+	delete players[1];
 }
 
 FeatureFunc featureCalculators[NULL_FEATURE] = { NULL };
@@ -378,7 +377,7 @@ void getFeatureSet(BoardFeature * bp, int wantCount) {
 void mainG() {
 	srand(time(NULL));
 	int bestScoreEvaa = INT_MIN, genCount = 0;
-	const int POP_COUNT = 210;
+	const int POP_COUNT = 330;
 
 	//getFeatureSet(significantFeatures, 10);
 
