@@ -411,7 +411,7 @@ void mainG() {
 		Organism children[POP_COUNT];
 		for (int i = 0; i < POP_COUNT; i++) {
 			if (i < POP_COUNT / 15.0)children[i] = parents[i];
-			else if (i < POP_COUNT*.8) crossover(parents[rand() % (int)(POP_COUNT*.5)], parents[rand() % (int)(POP_COUNT*.5)], children[i], children[++i]);
+			else if (i < POP_COUNT*.55) crossover(parents[rand() % (int)(POP_COUNT*.5)], parents[rand() % (int)(POP_COUNT*.5)], children[i], children[++i]);
 			else for (int k = 0; k < 100; k++) children[i].first.push_back(rand() % 256 - 128);
 		}
 

@@ -10,7 +10,7 @@ static int seekDepth = INT_MAX;
 static double seekTime = 4;
 static bool cutShortByDepth = true;
 
-static bool verbose = true;
+static bool verbose = false;
 
 AI::Seeker::Seeker()
 {
