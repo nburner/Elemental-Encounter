@@ -133,214 +133,127 @@ public class BoardManager : MonoBehaviour
     private Queue<UndoEntry> UndoQueue;
     private Stack<int> BreakAnimations;
     private bool UndoInProgress = false;
-    public void UndoButtonClick(){
-        if(gameCore.CurrentTurn == gameCore.MySide) gameCore.Undo();
+    public void UndoButtonClick()
+    {
+        BoardHighlights.Instance.HideHighlights();
+        if (gameCore.CurrentTurn == gameCore.MySide) gameCore.Undo();
     }
 
-    internal void QueueUndo(Move m, GameCore.Turn t, bool cap) {
-        UndoQueue.Enqueue(new UndoEntry {
+    internal void QueueUndo(Move m, GameCore.Turn t, bool cap)
+    {
+        UndoQueue.Enqueue(new UndoEntry
+        {
             move = m,
             turn = t,
             capture = cap
         });
     }
-    internal IEnumerator Undo() {
+    internal IEnumerator Undo()
+    {
         UndoInProgress = true;
         UndoEntry entry = UndoQueue.Dequeue();
 
-        if(Pieces[entry.move.To].Undone) Pieces[entry.move.To].transform.position = GetTileCenter(Pieces[entry.move.To].Position); // Getting the center of the tile where the piece is moving
+        if (Pieces[entry.move.To].Undone) Pieces[entry.move.To].transform.position = GetTileCenter(Pieces[entry.move.To].Position); // Getting the center of the tile where the piece is moving
         Pieces[entry.move.To].Undone = true;
 
         //StartCoroutine(Pieces[move.From].PlayMoveSound()); //sound effect
-        PlayUndoAnimation(Pieces[entry.move.To], entry.move, entry.capture);
+
+        PlayUndoAnimationMove(Pieces[entry.move.To], entry.move, entry.capture);
         Pieces[entry.move.To].SetPosition(entry.move.From);
         Pieces[entry.move.From] = Pieces[entry.move.To];
-        if(!entry.capture) Pieces[entry.move.To] = null;
-                
-        if (entry.capture)
+
+        if (!entry.capture) Pieces[entry.move.To] = null;
+        else yield return PlayUndoAnimationBreak(Pieces[entry.move.To], entry.move, entry.capture);
+        
+        yield return new WaitWhile(() => Pieces[entry.move.From].GetComponent<Animation>().isPlaying);
+        
+        UndoInProgress = false;
+    }
+
+    void PlayUndoAnimationMove(Piece selectedPiece, Move m, bool capture)
+    {
+        string animation;
+        if (!capture)
         {
-            //	StartCoroutine(PlayCaptureSound(Pieces[move.To])); //sound effect
-            
-            Destroy(Pieces[entry.move.To].gameObject, 1.4f);
-            activePieces.Remove(Pieces[entry.move.To].gameObject);
-
-            Piece replacements = SpawnPiece(entry.turn == GameCore.Turn.ICE ? 1 : 0, entry.move.To);
-            replacements.GetComponent<Animation>().playAutomatically = false;
-
-            yield return new WaitWhile(() => replacements.GetComponent<Animation>().isPlaying);
+            if (m.Direction == Move.Laterality.LEFT) animation = "Left";
+            else if (m.Direction == Move.Laterality.RIGHT) animation = "Right";
+            else animation = "Forward";
         }
         else
-            yield return new WaitWhile(() => Pieces[entry.move.From].GetComponent<Animation>().isPlaying);
-                
-		
-        //CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Ice Turn";
-        //LastTurn = gameCore.CurrentTurn;
+        {
+            string[] animationList = { "", "", "Bounce - Left", "Roll - Left", "Smash - Left", "Bounce - Right", "Roll - Right", "Smash - Right", "Diagonal - Left", "Dig - Left", "Top - Left", "Diagonal - Right", "Dig - Right", "Top - Right" };
 
-        
-
-        //yield return new WaitForSeconds(1.5f);
-        UndoInProgress = false;
-	}
-
-    void PlayUndoAnimation(Piece selectedPiece, Move m, bool capture)
-    {
-        if (!capture) { 
-            if (m.Direction == Move.Laterality.LEFT) {
-                selectedPiece.GetComponent<Animation>()["Left"].speed = -1;
-                selectedPiece.GetComponent<Animation>()["Left"].time = selectedPiece.GetComponent<Animation>()["Left"].length;
-                selectedPiece.GetComponent<Animation>().Play("Left");
-            }
-            else if (m.Direction == Move.Laterality.RIGHT) {
-                selectedPiece.GetComponent<Animation>()["Right"].speed = -1;
-                selectedPiece.GetComponent<Animation>()["Right"].time = selectedPiece.GetComponent<Animation>()["Right"].length;
-                selectedPiece.GetComponent<Animation>().Play("Right");
-            }
-            else {
-                selectedPiece.GetComponent<Animation>()["Forward"].speed = -1;
-                selectedPiece.GetComponent<Animation>()["Forward"].time = selectedPiece.GetComponent<Animation>()["Forward"].length;
-                selectedPiece.GetComponent<Animation>().Play("Forward");
-            }
+            animation = animationList[BreakAnimations.Peek()];
         }
-        else {
-            int breakAnimation = BreakAnimations.Pop();
-            Piece unbreakingPiece = SpawnPiece(breakAnimation, m.To);
 
-            string animation = unbreakingPiece.GetComponent<Animation>().clip.name;
-            //Debug.Log(animation);
-            unbreakingPiece.GetComponent<Animation>()[animation].speed = -1;
-            unbreakingPiece.GetComponent<Animation>()[animation].time = unbreakingPiece.GetComponent<Animation>()[animation].length;
-        }
-        //System.Random rnd = new System.Random();
-        //int captureChoice;
-
-        //if (selectedPiece.isIce == false)
-        //{
-        //    //If capture is Left, plays left capture animation
-        //    if (m.Direction != Move.Laterality.LEFT)
-        //    {
-        //        captureChoice = rnd.Next(1, 5);
-
-        //        if (captureChoice == 2)
-        //        {
-        //            selectedPiece.GetComponent<Animation>().Play("Bounce - Left");
-        //            bm.SpawnPiece(2, m.To);
-        //            Destroy(bm.Pieces[m.To].gameObject, 3f);
-        //        }
-        //        else if (captureChoice == 3)
-        //        {
-        //            selectedPiece.GetComponent<Animation>().Play("Roll - Left");
-        //            bm.SpawnPiece(3, m.To);
-        //            Destroy(bm.Pieces[m.To].gameObject, 3f);
-        //        }
-        //        else
-        //        {
-        //            selectedPiece.GetComponent<Animation>().Play("Smash - Left");
-        //            bm.SpawnPiece(4, m.To);
-        //            Destroy(bm.Pieces[m.To].gameObject, 3f);
-        //        }
-
-        //    }
-
-        //    //If capture is Right, plays right capture animation
-        //    else
-        //    {
-        //        captureChoice = 6;
-
-        //        if (captureChoice == 5)
-        //        {
-        //            selectedPiece.GetComponent<Animation>().Play("Bounce - Right");
-        //            bm.SpawnPiece(5, m.To);
-        //            Destroy(bm.Pieces[m.To].gameObject, 3f);
-        //        }
-        //        else if (captureChoice == 6)
-        //        {
-        //            selectedPiece.GetComponent<Animation>().Play("Roll - Right");
-        //            bm.SpawnPiece(6, m.To);
-        //            Destroy(bm.Pieces[m.To].gameObject, 3f);
-        //        }
-        //        else
-        //        {
-        //            selectedPiece.GetComponent<Animation>().Play("Smash - Right");
-        //            bm.SpawnPiece(7, m.To);
-        //            Destroy(bm.Pieces[m.To].gameObject, 3f);
-        //        }
-        //    }
-        //}
-        //else
-        //{
-        //    //If capture is Left, plays left capture animation
-        //    if (m.Direction == Move.Laterality.LEFT)
-        //    {
-        //        captureChoice = rnd.Next(7, 11);
-
-        //        if (captureChoice == 8)
-        //        {
-        //            selectedPiece.GetComponent<Animation>().Play("Diagonal - Left");
-        //            bm.SpawnPiece(8, m.To);
-        //            Destroy(bm.Pieces[m.To].gameObject, 3f);
-        //        }
-        //        else if (captureChoice == 9)
-        //        {
-        //            selectedPiece.GetComponent<Animation>().Play("Dig - Left");
-        //            bm.SpawnPiece(9, m.To);
-        //            Destroy(bm.Pieces[m.To].gameObject, 3f);
-        //        }
-        //        else
-        //        {
-        //            selectedPiece.GetComponent<Animation>().Play("Top - Left");
-        //            bm.SpawnPiece(10, m.To);
-        //            Destroy(bm.Pieces[m.To].gameObject, 3f);
-        //        }
-        //    }
-
-        //    //If capture is Right, plays right capture animation
-        //    else
-        //    {
-        //        captureChoice = rnd.Next(10, 14);
-
-        //        if (captureChoice == 11)
-        //        {
-        //            selectedPiece.GetComponent<Animation>().Play("Diagonal - Right");
-        //            bm.SpawnPiece(11, m.To);
-        //            Destroy(bm.Pieces[m.To].gameObject, 3f);
-        //        }
-        //        else if (captureChoice == 12)
-        //        {
-        //            selectedPiece.GetComponent<Animation>().Play("Dig - Right");
-        //            bm.SpawnPiece(12, m.To);
-        //            Destroy(bm.Pieces[m.To].gameObject, 3f);
-        //        }
-        //        else
-        //        {
-        //            selectedPiece.GetComponent<Animation>().Play("Top - Right");
-        //            bm.SpawnPiece(13, m.To);
-        //            Destroy(bm.Pieces[m.To].gameObject, 3f);
-        //        }
-        //    }
-        //}
+        selectedPiece.GetComponent<Animation>()[animation].speed = -1;
+        selectedPiece.GetComponent<Animation>()[animation].time = selectedPiece.GetComponent<Animation>()[animation].length;
+        selectedPiece.GetComponent<Animation>().Play(animation);
     }
+    IEnumerator PlayUndoAnimationBreak(Piece selectedPiece, Move m, bool capture)
+    {
+        int breakAnimation = BreakAnimations.Pop();
+
+        Piece unbreakingPiece = SpawnPiece(breakAnimation, m.To);
+        string animation = unbreakingPiece.GetComponent<Animation>().clip.name;
+        unbreakingPiece.GetComponent<Animation>()[animation].speed = -1;
+        unbreakingPiece.GetComponent<Animation>()[animation].time = unbreakingPiece.GetComponent<Animation>()[animation].length;
+
+        unbreakingPiece.GetComponent<Animation>().Play(animation);
+
+        yield return DestroyAndReplaceBrokenPiece(unbreakingPiece);
+        //SpawnPiece(unbreakingPiece.isIce ? 0 : 1, unbreakingPiece.Position, false);
+    }
+    IEnumerator DestroyAndReplaceBrokenPiece(Piece unbreakingPiece)
+    {
+        //yield return new WaitForSeconds(1.2f);
+        yield return new WaitWhile(() => unbreakingPiece.GetComponent<Animation>().isPlaying);
+
+        Destroy(unbreakingPiece.gameObject);
+        activePieces.Remove(unbreakingPiece.gameObject);
+
+        GameObject go = Instantiate(piecePrefabs[unbreakingPiece.isIce ? 0 : 1], GetTileCenter(unbreakingPiece.Position.X, unbreakingPiece.Position.Y + (unbreakingPiece.isIce ? 1 : -1)), Quaternion.identity) as GameObject;
+        go.transform.SetParent(transform);
+        Pieces[unbreakingPiece.Position] = go.GetComponent<Piece>();
+        Pieces[unbreakingPiece.Position].SetPosition(unbreakingPiece.Position);
+        activePieces.Add(go);
+
+        string animation = go.GetComponent<Animation>().clip.name;
+        go.GetComponent<Animation>()[animation].time = go.GetComponent<Animation>()[animation].length;
+        go.GetComponent<Animation>()[animation].speed = 1;
+        go.GetComponent<Animation>().Play(animation);
+
+        yield return null;
+        go.GetComponent<Animation>().Stop();
+        Pieces[unbreakingPiece.Position].transform.position = GetTileCenter(unbreakingPiece.Position);
+
+        //for (int i = 0; i < 20; i++) yield return null;
+    }
+
 
     //This function is used by the GUI to validate a potential move by the local user, and send it to the Game Core if it's good
     private void MakeLocalMove(Coordinate to)
     {
         Move myMove;
-        try {
+        try
+        {
             myMove = new Move(selectedPiece.Position, to);
 
             if (gameCore.PossibleMoves(selectedPiece.isIce, selectedPiece.Position).Contains(myMove)) //If Valid Move
             {
-                if (!gameCore.isSinglePlayer) networkLogic.SendMove(myMove,gameCore.MySide);
+                if (!gameCore.isSinglePlayer) networkLogic.SendMove(myMove, gameCore.MySide);
                 isMyTurn = false;
                 gameCore.UpdateBoard(myMove);
             }
         }
-        catch (ArgumentException e) {
+        catch (ArgumentException e)
+        {
             //Move constructor throws on invalid move
             Debug.Log(e.Message);
         }
-                        
+
         isClicked = false;
-        
+
         BoardHighlights.Instance.HideHighlights();
         timerCount = 60f;
         Timer.SetActive(false);
@@ -359,7 +272,7 @@ public class BoardManager : MonoBehaviour
             isMyTurn = true;
             MainCamera.transform.position = new Vector3(MainCamera.transform.position.x, MainCamera.transform.position.y, -4);
             MainCamera.transform.rotation = Quaternion.Euler(MainCamera.transform.rotation.eulerAngles.x, 0f, 0f);
-            if(!gameCore.isSinglePlayer) Timer.SetActive(true);
+            if (!gameCore.isSinglePlayer) Timer.SetActive(true);
         }
         else
         {
@@ -427,13 +340,13 @@ public class BoardManager : MonoBehaviour
     }
     public void SendSide()
     {
-        if(gameCore.MySide == GameCore.Turn.ICE) { networkLogic.WhatSide(0); }
+        if (gameCore.MySide == GameCore.Turn.ICE) { networkLogic.WhatSide(0); }
         else { networkLogic.WhatSide(1); }
         ChangeSide();
     }
     public void ReceiveSide(int side)
     {
-        if(side == 0) { gameCore.MySide = GameCore.Turn.FIRE; ChangeSide(); }
+        if (side == 0) { gameCore.MySide = GameCore.Turn.FIRE; ChangeSide(); }
         else { gameCore.MySide = GameCore.Turn.ICE; ChangeSide(); }
     }
     public void WhatIsMySide()
@@ -464,7 +377,7 @@ public class BoardManager : MonoBehaviour
             Destroy(Pieces[move.To].gameObject, 1.4f);
         }
         StartCoroutine(Pieces[move.From].PlayMoveSound()); //sound effect
-        
+
         int breakAnimation = Piece.playAnimation(Pieces[move.From], move, takingPiece);
         if (breakAnimation > 0) BreakAnimations.Push(breakAnimation);
 
@@ -472,7 +385,7 @@ public class BoardManager : MonoBehaviour
         Pieces[move.From].SetPosition(move.To);
         Pieces[move.To] = Pieces[move.From];
         Pieces[move.From] = null; // Removing the piece from the 
-        if(gameCore.MySide == GameCore.Turn.ICE)
+        if (gameCore.MySide == GameCore.Turn.ICE)
         {
             CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Waiting for opponent" : "Ice Turn";
             CurrentTurnText.GetComponent<Text>().color = (LastTurn == GameCore.Turn.FIRE) ? Color.black : Color.blue;
@@ -504,14 +417,15 @@ public class BoardManager : MonoBehaviour
             SpawnPiece(1, i, testing ? 5 : 7);
         }
     }
-    public Piece SpawnPiece(int prefab, Coordinate c) { return SpawnPiece(prefab, c.X, c.Y); }
-    public Piece SpawnPiece(int prefab, int x, int y)
+    public Piece SpawnPiece(int prefab, Coordinate c, bool animation = true) { return SpawnPiece(prefab, c.X, c.Y, animation); }
+    public Piece SpawnPiece(int prefab, int x, int y, bool animation = true)
     {
         GameObject go = Instantiate(piecePrefabs[prefab], GetTileCenter(x, y), Quaternion.identity) as GameObject;
-        go.transform.SetParent(transform);    
+        go.transform.SetParent(transform);
         Pieces[x, y] = go.GetComponent<Piece>();
         Pieces[x, y].SetPosition(x, y);
         activePieces.Add(go);
+        if (animation) go.GetComponent<Animation>().Play();
         return Pieces[x, y];
     }
 
@@ -546,7 +460,7 @@ public class BoardManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        if(Timer.activeInHierarchy != false)
+        if (Timer.activeInHierarchy != false)
         {
             timerCount -= Time.deltaTime;
             networkTimer.text = Mathf.RoundToInt(timerCount).ToString();
@@ -562,13 +476,16 @@ public class BoardManager : MonoBehaviour
         if (Pieces[loc] == null) return;
         //Check if piece "isIce" is the same as my "isIce" (aka, make sure it's my piece)
         if (Pieces[loc].isIce != (gameCore.MySide == GameCore.Turn.ICE)) return;
+        //Highlight the clicked space
+        BoardHighlights.Instance.HighlightClickedSpace(loc);
         //Check if piece has any possible 
         List<Move> moves = gameCore.PossibleMoves(Pieces[loc].isIce, loc);
         if (moves.Count == 0) return;
 
         selectedPiece = Pieces[loc];
         BoardHighlights.Instance.HighlightAllowedMoves(moves);
-                
+        BoardHighlights.Instance.HighlightClickedSpace(loc);
+
         isClicked = true;
     }
     public Vector3 GetTileCenter(int x, int y)
@@ -601,8 +518,9 @@ public class BoardManager : MonoBehaviour
     private IEnumerator showHint()
     {
         while (!hintReady) yield return null;
-        
+
         BoardHighlights.Instance.HighlightHint(hintMove);
+        BoardHighlights.Instance.HighlightClickedSpace(hintMove);
         yield return null;
     }
     #endregion

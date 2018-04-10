@@ -10,7 +10,7 @@ static int seekDepth = INT_MAX;
 static double seekTime = 4;
 static bool cutShortByDepth = true;
 
-static bool verbose = false;
+static bool verbose = true;
 
 AI::Seeker::Seeker()
 {
@@ -32,6 +32,19 @@ AI::Seeker::Seeker(int) : Prune(0)
 	SEEK_OPPONENT_WIN_SHORT = 1;
 	SEEK_OPPONENT_WIN_LONG = 2.5;
 	SEEK_BLOCKING_MOVE = 2;
+}
+
+AI::Seeker::Seeker(int, int i) : Prune(0)
+{
+	t.start();
+	MAX_SEEK_DEPTH = 20;
+	FINAL_ALPHA_BETA_TIME = 5.88;
+	SEEK_WIN = 2.5;
+	SEEK_OPPONENT_WIN_SHORT = 1;
+	SEEK_OPPONENT_WIN_LONG = 2.5;
+	SEEK_BLOCKING_MOVE = 2;
+
+	readWeights(i);
 }
 
 AI::Seeker::Seeker(std::string hinter) : Prune(0)
@@ -112,7 +125,9 @@ move seek(const Board& b, int movesMade, const timer& time) {
 move Seeker::deepTimedSeek(const Board& b, double time, int depth = 40) const {
 	move seekResult = { A1, A1 };
 	timer seekTimer; seekTimer.start(); seekTime = time;
+	cutShortByDepth = true;
 	for (seekDepth = 2; seekDepth < MAX_SEEK_DEPTH && seekTimer.read() < seekTime && cutShortByDepth; seekDepth++) {
+	//for (seekDepth = 2; seekDepth < MAX_SEEK_DEPTH && seekTimer.read() < seekTime; seekDepth++) {
 		cutShortByDepth = false;
 		move newResult = seek(b, 0, seekTimer);
 		seekResult = newResult.first == newResult.second ? seekResult : newResult;
@@ -254,7 +269,7 @@ void AI::Seeker::writeWeights(int k)
 	ofstream fout("weights" + std::to_string(k) + ".save");
 	for (int i = 0; i < NULL_FEATURE; i++) {
 		for (int j = 0; j < NULL_FEATURE; j++)
-			fout << std::to_string(weights[i][j]) << ' ';
+			fout << std::to_string(weights[i][j]) << '\t';
 		fout << std::endl;
 	}
 }

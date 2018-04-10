@@ -1,12 +1,48 @@
 #include "..\..\CSharpSolution\AILibrary\AI.h"
 #include <map>
+#include <numeric>
 using namespace AI;
 
 const int BEST_WEIGHTS = -1 * INT_MAX;
 const int WEEB_WEIGHTS = -1 * INT_MAX + 1;
 const int BEST_EVER_WEIGHTS = -1 * INT_MAX + 2;
 
+
 typedef std::pair<Seeker, int> Specimen;
+typedef std::pair<std::vector<signed char>, int> Organism;
+
+bool weightCompare(const Organism& p1, const Organism& p2) {
+	return p1.second > p2.second;
+}
+
+const int FEATURE_COUNT = 13;
+BoardFeature significantFeatures[FEATURE_COUNT] = {
+	H_FILE							,
+	A_FILE							,
+	ROW_4_THREATENED				,
+	PIECE_ADVANTAGE_B				,
+	PUSH_ADVANTAGE					,
+	THREATENED_SQUARES				,
+	ROW_3_THREATENED				,
+	FURTHEST_PIECE_UNTHREATENED		,
+	DISPERSION						,
+	THREATENED_DEFENDED				,
+	UNTHREATEN_UNDEFENDED			,
+	UNTHREATENED_UNDEFENDED			,
+	ROW_2_THREATENED
+};
+
+void crossover(const Organism& p1, const Organism& p2, Organism& c1, Organism& c2) {
+	c1.first.clear(); c2.first.clear(); c1.second = 0; c2.second = 0;
+
+	for (int i = 0; i < FEATURE_COUNT*FEATURE_COUNT; i++) {
+		int pt = rand() % 2;
+		c1.first.push_back((pt ? p1.first : p2.first)[i]);
+		c2.first.push_back((pt ? p2.first : p1.first)[i]);
+	}
+	for (int i = 0; i < FEATURE_COUNT*FEATURE_COUNT; i++) if (rand() % 1000 < 2) c1.first[i] ^= rand() % 256;
+	for (int i = 0; i < FEATURE_COUNT*FEATURE_COUNT; i++) if (rand() % 1000 < 2) c2.first[i] ^= rand() % 256;
+}
 
 void evaluate(Specimen& s, bool black = true) {
 	Board board(CommonBitboards::row1 | CommonBitboards::row2, CommonBitboards::row7 | CommonBitboards::row8, WHITE);
@@ -23,6 +59,27 @@ void evaluate(Specimen& s, bool black = true) {
 	else s.second = INT_MIN + turnCount;
 
 	delete players[!black];
+}
+
+void evaluate(Organism& s, bool black = true) {
+	Board board(CommonBitboards::row1 | CommonBitboards::row2, CommonBitboards::row7 | CommonBitboards::row8, WHITE);
+
+	Seeker * players[2];
+	players[!black] = new Seeker(0);
+
+	players[black] = new Seeker(0);
+	players[black]->readWeights(WEEB_WEIGHTS);
+	for (int i = 0; i < FEATURE_COUNT*FEATURE_COUNT; i++) players[black]->adjustWeight((BoardFeature)significantFeatures[i / FEATURE_COUNT], (BoardFeature)significantFeatures[i % FEATURE_COUNT], s.first[i]);
+
+	int turnCount = 0;
+
+	while (++turnCount && !board.gameOver()) board = board.makeMove((*players[(turnCount + 1) % 2])(board));
+
+	if (turnCount-- % 2 == black) s.second = INT_MIN - turnCount;
+	else s.second = INT_MIN + turnCount;
+
+	delete players[!black];
+	delete players[black];
 }
 
 FeatureFunc featureCalculators[NULL_FEATURE] = { NULL };
@@ -160,13 +217,17 @@ struct featureSet {
 		return "(" + ::to_string(first) + ", " + ::to_string(second) + ")";
 	}
 	featureSet(int b1, int b2) {
-		first = (BoardFeature)std::min(b1, b2);
-		second = (BoardFeature)std::max(b1, b2);
+		//first = (BoardFeature)std::min(b1, b2);
+		//second = (BoardFeature)std::max(b1, b2);
+		first = (BoardFeature)std::max(b1, b2);
+		second = (BoardFeature)std::min(b1, b2);
 		if (b1 == b2) throw"You dumb nut get gud";
 	}
 	featureSet(BoardFeature b1, BoardFeature b2) {
-		first = std::min(b1, b2);
-		second = std::max(b1, b2);
+		//first = std::min(b1, b2);
+		//second = std::max(b1, b2);
+		first = std::max(b1, b2);
+		second = std::min(b1, b2);
 		if (b1 == b2) throw"You dumb nut get gud";
 	}
 	bool operator<(const featureSet p) const {
@@ -178,14 +239,14 @@ private:
 	BoardFeature second;
 };
 
-void mainY(BoardFeature * bp, int wantCount) {
+std::set<featureSet> getSimilarities() {
 	srand(time(NULL));
 	setFeatureCalculators();
 
 	//Gen board data
 	std::set<Board> boards;
 	Board currentBoard;
-	while (boards.size() < 500000) {
+	while (boards.size() < 700000) {
 		auto b = currentBoard.validNextBoards();
 
 		if (b.empty()) currentBoard = Board();
@@ -202,9 +263,11 @@ void mainY(BoardFeature * bp, int wantCount) {
 		}
 
 	//Normalize
-	int count = boards.size();
+	double count = boards.size();
 	for (int i = 0; i < NULL_FEATURE; i++) {
-		auto maxel = *std::max_element(featureVectors[i].begin(), featureVectors[i].end());
+		double maxel = *std::max_element(featureVectors[i].begin(), featureVectors[i].end());
+		double average = std::accumulate(featureVectors[i].begin(), featureVectors[i].end(), 0) / count;
+		for (int e = 0; e < count; e++) featureVectors[i][e] -= average;
 		for (int e = 0; e < count; e++) featureVectors[i][e] /= maxel;
 	}
 
@@ -224,23 +287,72 @@ void mainY(BoardFeature * bp, int wantCount) {
 					insertion.first->similarity = dotProd / (sqrt(mag1) * sqrt(mag2));
 				}
 			}
-	
-	//Count total similarity
-	double totalSimilarity[NULL_FEATURE] = { 0 };
-	for (auto a : similarities) {
-		totalSimilarity[a.features().first] += std::abs(a.similarity);
-		totalSimilarity[a.features().second] += std::abs(a.similarity);
+
+	return similarities;
+}
+
+void getFeatureSet(BoardFeature * bp, int wantCount) {
+	auto similarities = getSimilarities();
+
+	std::set<BoardFeature> noGood;
+	noGood.insert(ROW_2_THREATENED_B);
+	noGood.insert(ROW_3_THREATENED_B);
+	noGood.insert(ROW_4_THREATENED_B);
+	noGood.insert(PIECE_ADVANTAGE);
+	//noGood.insert(A_FILE						);
+	noGood.insert(A_FILE_B						);
+	//noGood.insert(H_FILE						);
+	noGood.insert(H_FILE_B						);
+	//noGood.insert(DISPERSION					);
+	//noGood.insert(THREATENED_DEFENDED			);
+	noGood.insert(THREATENED_DEFENDED_B);
+	//noGood.insert(THREATENED_UNDEFENDED			);
+	noGood.insert(THREATENED_UNDEFENDED_B);
+	//noGood.insert(THREATEN_DEFENDED				);
+	noGood.insert(THREATEN_DEFENDED_B);
+	//noGood.insert(THREATEN_UNDEFENDED			);
+	noGood.insert(THREATEN_UNDEFENDED_B);
+	//noGood.insert(FURTHEST_PIECE_DEFENDED		);
+	//noGood.insert(FURTHEST_PIECE_UNDEFENDED		);
+	//noGood.insert(FURTHEST_PIECE_THREATENED		);
+	//noGood.insert(FURTHEST_PIECE_UNTHREATENED	);
+	//noGood.insert(CLOSEST_PIECE_DEFENDED		);
+	//noGood.insert(CLOSEST_PIECE_UNDEFENDED		);
+	//noGood.insert(CLOSEST_PIECE_THREATENED		);
+	//noGood.insert(CLOSEST_PIECE_UNTHREATENED	);
+	//noGood.insert(PUSH_ADVANTAGE				);
+	noGood.insert(PUSH_ADVANTAGE_B);
+	//noGood.insert(UNTHREATENED_UNDEFENDED		);
+	noGood.insert(UNTHREATENED_UNDEFENDED_B);
+	//noGood.insert(UNTHREATEN_UNDEFENDED			);
+	noGood.insert(UNTHREATEN_UNDEFENDED_B);
+	//noGood.insert(THREATENED_SQUARES			);
+	for (int keepers = 0; keepers < wantCount; keepers++) {
+
+		//Count total similarity
+		double totalSimilarity[NULL_FEATURE] = { 0 };
+		for (auto a : similarities) if (noGood.find(a.features().first) == noGood.end() && noGood.find(a.features().second) == noGood.end()) {
+			totalSimilarity[a.features().first] += std::abs(a.similarity);
+			totalSimilarity[a.features().second] += std::abs(a.similarity);
+		}
+
+		//Keep the least similar feature
+		double minSimilarity = INFINITY;
+		for (int i = 0; i < NULL_FEATURE; i++) if (totalSimilarity[i] < minSimilarity && noGood.find((BoardFeature)i) == noGood.end()) {
+			cout << "Feature: " << to_string((BoardFeature)i) << ": " << totalSimilarity[i] << endl;
+			bp[keepers] = (BoardFeature)i;
+			minSimilarity = totalSimilarity[i];
+		}
+
+		noGood.insert(bp[keepers]);
+
+		//"Get rid" of all the features that are similar to the one I just kept
+		for (int i = 0; i < NULL_FEATURE; i++) if (i != bp[keepers]) {
+			if (std::abs(similarities.find(featureSet(i, bp[keepers]))->similarity) >= .45) noGood.insert((BoardFeature)i);
+		}
 	}
 
-	//std::sort(totalSimilarity, totalSimilarity + NULL_FEATURE);
-	double minSimilarity = INFINITY;
-	for (int i = 0; i < NULL_FEATURE; i++) if (totalSimilarity[i] < minSimilarity) {
-		cout << "Feature: " << to_string((BoardFeature)i) << ": " << totalSimilarity[i] << endl;
-		bp[0] = (BoardFeature)i;
-		minSimilarity = totalSimilarity[i];
-	}
-
-	for (int keptGuys = 1; keptGuys < wantCount; keptGuys++) {
+	/*for (int keptGuys = 1; keptGuys < wantCount; keptGuys++) {
 		double totalSimilarity[NULL_FEATURE] = { 0 };
 		for (int guysToCount = 0; guysToCount < keptGuys; guysToCount++) {
 			totalSimilarity[bp[guysToCount]] = INFINITY;
@@ -256,22 +368,58 @@ void mainY(BoardFeature * bp, int wantCount) {
 			minSimilarity = totalSimilarity[i];
 		}
 		cout << endl;
-	}
+	}*/
 
 	for (int keptGuys = 0; keptGuys < wantCount; keptGuys++) cout << "Feature: " << to_string(bp[keptGuys]) << endl;
 
-	
+
 }
 
-void main(){
+void mainG() {
 	srand(time(NULL));
-	bool alreadyMaxed[NULL_FEATURE][NULL_FEATURE] = { 0 };
-	int maxedCount = 0;
-	int bestScoreEvaa = INT_MIN;
+	int bestScoreEvaa = INT_MIN, genCount = 0;
+	const int POP_COUNT = 210;
 
-	//So we generate our weebs first
-	//And each weeb has their own feature bumped to start
-	Specimen * weebs = new Specimen[NULL_FEATURE * NULL_FEATURE];
+	//getFeatureSet(significantFeatures, 10);
+
+	//initialize random parents
+	Organism parents[POP_COUNT];
+	for (int i = 0; i < POP_COUNT; i++)
+		for (int k = 0; k < FEATURE_COUNT*FEATURE_COUNT; k++)
+			parents[i].first.push_back(rand() % 256 - 128);
+
+	while (true) {
+		//Evaluate parents
+#pragma omp parallel for
+		for (int i = 0; i < POP_COUNT; i++) if (!parents[i].second) evaluate(parents[i]);
+
+		//sort
+		std::sort(parents, parents + POP_COUNT, weightCompare);
+
+		//Then we save the weights if they were good
+		if (parents[0].second >= bestScoreEvaa) {
+			bestScoreEvaa = parents[0].second;
+			auto a = Seeker(0);
+			a.readWeights(WEEB_WEIGHTS);
+			for (int i = 0; i < 100; i++) a.adjustWeight((BoardFeature)significantFeatures[i / 10], (BoardFeature)significantFeatures[i % 10], parents[0].first[i]);
+			a.writeWeights(BEST_EVER_WEIGHTS);
+		}
+
+		cout << "Gen: " << genCount++ << " | Best: " << parents[0].second << endl;
+
+		//make next gen
+		Organism children[POP_COUNT];
+		for (int i = 0; i < POP_COUNT; i++) {
+			if (i < POP_COUNT / 15.0)children[i] = parents[i];
+			else if (i < POP_COUNT*.8) crossover(parents[rand() % (int)(POP_COUNT*.5)], parents[rand() % (int)(POP_COUNT*.5)], children[i], children[++i]);
+			else for (int k = 0; k < 100; k++) children[i].first.push_back(rand() % 256 - 128);
+		}
+
+		std::copy(children, children + POP_COUNT, parents);
+	}
+	//Rest is classic
+	//Will have to crossover
+
 }
 
 void mainX() {
@@ -331,4 +479,19 @@ void mainX() {
 	}
 
 	delete[] weebs;
+}
+
+void main() {
+	//auto similarities = getSimilarities();
+	//for (auto a : similarities) //if (a.similarity > .85) 
+	//	cout << a.to_string() << " - " << a.similarity << endl;
+
+	//BoardFeature f[15];
+	//getFeatureSet(f, 15);
+	//for (int i = 0; i < 15; i++)
+	//{
+	//	cout << to_string(f[i]) << endl;
+	//}
+
+	mainG();
 }
