@@ -10,7 +10,7 @@ static int seekDepth = INT_MAX;
 static double seekTime = 4;
 static bool cutShortByDepth = true;
 
-static bool verbose = false;
+static bool verbose = true;
 
 AI::Seeker::Seeker()
 {
@@ -125,7 +125,9 @@ move seek(const Board& b, int movesMade, const timer& time) {
 move Seeker::deepTimedSeek(const Board& b, double time, int depth = 40) const {
 	move seekResult = { A1, A1 };
 	timer seekTimer; seekTimer.start(); seekTime = time;
+	cutShortByDepth = true;
 	for (seekDepth = 2; seekDepth < MAX_SEEK_DEPTH && seekTimer.read() < seekTime && cutShortByDepth; seekDepth++) {
+	//for (seekDepth = 2; seekDepth < MAX_SEEK_DEPTH && seekTimer.read() < seekTime; seekDepth++) {
 		cutShortByDepth = false;
 		move newResult = seek(b, 0, seekTimer);
 		seekResult = newResult.first == newResult.second ? seekResult : newResult;

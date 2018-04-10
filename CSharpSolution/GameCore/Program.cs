@@ -12,8 +12,8 @@ namespace GameCore
 		private static Game game = new Game();
 		private static Dictionary<AIType, int> wins = Enum.GetValues(typeof(AIType)).Cast<AIType>().ToDictionary<AIType, AIType, int>((a) => { return a; }, (a) => { return 0; });
 		static void Main(string[] args) {
-			//functionForDaryl();
-			aiCompare(AIType.SEEKER, AIType.L337);
+			functionForDaryl();
+			//aiCompare(AIType.SEEKER, AIType.L337);
         }
 		private static void functionForDaryl() {
 			Console.WindowHeight = (int)(Console.LargestWindowHeight / 1.2);
