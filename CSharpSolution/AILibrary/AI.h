@@ -128,6 +128,7 @@ namespace AI {
 	public:
 		Seeker();
 		Seeker(int);
+		Seeker(int,int);
 		Seeker(std::string hinter);
 		virtual move operator()(const Board b) const;
 

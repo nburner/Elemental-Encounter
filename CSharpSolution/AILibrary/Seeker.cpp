@@ -34,6 +34,13 @@ AI::Seeker::Seeker(int) : Prune(0)
 	SEEK_BLOCKING_MOVE = 2;
 }
 
+AI::Seeker::Seeker(int, int i) : Prune(0)
+{
+	for (int a = 0; a < NULL_FEATURE; a++)
+		for (int b = 0; b < NULL_FEATURE; b++)
+			weights[a][b] = i;
+}
+
 AI::Seeker::Seeker(std::string hinter) : Prune(0)
 {
 	t.start();
@@ -254,7 +261,7 @@ void AI::Seeker::writeWeights(int k)
 	ofstream fout("weights" + std::to_string(k) + ".save");
 	for (int i = 0; i < NULL_FEATURE; i++) {
 		for (int j = 0; j < NULL_FEATURE; j++)
-			fout << std::to_string(weights[i][j]) << ' ';
+			fout << std::to_string(weights[i][j]) << '\t';
 		fout << std::endl;
 	}
 }
