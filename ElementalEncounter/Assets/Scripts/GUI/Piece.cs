@@ -58,12 +58,18 @@ public class Piece : MonoBehaviour
             }
         }
         else
-        {
+        {            
             System.Random rnd = new System.Random();
             int captureChoice;
 
             if (selectedPiece.isIce == false)
             {
+                string[] animationList = { "Bounce - Left", "Roll - Left", "Smash - Left", "Bounce - Right", "Roll - Right", "Smash - Right" };
+                for (int i = 0; i < animationList.Length; i++){
+                    selectedPiece.GetComponent<Animation>()[animationList[i]].time = 0;
+                    selectedPiece.GetComponent<Animation>()[animationList[i]].speed = 1;
+                }
+
                 //If capture is Left, plays left capture animation
                 if (m.Direction != Move.Laterality.LEFT)
                 {
@@ -117,6 +123,12 @@ public class Piece : MonoBehaviour
             }
             else
             {
+                string[] animationList = { "Diagonal - Left", "Dig - Left", "Top - Left", "Diagonal - Right", "Dig - Right", "Top - Right" };
+                for (int i = 0; i < animationList.Length; i++){
+                    selectedPiece.GetComponent<Animation>()[animationList[i]].time = 0;
+                    selectedPiece.GetComponent<Animation>()[animationList[i]].speed = 1;
+                }
+
                 //If capture is Left, plays left capture animation
                 if (m.Direction == Move.Laterality.LEFT)
                 {
