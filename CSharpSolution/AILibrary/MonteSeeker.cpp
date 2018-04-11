@@ -4,21 +4,26 @@
 #include <map>
 #include <algorithm>
 #include <thread>
+#include <atomic>
+#include <mutex>
 using namespace AI;
 
 static int seekDepth = INT_MAX;
 static double seekTime = 4;
 static bool cutShortByDepth = true;
 
-static bool verbose = false;
+static bool verbose = true;
+
+static std::atomic_bool waitingForCarlo = false;
+static std::mutex scoreMutex;
 
 inline bool valueComparer(const Board& b1, const Board& b2) {
 	return b1.val < b2.val;
 }
-inline bool compareWins(const std::pair<move, int>& p1, const std::pair<move, int>& p2) {
-	return p1.second < p2.second;
+inline bool compareWins(const std::pair<Board, std::pair<int, int>>& p1, const std::pair<Board, std::pair<int, int>>& p2) {
+	return p1.second.first / (double)p1.second.second < p2.second.first / (double)p2.second.second;
 }
-inline bool compareAvgTurns(const std::pair<move, double>& p1, const std::pair<move, double>& p2) {
+inline bool compareAvgTurns(const std::pair<Board, double>& p1, const std::pair<Board, double>& p2) {
 	return p1.second > p2.second;
 }
 
@@ -26,64 +31,77 @@ AI::MonteSeeker::MonteSeeker(int) : Seeker(0)
 {
 }
 
-void AI::MonteSeeker::MonteCarlo(const Board& b) const {
+static std::map<Board, std::pair<int, int>> monteCarloScores;
+
+void AI::MonteSeeker::MonteCarlo(const MonteSeeker& m, const Board& b) {
 	auto boards = b.validWinBoards();
 	if (!boards.empty()) {
-		MonteCarloResult = boards[0].lastMove;
+		waitingForCarlo = false;
 		return;
 	}
 
 	boards = b.validNextBoards();
 
-	std::map<move, int> winCount;
-	std::map<move, double> avgTurnCount;
+	//std::map<move, double> avgTurnCount;
 
 	int k = 0;
-	while (t.read() < 5.88 && waitingForCarlo) {
+	while (m.t.read() < 5.5 && waitingForCarlo) {
+		#pragma omp parallel for num_threads(6)
 		for (int i = 0; i < boards.size(); i++) {
 			auto board = boards[i];
-			int turnCount = 0;
+			int turnCount = 1;
+			vector<Board> seenBoards;
 			while (!board.gameOver()) {
 				move nextMove;
 				auto next = board.validWinBoards();
 				if (next.empty()) next = board.validNextBoards();
-				
-				if (turnCount % 2) nextMove = next[rand() % next.size()].lastMove;				
+
+				if (turnCount % 2) nextMove = next[rand() % next.size()].lastMove;
 				else {
-					for (int i = 0; i < next.size(); i++) evaluate(next[i]);
-					nextMove = std::max_element(next.begin(), next.end(), valueComparer)->lastMove;
+					for (int i = 0; i < next.size(); i++) m.evaluate(next[i]);
+					std::sort(next.begin(), next.end(), valueComparer);
+					nextMove = next[0].lastMove;
 				}
 
+				if (turnCount % 2) seenBoards.push_back(board);
 				board = board.makeMove(nextMove);
-				turnCount++;
 			}
 
-			avgTurnCount[boards[i].lastMove] = avgTurnCount[boards[i].lastMove] * k / (double)(k + 1.0) + turnCount / (double)(k + 1.0);
-			winCount[boards[i].lastMove] += board.turn() != b.turn();
+			//if(board.turn() != b.turn()) avgTurnCount[boards[i].lastMove] = avgTurnCount[boards[i].lastMove] * monteCarloScores[boards[i].lastMove] / (double)(monteCarloScores[boards[i].lastMove] + 1.0) + turnCount / (double)(monteCarloScores[boards[i].lastMove] + 1.0);
+			for (int p = 0; p < seenBoards.size(); p++) {
+				std::lock_guard<std::mutex> lock(scoreMutex);
+				monteCarloScores[seenBoards[p]].first += board.turn() != b.turn();
+				monteCarloScores[seenBoards[p]].second++;
+			}
 			k++;
 		}
 	}
+	if (waitingForCarlo) {
+		
+		//auto runnerUp = std::max_element(avgTurnCount.begin(), avgTurnCount.end(), compareAvgTurns);
 
-	auto winner = std::max_element(winCount.begin(), winCount.end(), compareWins);
-	auto runnerUp = std::max_element(avgTurnCount.begin(), avgTurnCount.end(), compareAvgTurns);
-
-	cout << "Monte Carlo ran " << k << " games in " << t.read() << " seconds" << endl;
-	cout << "Monte Carlo picked a move that won " << winner->second << " games out of " << k / boards.size() << " in an average " << avgTurnCount[winner->first] << " turns" << endl;
-	cout << "instead of picking a move that won " << winCount[runnerUp->first] << " games out of " << k / boards.size() << " in an average " << runnerUp->second << " turns" << endl;
-	MonteCarloResult = winner->first;
+		cout << "Monte Carlo ran " << k << " games in " << m.t.read() << " seconds" << endl;
+		//cout << "Monte Carlo picked a move (" << BoardHelpers::to_string(winner.lastMove) << ") that won " << monteCarloScores[winner].first << " games out of " << monteCarloScores[winner].second
+		//	<< endl; //<< " in an average " << avgTurnCount[winner->first] << " turns" << endl;
+		//cout << "instead of picking a move (" << BoardHelpers::to_string(runnerUp->first) << ") that won " << monteCarloScores[runnerUp->first] << " games out of " << k / boards.size() << " in an average " << runnerUp->second << " turns" << endl;
+		//MonteCarloResult = winner.lastMove;
+		waitingForCarlo = false;
+	}
 }
 
 move AI::MonteSeeker::operator()(const Board b) const
 {
 	t.reset();
 	waitingForCarlo = true;
+
 	std::thread monteCarloThread = std::thread(&MonteSeeker::MonteCarlo, *this, b);
 
 	//Always win if you can
 	auto boards = b.validWinBoards();
 	if (!boards.empty()) {
 		if (verbose) cout << "This move took: " << t.read() << " seconds" << endl;
-		waitingForCarlo = false;
+		monteCarloThread.join();
+		while (waitingForCarlo);
 		return boards[0].lastMove;
 	}
 
@@ -119,16 +137,26 @@ move AI::MonteSeeker::operator()(const Board b) const
 			}
 
 			if (verbose) cout << "Seeker: I think I'm screwed" << endl;
-			if (verbose) cout << "This move took: " << t.read() << " seconds" << endl;
 			waitingForCarlo = false;
+			monteCarloThread.join();
+			if (verbose) cout << "This move took: " << t.read() << " seconds" << endl;
 			return result;
 		}
 		//Otherwise evaluate your remaining options
 		//Scratch that evaluating swapped with Monte Carlo
 		monteCarloThread.join();
+		while (waitingForCarlo);
+		
+		Board winner; double maxWinRatio = -1;
+		for (int i = 0; i < boards.size(); i++) {
+			double winRatio = monteCarloScores[boards[i]].first / (double)monteCarloScores[boards[i]].second;
+			if (winRatio > maxWinRatio && !featureCalculators[THREATENED_UNDEFENDED_B](boards[i])) {
+				maxWinRatio = winRatio;
+				winner = boards[i];
+			}
+		}
 		if (verbose) cout << "This move took: " << t.read() << " seconds" << endl;
-		waitingForCarlo = false;
-		return MonteCarloResult;
+		return winner.lastMove;
 	}
 	//But if there is a way to victory, ensure it doesn't cost you the game
 	else {
@@ -137,9 +165,10 @@ move AI::MonteSeeker::operator()(const Board b) const
 		//savedTime = std::max(.0, SEEK_OPPONENT_WIN_SHORT + SEEK_WIN - t.read());		
 		//If they don't, good for you!
 		if (test.first == test.second) {
-			if (verbose) cout << "This move took: " << t.read() << " seconds" << endl;
-			if (verbose) cout << "Seeker: I've got you now!" << endl;
 			waitingForCarlo = false;
+			monteCarloThread.join();
+			if (verbose) cout << "Seeker: I've got you now!" << endl;
+			if (verbose) cout << "This move took: " << t.read() << " seconds" << endl;
 			return seekResult;
 		}
 		//If they do, see if there is a way to stop them
@@ -161,8 +190,9 @@ move AI::MonteSeeker::operator()(const Board b) const
 			}
 			//If there's no way to stop them...
 			if (boards.empty()) {
-				if (verbose) cout << "This move took: " << t.read() << " seconds" << endl;
 				waitingForCarlo = false;
+				monteCarloThread.join();
+				if (verbose) cout << "This move took: " << t.read() << " seconds" << endl;
 				//Maybe we can beat them to it
 				if (minMovesToWin >= b.movesBeforeWin) return seekResult;
 				//Maybe we can try to slow them down
@@ -171,14 +201,25 @@ move AI::MonteSeeker::operator()(const Board b) const
 			//Otherwise pick the best move that will stop them
 			//Using Monte Carlo
 			monteCarloThread.join();
+			while (waitingForCarlo);
+
+			Board winner; double maxWinRatio = -1;
+			for (int i = 0; i < boards.size(); i++) {
+				double winRatio = monteCarloScores[boards[i]].first / (double)monteCarloScores[boards[i]].second;
+				if (winRatio > maxWinRatio) {
+					maxWinRatio = winRatio;
+					winner = boards[i];
+				}
+			}
 			if (verbose) cout << "This move took: " << t.read() << " seconds" << endl;
-			waitingForCarlo = false;
-			return MonteCarloResult;
+			return winner.lastMove;
 		}
 	}
 
 	//if (t.read() > 6) 
 	if (verbose) cout << "This move took: " << t.read() << " seconds" << endl;
 	waitingForCarlo = false;
+	monteCarloThread.join();
 	return std::max_element(boards.begin(), boards.end(), valueComparer)->lastMove;
+
 }

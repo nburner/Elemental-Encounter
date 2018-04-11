@@ -139,9 +139,7 @@ namespace AI {
 
 	class MonteSeeker : public Seeker {
 	protected:
-		void MonteCarlo(const Board& b) const;
-		mutable move MonteCarloResult;
-		mutable bool waitingForCarlo = false;
+		static void MonteCarlo(const MonteSeeker&, const Board& b);
 	public:
 		MonteSeeker(int);
 		virtual move operator()(const Board b) const;

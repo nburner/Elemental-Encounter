@@ -2,11 +2,13 @@
 #include "Board.h"
 #include <random>
 #include <set>
+#include <mutex>
 
 using namespace AI;
 using std::set;
 
 const int MAX_WEIGHT = 127;
+std::mutex setInsertionMutex;
 
 FeatureFunc Pet::featureCalculators[AI::BoardFeature::NULL_FEATURE] = { NULL };
 
@@ -122,10 +124,13 @@ Pet::Pet(int)
 
 void Pet::evaluate(Board& board) const
 {	
+	std::lock_guard<std::mutex> lock(setInsertionMutex);
 	auto insertionResult = seenBoards.insert(board);
+	delete &lock;
 
 	if (insertionResult.second) {
 		if (board.gameOver()) {
+			std::lock_guard<std::mutex> lock(setInsertionMutex);
 			insertionResult.first->val = board.gameOver();
 		}
 		else {
@@ -139,10 +144,12 @@ void Pet::evaluate(Board& board) const
 				}
 			}
 
+			std::lock_guard<std::mutex> lock(setInsertionMutex);
 			insertionResult.first->val = result;
 		}
 	}
 
+	std::lock_guard<std::mutex> lock2(setInsertionMutex);
 	board.val = insertionResult.first->val;
 }
 

@@ -26,6 +26,7 @@ Board::Board(const Board& b, bool flipTurn)
 	_turn = Turn((flipTurn + b._turn) % 2);
 
 	lastMove = b.lastMove;
+	val = b.val;
 }
 
 #pragma endregion
@@ -257,13 +258,15 @@ Square AI::Board::furthestPiece(Turn t) const
 //returns INT_MAX if the current player won, INT_MIN if the current player lost, 0 otherwise
 int Board::gameOver() const
 {
-	if (bb[WHITE] & row8 || !bb[BLACK]) {
+	/*if (bb[WHITE] & row8 || !bb[BLACK]) {
 		if (!_turn) return -1*INT_MAX;
 		if (_turn) return INT_MAX;
 	}
 	if (bb[BLACK] & row1 || !bb[WHITE]) {
 		if (!_turn) return INT_MAX;
 		if (_turn) return -1*INT_MAX;
-	}
+	}*/
+	if (bb[WHITE] & row8 || !bb[BLACK] || bb[BLACK] & row1 || !bb[WHITE]) return -1 * INT_MAX;
+	
 	return 0;
 }
