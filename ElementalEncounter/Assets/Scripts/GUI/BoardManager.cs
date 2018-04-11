@@ -41,7 +41,6 @@ public class BoardManager : MonoBehaviour
     private const float TILE_OFFSET = 0.5f;
     private AI.AI HinterXHinter;
     private Camera MainCamera;
-    private bool isClicked = false;
     private float timerCount = 60f;
     private GameCore.Turn LastTurn;
     private NetworkGame.NetworkManager networkLogic;
@@ -130,6 +129,16 @@ public class BoardManager : MonoBehaviour
         HinterXHinter = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.HINTER, gameCore.MySide == GameCore.Turn.ICE ? AI.Turn.ICE : AI.Turn.FIRE, UpdateHint);
     }
 
+    #region Option Buttons
+    public void MuteSoundEffectsButtonClick()
+    {
+        gameCore.sound = !gameCore.sound;
+
+        for (int i = 0; i < activePieces.Count; i++) if (activePieces[i] != null) activePieces[i].GetComponent<AudioSource>().mute = !gameCore.sound;
+    }
+    #endregion
+
+    #region Undo Stuff
     private Queue<UndoEntry> UndoQueue;
     private Stack<int> BreakAnimations;
     private bool UndoInProgress = false;
@@ -170,6 +179,13 @@ public class BoardManager : MonoBehaviour
         
         UndoInProgress = false;
 
+        if (HinterXHinter == null)
+        {
+            HinterXHinter = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.HINTER, gameCore.MySide == GameCore.Turn.ICE ? AI.Turn.ICE : AI.Turn.FIRE, UpdateHint);
+        }
+        HinterXHinter.GetMove(gameCore.Pieces);
+        hintReady = false;
+
         if (gameCore.MySide == GameCore.Turn.ICE)
         {
             LastTurn = GameCore.Turn.ICE;
@@ -205,6 +221,8 @@ public class BoardManager : MonoBehaviour
         selectedPiece.GetComponent<Animation>()[animation].speed = -1;
         selectedPiece.GetComponent<Animation>()[animation].time = selectedPiece.GetComponent<Animation>()[animation].length;
         selectedPiece.GetComponent<Animation>().Play(animation);
+
+        selectedPiece.PlayMoveSound(false);
     }
     IEnumerator PlayUndoAnimationBreak(Piece selectedPiece, Move m, bool capture)
     {
@@ -222,7 +240,6 @@ public class BoardManager : MonoBehaviour
     }
     IEnumerator DestroyAndReplaceBrokenPiece(Piece unbreakingPiece)
     {
-        //yield return new WaitForSeconds(1.2f);
         yield return new WaitWhile(() => unbreakingPiece.GetComponent<Animation>().isPlaying);
 
         Destroy(unbreakingPiece.gameObject);
@@ -245,7 +262,7 @@ public class BoardManager : MonoBehaviour
 
         //for (int i = 0; i < 20; i++) yield return null;
     }
-
+    #endregion
 
     //This function is used by the GUI to validate a potential move by the local user, and send it to the Game Core if it's good
     private void MakeLocalMove(Coordinate to)
@@ -267,8 +284,6 @@ public class BoardManager : MonoBehaviour
             //Move constructor throws on invalid move
             Debug.Log(e.Message);
         }
-
-        isClicked = false;
 
         BoardHighlights.Instance.HideHighlights();
         timerCount = 60f;
@@ -389,8 +404,8 @@ public class BoardManager : MonoBehaviour
         if (takingPiece)
         {
             activePieces.Remove(Pieces[move.To].gameObject);
-            StartCoroutine(PlayCaptureSound(Pieces[move.To].captureSound, Pieces[move.To].transform.position)); //sound effect
-            Destroy(Pieces[move.To].gameObject, 1.4f);
+            //StartCoroutine(PlayCaptureSound(Pieces[move.To].captureSound, Pieces[move.To].transform.position)); //sound effect
+            Destroy(Pieces[move.To].gameObject, 0.4f);
         }
         StartCoroutine(Pieces[move.From].PlayMoveSound()); //sound effect
 
@@ -433,6 +448,7 @@ public class BoardManager : MonoBehaviour
             SpawnPiece(1, i, testing ? 5 : 7);
         }
     }
+
     public Piece SpawnPiece(int prefab, Coordinate c, bool animation = true) { return SpawnPiece(prefab, c.X, c.Y, animation); }
     public Piece SpawnPiece(int prefab, int x, int y, bool animation = true)
     {
@@ -442,6 +458,7 @@ public class BoardManager : MonoBehaviour
         Pieces[x, y].SetPosition(x, y);
         activePieces.Add(go);
         if (animation) go.GetComponent<Animation>().Play();
+        go.GetComponent<AudioSource>().mute = !gameCore.sound;
         return Pieces[x, y];
     }
 
@@ -501,8 +518,6 @@ public class BoardManager : MonoBehaviour
         selectedPiece = Pieces[loc];
         BoardHighlights.Instance.HighlightAllowedMoves(moves);
         BoardHighlights.Instance.HighlightClickedSpace(loc);
-
-        isClicked = true;
     }
     public Vector3 GetTileCenter(int x, int y)
     {
