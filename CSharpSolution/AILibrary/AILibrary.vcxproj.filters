@@ -62,5 +62,11 @@
     <ClCompile Include="Seeker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MonteCarlo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MonteSeeker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

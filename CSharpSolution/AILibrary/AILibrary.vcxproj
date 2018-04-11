@@ -172,6 +172,8 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="FeatureFunctions.cpp" />
     <ClCompile Include="MemoryPet.cpp" />
+    <ClCompile Include="MonteCarlo.cpp" />
+    <ClCompile Include="MonteSeeker.cpp" />
     <ClCompile Include="Pet.cpp" />
     <ClCompile Include="Prune.cpp" />
     <ClCompile Include="Seeker.cpp" />

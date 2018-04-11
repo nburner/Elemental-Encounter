@@ -122,7 +122,7 @@ move seek(const Board& b, int movesMade, const timer& time) {
 	return { A1, A1 };
 }
 
-move Seeker::deepTimedSeek(const Board& b, double time, int depth = 40) const {
+move Seeker::deepTimedSeek(const Board& b, double time, int depth) const {
 	move seekResult = { A1, A1 };
 	timer seekTimer; seekTimer.start(); seekTime = time;
 	cutShortByDepth = true;
