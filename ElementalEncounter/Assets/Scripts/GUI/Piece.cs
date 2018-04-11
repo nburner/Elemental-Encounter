@@ -84,7 +84,7 @@ public class Piece : MonoBehaviour
                 //If capture is Left, plays left capture animation
                 if (m.Direction != Move.Laterality.LEFT)
                 {
-                    captureChoice = rnd.Next(1, 5);
+                    captureChoice = rnd.Next(2, 5);
 
                     if (captureChoice == 2)
                     {
@@ -110,7 +110,7 @@ public class Piece : MonoBehaviour
                 //If capture is Right, plays right capture animation
                 else
                 {
-                    captureChoice = 6;
+                    captureChoice = rnd.Next(5, 8);
 
                     if (captureChoice == 5)
                     {
@@ -143,7 +143,7 @@ public class Piece : MonoBehaviour
                 //If capture is Left, plays left capture animation
                 if (m.Direction == Move.Laterality.LEFT)
                 {
-                    captureChoice = rnd.Next(7, 11);
+                    captureChoice = rnd.Next(8, 11);
 
                     if (captureChoice == 8)
                     {
@@ -168,7 +168,7 @@ public class Piece : MonoBehaviour
                 //If capture is Right, plays right capture animation
                 else
                 {
-                    captureChoice = rnd.Next(10, 14);
+                    captureChoice = rnd.Next(11, 14);
 
                     if (captureChoice == 11)
                     {
