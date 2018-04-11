@@ -31,6 +31,7 @@ public class BoardManager : MonoBehaviour
     public GameObject messageText;
     public GameObject mapPanel;
     public GameObject timeOutPanel;
+    public Text timeOutText;
     public Transform chatMessageContainer;
     public static BoardManager Instance { set; get; }
     public Board<Piece> Pieces { set; get; }
@@ -46,7 +47,7 @@ public class BoardManager : MonoBehaviour
     private const float TILE_OFFSET = 0.5f;
     private AI.AI HinterXHinter;
     private Camera MainCamera;
-    private float timerCount = 60f;
+    private float timerCount = 180f;
     private GameCore.Turn LastTurn;
     private NetworkGame.NetworkManager networkLogic;
     private Vector3 BoardCenter = new Vector3(4f, 0, 4f);
@@ -393,10 +394,13 @@ public class BoardManager : MonoBehaviour
     public void SendTimeOut()
     {
         networkLogic.TimeOut();
+        timeOutPanel.SetActive(true);
+        timeOutText.text = "You have lost due to Time Out!"
+        
     }
     public void ReceiveTimeOut()
     {
-        EndGame();
+        timeOutPanel.SetActive(true);
     }
     public void SendSide()
     {
