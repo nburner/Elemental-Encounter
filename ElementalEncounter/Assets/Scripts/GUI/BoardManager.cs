@@ -31,8 +31,10 @@ public class BoardManager : MonoBehaviour
     public GameObject messageText;
     public GameObject mapPanel;
     public GameObject timeOutPanel;
+    public GameObject moveLogPanel;
     public Text timeOutText;
     public Transform chatMessageContainer;
+    public Transform moveLogContainer;
     public static BoardManager Instance { set; get; }
     public Board<Piece> Pieces { set; get; }
     public bool isMyTurn = true;
@@ -395,12 +397,13 @@ public class BoardManager : MonoBehaviour
     {
         networkLogic.TimeOut();
         timeOutPanel.SetActive(true);
-        timeOutText.text = "You have lost due to Time Out!"
+        timeOutText.text = "You have lost due to Time Out!";
         
     }
     public void ReceiveTimeOut()
     {
         timeOutPanel.SetActive(true);
+        timeOutText.text = "You have won due to Time Out!";
     }
     public void SendSide()
     {
@@ -435,6 +438,20 @@ public class BoardManager : MonoBehaviour
 
         textInstance.GetComponentInChildren<Text>().text = message;
     }
+
+    public void MoveLogtoGUI(Move move)
+    {
+        int FromX, FromY, ToY, ToX;
+        FromX = move.From.X;
+        FromY = move.From.Y;
+        ToX = move.From.X;
+        ToY = move.From.Y;
+        string moveText = (CurrentTurnText.GetComponent<Text>().text)+": (" + FromX + "," + FromY+"," + ToX + "," + ToY + ")";
+        GameObject textInstance = Instantiate(messageText) as GameObject;
+        textInstance.transform.SetParent(moveLogContainer);
+
+        textInstance.GetComponentInChildren<Text>().text = moveText;
+    }
     #endregion
     public void ResetBoard()
     {
@@ -468,6 +485,7 @@ public class BoardManager : MonoBehaviour
         Pieces[move.From].SetPosition(move.To);
         Pieces[move.To] = Pieces[move.From];
         Pieces[move.From] = null; // Removing the piece from the 
+        MoveLogtoGUI(move);
         if (gameCore.MySide == GameCore.Turn.ICE)
         {
             CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Waiting for opponent" : "Ice Turn";
