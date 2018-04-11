@@ -11,6 +11,9 @@ TagManager:
   - FireTerrain
   - IceTerrain
   - MixedTerrain
+  - CapturedFirePiece
+  - New tag
+  - CapturedIcePiece
   layers:
   - Default
   - TransparentFX

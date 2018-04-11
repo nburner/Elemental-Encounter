@@ -48,6 +48,8 @@ namespace NetworkGame
         public override void OnPhotonPlayerDisconnected(PhotonPlayer other)
         {
             Debug.Log("OnPhotonPlayerDisconnected() " + other.NickName); // seen when other disconnects
+            BoardManager.Instance.panelContainer.SetActive(true);
+            BoardManager.Instance.mapPanel.SetActive(true);
             BoardManager.Instance.DisconnectPanel.SetActive(true);
             BoardManager.Instance.isMyTurn = false;
             //LeaveRoom();
@@ -115,11 +117,16 @@ namespace NetworkGame
         {
             PhotonNetwork.RaiseEvent(4, null, true, null);
         }
+        public void SendMessageChat(string aData)
+        {
+            PhotonNetwork.RaiseEvent(5, aData, true, null);
+        }
 
         public void OnEvent(byte eventcode, object content, int senderid)
         {
             int[] data = content as int[];
-            int[] data2 = content as int[];
+            string dataMessage = content as string;
+
             if (eventcode == 0)
             {
                 Move opponentMove = new Move(new Coordinate(data[0], data[1]), new Coordinate(data[2], data[3]));
@@ -136,12 +143,16 @@ namespace NetworkGame
             }
             if(eventcode == 3)
             {
-                int mySide = data2[0];
+                int mySide = data[0];
                 BoardManager.Instance.ReceiveSide(mySide);
             }
             if(eventcode == 4)
             {
                 BoardManager.Instance.SendSide();
+            }
+            if(eventcode == 5)
+            {
+                BoardManager.Instance.ReceiveMessage(dataMessage);
             }
         }
         #endregion

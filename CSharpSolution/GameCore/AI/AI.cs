@@ -11,7 +11,9 @@ namespace GameCore.AIWrapper
 		B_OFFENSE, B_DEFENSE, B_RANDOM, RANDOM_PET, DARYLS_PET, MEM_PET, TEST,
 		DARYLS_PRUNE,
         SEEKER,
-		L337
+		L337,
+		MonteCarlo,
+		MonteSeeker
 	};
 
 	class AI : Player
@@ -36,6 +38,10 @@ namespace GameCore.AIWrapper
 		public static extern void Seeker(bitboard white, bitboard black, Turn t, out int from, out int to);
 		[DllImport("AILibrary.dll")]
 		public static extern void L337(bitboard white, bitboard black, Turn t, out int from, out int to);
+		[DllImport("AILibrary.dll")]
+		public static extern void MonteCarlo(bitboard white, bitboard black, Turn t, out int from, out int to);
+		[DllImport("AILibrary.dll")]
+		public static extern void MonteSeeker(bitboard white, bitboard black, Turn t, out int from, out int to);
 
 
 		public AIType Type { get; private set; }
@@ -67,6 +73,8 @@ namespace GameCore.AIWrapper
 				case AIType.DARYLS_PRUNE: DarylsPrune(white, black, t, out from, out to); break;
 				case AIType.SEEKER: Seeker(white, black, t, out from, out to); break;
 				case AIType.L337: L337(white, black, t, out from, out to); break;
+				case AIType.MonteCarlo: MonteCarlo(white, black, t, out from, out to); break;
+				case AIType.MonteSeeker: MonteSeeker(white, black, t, out from, out to); break;
 				default: break;
 			}
             move result = new move((Square)from, (Square)to);

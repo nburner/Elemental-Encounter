@@ -14,6 +14,7 @@ public class MainMenu : MonoBehaviour
 
     public GameObject mainMenu;
     public GameObject gameOptions;
+    public GameObject optionsPanel;
     public ToggleGroup aiToggleGroup;
     public ToggleGroup mapToggleGroup;
     public ToggleGroup turnToggleGroup;
@@ -168,5 +169,11 @@ public class MainMenu : MonoBehaviour
         mainMenu.SetActive(true);
         gameOptions.SetActive(false);
         quitPanel.SetActive(false);
+        optionsPanel.SetActive(false);
+    }
+    public void ShowOptions()
+    {
+        optionsPanel.SetActive(true);
+        mainMenu.SetActive(false);
     }
 }

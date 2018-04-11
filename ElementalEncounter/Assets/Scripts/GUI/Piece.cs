@@ -12,7 +12,10 @@ public class Piece : MonoBehaviour
 
     public bool Undone = false;
 
-    public AudioClip captureSound;
+    private void Awake()
+    {
+        GetComponent<AudioSource>().Pause();
+    }
 
     public void SetPosition(int x, int y)
     {
@@ -23,11 +26,19 @@ public class Piece : MonoBehaviour
         Position = c;
     }
 
-    public IEnumerator PlayMoveSound()
+    private float moveSoundTime = 0f;
+    public IEnumerator PlayMoveSound(bool forward = true)
     {
-        GetComponent<AudioSource>().Play();                 //This starts the sound
-        for (int i = 0; i < 140; i++) yield return null;    //This waits for a number of frames (animations go for 100)
-        GetComponent<AudioSource>().Stop();                 //This stops the sound
+        //GetComponent<AudioSource>().time = moveSoundTime;
+
+        GetComponent<AudioSource>().UnPause();                 //This starts the sound
+        GetComponent<AudioSource>().pitch = forward ? 1 : -1;
+        for (int i = 0; i < 140; i++) {
+            if (this == null) yield break;
+            yield return null;    //This waits for a number of frames (animations go for 100)
+        }
+        GetComponent<AudioSource>().Pause();                 //This stops the sound
+        //moveSoundTime = GetComponent<AudioSource>().time;
     }
 
     public static int playAnimation(Piece selectedPiece, Move m, bool capture)
@@ -73,7 +84,7 @@ public class Piece : MonoBehaviour
                 //If capture is Left, plays left capture animation
                 if (m.Direction != Move.Laterality.LEFT)
                 {
-                    captureChoice = rnd.Next(1, 5);
+                    captureChoice = rnd.Next(2, 5);
 
                     if (captureChoice == 2)
                     {
@@ -99,7 +110,7 @@ public class Piece : MonoBehaviour
                 //If capture is Right, plays right capture animation
                 else
                 {
-                    captureChoice = 6;
+                    captureChoice = rnd.Next(5, 8);
 
                     if (captureChoice == 5)
                     {
@@ -132,7 +143,7 @@ public class Piece : MonoBehaviour
                 //If capture is Left, plays left capture animation
                 if (m.Direction == Move.Laterality.LEFT)
                 {
-                    captureChoice = rnd.Next(7, 11);
+                    captureChoice = rnd.Next(8, 11);
 
                     if (captureChoice == 8)
                     {
@@ -157,7 +168,7 @@ public class Piece : MonoBehaviour
                 //If capture is Right, plays right capture animation
                 else
                 {
-                    captureChoice = rnd.Next(10, 14);
+                    captureChoice = rnd.Next(11, 14);
 
                     if (captureChoice == 11)
                     {

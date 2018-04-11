@@ -17,6 +17,9 @@ public class GameCore : MonoBehaviour
     public enum MapChoice { ICE, FIRE, CLASH };
 
     public bool isSinglePlayer;
+    public bool animations=true;
+    public bool music = true;
+    public bool sound = true;
     public Turn MySide;
     public Turn CurrentTurn;
     public MapChoice Map;

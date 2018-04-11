@@ -27,6 +27,12 @@ public class BoardManager : MonoBehaviour
     public GameObject ClashTerrain;
     public GameObject UndoButton;
     public GameObject DisconnectPanel;
+    public GameObject ChatPanel;
+    public GameObject messageText;
+    public GameObject mapPanel;
+    public GameObject timeOutPanel;
+    public Text timeOutText;
+    public Transform chatMessageContainer;
     public static BoardManager Instance { set; get; }
     public Board<Piece> Pieces { set; get; }
     public bool isMyTurn = true;
@@ -41,10 +47,10 @@ public class BoardManager : MonoBehaviour
     private const float TILE_OFFSET = 0.5f;
     private AI.AI HinterXHinter;
     private Camera MainCamera;
-    private bool isClicked = false;
-    private float timerCount = 60f;
+    private float timerCount = 180f;
     private GameCore.Turn LastTurn;
     private NetworkGame.NetworkManager networkLogic;
+    private Vector3 BoardCenter = new Vector3(4f, 0, 4f);
     #endregion 
     #endregion
 
@@ -70,12 +76,13 @@ public class BoardManager : MonoBehaviour
                 ClashTerrain.SetActive(true);
                 break;
         }
-
+        ChatPanel.SetActive(false);
         if (!gameCore.isSinglePlayer)
         {   //Multiplayer
             networkLogic = GameObject.Find("NetworkManager").GetComponent<NetworkGame.NetworkManager>();
             networkTimer = Timer.GetComponent<Text>();
             UndoButton.SetActive(false);
+            ChatPanel.SetActive(true);
             if (!gameCore.isMasterClient)
             {
                 WhatIsMySide();
@@ -130,6 +137,32 @@ public class BoardManager : MonoBehaviour
         HinterXHinter = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.HINTER, gameCore.MySide == GameCore.Turn.ICE ? AI.Turn.ICE : AI.Turn.FIRE, UpdateHint);
     }
 
+    #region Option Buttons
+    public void MuteSoundEffectsButtonClick()
+    {
+        gameCore.sound = !gameCore.sound;
+
+        for (int i = 0; i < activePieces.Count; i++) if (activePieces[i] != null) activePieces[i].GetComponent<AudioSource>().mute = !gameCore.sound;
+    }
+    GameObject TopDown = null;
+    public void HideTopDownButtonClick()
+    {
+        Text buttonText = GameObject.Find("HideMiniMap_Button").GetComponent<Button>().GetComponentInChildren<Text>();
+        if(TopDown == null) TopDown = MainCamera.GetComponentInChildren<RawImage>(true).gameObject;
+
+        TopDown.SetActive(!TopDown.activeSelf);
+        buttonText.text = (TopDown.activeSelf) ? "Hide Map" : "Show Map";
+        //if (TopDown.activeSelf) buttonText.text = "Hide Map";
+        //else buttonText.text = "Show Map";
+    }
+    
+    public void ResetCameraButtonClick()
+    {
+        ResetCamera();
+    }
+    #endregion
+
+    #region Undo Stuff
     private Queue<UndoEntry> UndoQueue;
     private Stack<int> BreakAnimations;
     private bool UndoInProgress = false;
@@ -138,6 +171,7 @@ public class BoardManager : MonoBehaviour
         BoardHighlights.Instance.HideHighlights();
         if (gameCore.CurrentTurn == gameCore.MySide) gameCore.Undo();
     }
+
 
     internal void QueueUndo(Move m, GameCore.Turn t, bool cap)
     {
@@ -161,13 +195,36 @@ public class BoardManager : MonoBehaviour
         PlayUndoAnimationMove(Pieces[entry.move.To], entry.move, entry.capture);
         Pieces[entry.move.To].SetPosition(entry.move.From);
         Pieces[entry.move.From] = Pieces[entry.move.To];
-
+        CurrentTurnText.GetComponent<Text>().text = "Undo in progress";
+        CurrentTurnText.GetComponent<Text>().color = Color.black;
         if (!entry.capture) Pieces[entry.move.To] = null;
         else yield return PlayUndoAnimationBreak(Pieces[entry.move.To], entry.move, entry.capture);
         
         yield return new WaitWhile(() => Pieces[entry.move.From].GetComponent<Animation>().isPlaying);
         
         UndoInProgress = false;
+
+        if (HinterXHinter == null)
+        {
+            HinterXHinter = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.HINTER, gameCore.MySide == GameCore.Turn.ICE ? AI.Turn.ICE : AI.Turn.FIRE, UpdateHint);
+        }
+        HinterXHinter.GetMove(gameCore.Pieces);
+        hintReady = false;
+
+        if (gameCore.MySide == GameCore.Turn.ICE)
+        {
+            LastTurn = GameCore.Turn.ICE;
+            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Waiting for opponent" : "Ice Turn";
+            CurrentTurnText.GetComponent<Text>().color = (LastTurn == GameCore.Turn.FIRE) ? Color.black : Color.blue;
+            LastTurn = GameCore.Turn.FIRE;
+        }
+        else
+        {
+            LastTurn = GameCore.Turn.ICE;
+            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Waiting for opponent";
+            CurrentTurnText.GetComponent<Text>().color = (LastTurn == GameCore.Turn.FIRE) ? Color.red : Color.black;
+            LastTurn = GameCore.Turn.FIRE;
+        }
     }
 
     void PlayUndoAnimationMove(Piece selectedPiece, Move m, bool capture)
@@ -189,6 +246,8 @@ public class BoardManager : MonoBehaviour
         selectedPiece.GetComponent<Animation>()[animation].speed = -1;
         selectedPiece.GetComponent<Animation>()[animation].time = selectedPiece.GetComponent<Animation>()[animation].length;
         selectedPiece.GetComponent<Animation>().Play(animation);
+
+        selectedPiece.PlayMoveSound(false);
     }
     IEnumerator PlayUndoAnimationBreak(Piece selectedPiece, Move m, bool capture)
     {
@@ -206,13 +265,13 @@ public class BoardManager : MonoBehaviour
     }
     IEnumerator DestroyAndReplaceBrokenPiece(Piece unbreakingPiece)
     {
-        //yield return new WaitForSeconds(1.2f);
         yield return new WaitWhile(() => unbreakingPiece.GetComponent<Animation>().isPlaying);
 
         Destroy(unbreakingPiece.gameObject);
         activePieces.Remove(unbreakingPiece.gameObject);
-
+                
         GameObject go = Instantiate(piecePrefabs[unbreakingPiece.isIce ? 0 : 1], GetTileCenter(unbreakingPiece.Position.X, unbreakingPiece.Position.Y + (unbreakingPiece.isIce ? 1 : -1)), Quaternion.identity) as GameObject;
+        go.GetComponent<AudioSource>().mute = !gameCore.sound;
         go.transform.SetParent(transform);
         Pieces[unbreakingPiece.Position] = go.GetComponent<Piece>();
         Pieces[unbreakingPiece.Position].SetPosition(unbreakingPiece.Position);
@@ -229,7 +288,7 @@ public class BoardManager : MonoBehaviour
 
         //for (int i = 0; i < 20; i++) yield return null;
     }
-
+    #endregion
 
     //This function is used by the GUI to validate a potential move by the local user, and send it to the Game Core if it's good
     private void MakeLocalMove(Coordinate to)
@@ -252,35 +311,36 @@ public class BoardManager : MonoBehaviour
             Debug.Log(e.Message);
         }
 
-        isClicked = false;
-
         BoardHighlights.Instance.HideHighlights();
         timerCount = 60f;
         Timer.SetActive(false);
         selectedPiece = null;
     }
-
+    private void ResetCamera()
+    {
+        if (gameCore.MySide == GameCore.Turn.ICE)
+        {
+            MainCamera.transform.position = BoardCenter + new Vector3(0, 6, -9f);
+            MainCamera.transform.rotation = Quaternion.Euler(MainCamera.transform.rotation.eulerAngles.x, 0f, 0f);
+        }
+        else
+        {
+            MainCamera.transform.position = BoardCenter + new Vector3(0, 6, 9f);
+            MainCamera.transform.rotation = Quaternion.Euler(MainCamera.transform.rotation.eulerAngles.x, 180f, 0f);
+        }
+        MainCamera.transform.LookAt(BoardCenter);
+    }
     public void ChangeSide()
     {
         gameCore.boardManager = this;
         //Debug.Log("Started RestAndInitilizeBoard funcion");
         ResetAndInitializeBoard();
         //Debug.Log("Finishied RestAndInitilizeBoard funcion");
-
-        if (gameCore.MySide == GameCore.Turn.ICE)
-        {
-            isMyTurn = true;
-            MainCamera.transform.position = new Vector3(MainCamera.transform.position.x, MainCamera.transform.position.y, -4);
-            MainCamera.transform.rotation = Quaternion.Euler(MainCamera.transform.rotation.eulerAngles.x, 0f, 0f);
-            if (!gameCore.isSinglePlayer) Timer.SetActive(true);
-        }
-        else
-        {
-            isMyTurn = false;
-            MainCamera.transform.position = new Vector3(MainCamera.transform.position.x, MainCamera.transform.position.y, 12);
-            MainCamera.transform.rotation = Quaternion.Euler(MainCamera.transform.rotation.eulerAngles.x, 180f, 0f);
-            if (!gameCore.isSinglePlayer) Timer.SetActive(true);
-        }
+        ResetCamera();
+        
+        isMyTurn = gameCore.MySide == GameCore.Turn.ICE;
+        if (!gameCore.isSinglePlayer) Timer.SetActive(true);
+        
         LastTurn = GameCore.Turn.FIRE;
         if (gameCore.MySide == GameCore.Turn.ICE)
         {
@@ -323,9 +383,10 @@ public class BoardManager : MonoBehaviour
     {
         yield return new WaitForSeconds(seconds);
         panelContainer.SetActive(true);
+        mapPanel.SetActive(true);
         obj.SetActive(true);
     }
-
+    #region Networking functions
     public void EndGameNetwork()
     {
         networkLogic.SendEndGame();
@@ -333,10 +394,13 @@ public class BoardManager : MonoBehaviour
     public void SendTimeOut()
     {
         networkLogic.TimeOut();
+        timeOutPanel.SetActive(true);
+        timeOutText.text = "You have lost due to Time Out!"
+        
     }
     public void ReceiveTimeOut()
     {
-        EndGame();
+        timeOutPanel.SetActive(true);
     }
     public void SendSide()
     {
@@ -353,6 +417,25 @@ public class BoardManager : MonoBehaviour
     {
         networkLogic.RequestSide();
     }
+    public void SendMessageChat()
+    {
+        InputField inputFieldBox = GameObject.Find("MessageInput").GetComponent<InputField>();
+        if (inputFieldBox.text == "") return;
+        networkLogic.SendMessageChat(((PhotonNetwork.isMasterClient)? "Host:  ":"Client:  ") + inputFieldBox.text);
+        GameObject textInstance = Instantiate(messageText) as GameObject;
+        textInstance.transform.SetParent(chatMessageContainer);
+
+        textInstance.GetComponentInChildren<Text>().text = ((PhotonNetwork.isMasterClient) ? "Host:  " : "Client:  ") + inputFieldBox.text;
+        inputFieldBox.text = "";
+    }
+    public void ReceiveMessage(string message)
+    {
+        GameObject textInstance = Instantiate(messageText) as GameObject;
+        textInstance.transform.SetParent(chatMessageContainer);
+
+        textInstance.GetComponentInChildren<Text>().text = message;
+    }
+    #endregion
     public void ResetBoard()
     {
         ResetAndInitializeBoard();
@@ -373,8 +456,8 @@ public class BoardManager : MonoBehaviour
         if (takingPiece)
         {
             activePieces.Remove(Pieces[move.To].gameObject);
-            StartCoroutine(PlayCaptureSound(Pieces[move.To].captureSound, Pieces[move.To].transform.position)); //sound effect
-            Destroy(Pieces[move.To].gameObject, 1.4f);
+            //StartCoroutine(PlayCaptureSound(Pieces[move.To].captureSound, Pieces[move.To].transform.position)); //sound effect
+            Destroy(Pieces[move.To].gameObject, 0.4f);
         }
         StartCoroutine(Pieces[move.From].PlayMoveSound()); //sound effect
 
@@ -417,6 +500,7 @@ public class BoardManager : MonoBehaviour
             SpawnPiece(1, i, testing ? 5 : 7);
         }
     }
+
     public Piece SpawnPiece(int prefab, Coordinate c, bool animation = true) { return SpawnPiece(prefab, c.X, c.Y, animation); }
     public Piece SpawnPiece(int prefab, int x, int y, bool animation = true)
     {
@@ -426,6 +510,7 @@ public class BoardManager : MonoBehaviour
         Pieces[x, y].SetPosition(x, y);
         activePieces.Add(go);
         if (animation) go.GetComponent<Animation>().Play();
+        go.GetComponent<AudioSource>().mute = !gameCore.sound;
         return Pieces[x, y];
     }
 
@@ -445,17 +530,36 @@ public class BoardManager : MonoBehaviour
         }
         else cursorLocation = null;
     }
+        
     private void Update()
     {
         if (UndoQueue.Count > 0 && !UndoInProgress) StartCoroutine(Undo());
 
         UpdateSelection();
 
-        if (Input.GetMouseButtonDown(0) && cursorLocation != null && isMyTurn && !panelContainer.activeInHierarchy)
+        if (Input.GetMouseButtonDown(0) && cursorLocation != null && isMyTurn && !panelContainer.activeInHierarchy && !UndoInProgress)
         {
             if (selectedPiece == null) SelectPiece(cursorLocation);
             else MakeLocalMove(cursorLocation);
         }
+
+
+        var d = Input.GetAxis("Mouse ScrollWheel");
+        if (Input.GetKey(KeyCode.UpArrow) && MainCamera.transform.rotation.eulerAngles.x < 80) {
+            var axis = Vector3.Cross(Vector3.up, MainCamera.transform.position - BoardCenter);            
+            MainCamera.transform.RotateAround(BoardCenter, axis.normalized, -.5f);
+        }
+        else if (Input.GetKey(KeyCode.DownArrow) && MainCamera.transform.rotation.eulerAngles.x > 10) {
+            var axis = Vector3.Cross(Vector3.up, MainCamera.transform.position - BoardCenter);
+            MainCamera.transform.RotateAround(BoardCenter, axis.normalized, .5f);
+        }
+        if (Input.GetKey(KeyCode.LeftArrow)) MainCamera.transform.RotateAround(BoardCenter, Vector3.up, .5f);
+
+        else if (Input.GetKey(KeyCode.RightArrow)) MainCamera.transform.RotateAround(BoardCenter, Vector3.down, .5f);
+
+        //else if (MainCamera.transform.position.y > 2) MainCamera.transform.position = Vector3.MoveTowards(MainCamera.transform.position, BoardCenter, d * 2.5f);
+
+        while (MainCamera.transform.position.y <= 1) MainCamera.transform.Translate(0, 1, 0);
     }
 
     private void LateUpdate()
@@ -485,8 +589,6 @@ public class BoardManager : MonoBehaviour
         selectedPiece = Pieces[loc];
         BoardHighlights.Instance.HighlightAllowedMoves(moves);
         BoardHighlights.Instance.HighlightClickedSpace(loc);
-
-        isClicked = true;
     }
     public Vector3 GetTileCenter(int x, int y)
     {
@@ -512,7 +614,7 @@ public class BoardManager : MonoBehaviour
     //Called by the button on screen
     public void GetHint()
     {
-        StartCoroutine(showHint());
+        if (isMyTurn) StartCoroutine(showHint());
     }
     //Waits until the hint is ready, then shows it on the board
     private IEnumerator showHint()

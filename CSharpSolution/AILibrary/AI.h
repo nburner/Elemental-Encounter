@@ -123,7 +123,7 @@ namespace AI {
 		double SEEK_OPPONENT_WIN_LONG;
 		double SEEK_BLOCKING_MOVE;
 		mutable timer t;
-		move deepTimedSeek(const Board & b, double time, int depth) const;
+		move deepTimedSeek(const Board & b, double time, int depth = 40) const;
 
 	public:
 		Seeker();
@@ -136,4 +136,16 @@ namespace AI {
 		void writeWeights(int);
 		bool adjustWeight(BoardFeature, BoardFeature, int);
 	};
+
+	class MonteSeeker : public Seeker {
+	protected:
+		void MonteCarlo(const Board& b) const;
+		mutable move MonteCarloResult;
+		mutable bool waitingForCarlo = false;
+	public:
+		MonteSeeker(int);
+		virtual move operator()(const Board b) const;
+	};
+
+	move MonteCarlo(Board b);
 }

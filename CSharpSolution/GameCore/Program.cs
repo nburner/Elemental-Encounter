@@ -19,7 +19,7 @@ namespace GameCore
 			Console.WindowHeight = (int)(Console.LargestWindowHeight / 1.2);
 
 			//This declares the players (one ai and one human who represents the opponents ai)
-			AI ai = new AI(AIType.L337, true); //NOTE - Change AIType to DARYLS_PET if Seeker crashes or takes too long (hopefully shouldn't happen)
+			AI ai = new AI(AIType.MonteSeeker, true); //NOTE - Change AIType to DARYLS_PET if Seeker crashes or takes too long (hopefully shouldn't happen)
 			Daryl opponent = new Daryl();
 
 			//Fun instructions
