@@ -27,6 +27,11 @@ public class BoardManager : MonoBehaviour
     public GameObject ClashTerrain;
     public GameObject UndoButton;
     public GameObject DisconnectPanel;
+    public GameObject ChatPanel;
+    public GameObject messageText;
+    public GameObject mapPanel;
+    public GameObject timeOutPanel;
+    public Transform chatMessageContainer;
     public static BoardManager Instance { set; get; }
     public Board<Piece> Pieces { set; get; }
     public bool isMyTurn = true;
@@ -44,6 +49,7 @@ public class BoardManager : MonoBehaviour
     private float timerCount = 60f;
     private GameCore.Turn LastTurn;
     private NetworkGame.NetworkManager networkLogic;
+    private Vector3 BoardCenter = new Vector3(4f, 0, 4f);
     #endregion 
     #endregion
 
@@ -69,12 +75,13 @@ public class BoardManager : MonoBehaviour
                 ClashTerrain.SetActive(true);
                 break;
         }
-
+        ChatPanel.SetActive(false);
         if (!gameCore.isSinglePlayer)
         {   //Multiplayer
             networkLogic = GameObject.Find("NetworkManager").GetComponent<NetworkGame.NetworkManager>();
             networkTimer = Timer.GetComponent<Text>();
             UndoButton.SetActive(false);
+            ChatPanel.SetActive(true);
             if (!gameCore.isMasterClient)
             {
                 WhatIsMySide();
@@ -136,6 +143,22 @@ public class BoardManager : MonoBehaviour
 
         for (int i = 0; i < activePieces.Count; i++) if (activePieces[i] != null) activePieces[i].GetComponent<AudioSource>().mute = !gameCore.sound;
     }
+    GameObject TopDown = null;
+    public void HideTopDownButtonClick()
+    {
+        Text buttonText = GameObject.Find("HideMiniMap_Button").GetComponent<Button>().GetComponentInChildren<Text>();
+        if(TopDown == null) TopDown = MainCamera.GetComponentInChildren<RawImage>(true).gameObject;
+
+        TopDown.SetActive(!TopDown.activeSelf);
+        buttonText.text = (TopDown.activeSelf) ? "Hide Map" : "Show Map";
+        //if (TopDown.activeSelf) buttonText.text = "Hide Map";
+        //else buttonText.text = "Show Map";
+    }
+    
+    public void ResetCameraButtonClick()
+    {
+        ResetCamera();
+    }
     #endregion
 
     #region Undo Stuff
@@ -147,6 +170,7 @@ public class BoardManager : MonoBehaviour
         BoardHighlights.Instance.HideHighlights();
         if (gameCore.CurrentTurn == gameCore.MySide) gameCore.Undo();
     }
+
 
     internal void QueueUndo(Move m, GameCore.Turn t, bool cap)
     {
@@ -244,8 +268,9 @@ public class BoardManager : MonoBehaviour
 
         Destroy(unbreakingPiece.gameObject);
         activePieces.Remove(unbreakingPiece.gameObject);
-
+                
         GameObject go = Instantiate(piecePrefabs[unbreakingPiece.isIce ? 0 : 1], GetTileCenter(unbreakingPiece.Position.X, unbreakingPiece.Position.Y + (unbreakingPiece.isIce ? 1 : -1)), Quaternion.identity) as GameObject;
+        go.GetComponent<AudioSource>().mute = !gameCore.sound;
         go.transform.SetParent(transform);
         Pieces[unbreakingPiece.Position] = go.GetComponent<Piece>();
         Pieces[unbreakingPiece.Position].SetPosition(unbreakingPiece.Position);
@@ -290,28 +315,31 @@ public class BoardManager : MonoBehaviour
         Timer.SetActive(false);
         selectedPiece = null;
     }
-
+    private void ResetCamera()
+    {
+        if (gameCore.MySide == GameCore.Turn.ICE)
+        {
+            MainCamera.transform.position = BoardCenter + new Vector3(0, 6, -9f);
+            MainCamera.transform.rotation = Quaternion.Euler(MainCamera.transform.rotation.eulerAngles.x, 0f, 0f);
+        }
+        else
+        {
+            MainCamera.transform.position = BoardCenter + new Vector3(0, 6, 9f);
+            MainCamera.transform.rotation = Quaternion.Euler(MainCamera.transform.rotation.eulerAngles.x, 180f, 0f);
+        }
+        MainCamera.transform.LookAt(BoardCenter);
+    }
     public void ChangeSide()
     {
         gameCore.boardManager = this;
         //Debug.Log("Started RestAndInitilizeBoard funcion");
         ResetAndInitializeBoard();
         //Debug.Log("Finishied RestAndInitilizeBoard funcion");
-
-        if (gameCore.MySide == GameCore.Turn.ICE)
-        {
-            isMyTurn = true;
-            MainCamera.transform.position = new Vector3(MainCamera.transform.position.x, MainCamera.transform.position.y, -4);
-            MainCamera.transform.rotation = Quaternion.Euler(MainCamera.transform.rotation.eulerAngles.x, 0f, 0f);
-            if (!gameCore.isSinglePlayer) Timer.SetActive(true);
-        }
-        else
-        {
-            isMyTurn = false;
-            MainCamera.transform.position = new Vector3(MainCamera.transform.position.x, MainCamera.transform.position.y, 12);
-            MainCamera.transform.rotation = Quaternion.Euler(MainCamera.transform.rotation.eulerAngles.x, 180f, 0f);
-            if (!gameCore.isSinglePlayer) Timer.SetActive(true);
-        }
+        ResetCamera();
+        
+        isMyTurn = gameCore.MySide == GameCore.Turn.ICE;
+        if (!gameCore.isSinglePlayer) Timer.SetActive(true);
+        
         LastTurn = GameCore.Turn.FIRE;
         if (gameCore.MySide == GameCore.Turn.ICE)
         {
@@ -354,9 +382,10 @@ public class BoardManager : MonoBehaviour
     {
         yield return new WaitForSeconds(seconds);
         panelContainer.SetActive(true);
+        mapPanel.SetActive(true);
         obj.SetActive(true);
     }
-
+    #region Networking functions
     public void EndGameNetwork()
     {
         networkLogic.SendEndGame();
@@ -384,6 +413,25 @@ public class BoardManager : MonoBehaviour
     {
         networkLogic.RequestSide();
     }
+    public void SendMessageChat()
+    {
+        InputField inputFieldBox = GameObject.Find("MessageInput").GetComponent<InputField>();
+        if (inputFieldBox.text == "") return;
+        networkLogic.SendMessageChat(((PhotonNetwork.isMasterClient)? "Host:  ":"Client:  ") + inputFieldBox.text);
+        GameObject textInstance = Instantiate(messageText) as GameObject;
+        textInstance.transform.SetParent(chatMessageContainer);
+
+        textInstance.GetComponentInChildren<Text>().text = ((PhotonNetwork.isMasterClient) ? "Host:  " : "Client:  ") + inputFieldBox.text;
+        inputFieldBox.text = "";
+    }
+    public void ReceiveMessage(string message)
+    {
+        GameObject textInstance = Instantiate(messageText) as GameObject;
+        textInstance.transform.SetParent(chatMessageContainer);
+
+        textInstance.GetComponentInChildren<Text>().text = message;
+    }
+    #endregion
     public void ResetBoard()
     {
         ResetAndInitializeBoard();
@@ -478,6 +526,7 @@ public class BoardManager : MonoBehaviour
         }
         else cursorLocation = null;
     }
+        
     private void Update()
     {
         if (UndoQueue.Count > 0 && !UndoInProgress) StartCoroutine(Undo());
@@ -489,6 +538,24 @@ public class BoardManager : MonoBehaviour
             if (selectedPiece == null) SelectPiece(cursorLocation);
             else MakeLocalMove(cursorLocation);
         }
+
+
+        var d = Input.GetAxis("Mouse ScrollWheel");
+        if (Input.GetKey(KeyCode.UpArrow) && MainCamera.transform.rotation.eulerAngles.x < 80) {
+            var axis = Vector3.Cross(Vector3.up, MainCamera.transform.position - BoardCenter);            
+            MainCamera.transform.RotateAround(BoardCenter, axis.normalized, -.5f);
+        }
+        else if (Input.GetKey(KeyCode.DownArrow) && MainCamera.transform.rotation.eulerAngles.x > 10) {
+            var axis = Vector3.Cross(Vector3.up, MainCamera.transform.position - BoardCenter);
+            MainCamera.transform.RotateAround(BoardCenter, axis.normalized, .5f);
+        }
+        if (Input.GetKey(KeyCode.LeftArrow)) MainCamera.transform.RotateAround(BoardCenter, Vector3.up, .5f);
+
+        else if (Input.GetKey(KeyCode.RightArrow)) MainCamera.transform.RotateAround(BoardCenter, Vector3.down, .5f);
+
+        //else if (MainCamera.transform.position.y > 2) MainCamera.transform.position = Vector3.MoveTowards(MainCamera.transform.position, BoardCenter, d * 2.5f);
+
+        while (MainCamera.transform.position.y <= 1) MainCamera.transform.Translate(0, 1, 0);
     }
 
     private void LateUpdate()
@@ -543,7 +610,7 @@ public class BoardManager : MonoBehaviour
     //Called by the button on screen
     public void GetHint()
     {
-        StartCoroutine(showHint());
+        if (isMyTurn) StartCoroutine(showHint());
     }
     //Waits until the hint is ready, then shows it on the board
     private IEnumerator showHint()
