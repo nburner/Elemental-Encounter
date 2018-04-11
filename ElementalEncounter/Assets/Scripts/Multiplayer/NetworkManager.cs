@@ -115,6 +115,10 @@ namespace NetworkGame
         {
             PhotonNetwork.RaiseEvent(4, null, true, null);
         }
+        public void SendMessageChat(string aData)
+        {
+            PhotonNetwork.RaiseEvent(5, aData, true, null);
+        }
 
         public void OnEvent(byte eventcode, object content, int senderid)
         {
@@ -142,6 +146,10 @@ namespace NetworkGame
             if(eventcode == 4)
             {
                 BoardManager.Instance.SendSide();
+            }
+            if(eventcode == 5)
+            {
+                
             }
         }
         #endregion
