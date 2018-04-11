@@ -446,7 +446,7 @@ public class BoardManager : MonoBehaviour
         FromY = move.From.Y;
         ToX = move.From.X;
         ToY = move.From.Y;
-        string moveText = (CurrentTurnText.GetComponent<Text>().text)+": (" + FromX + "," + FromY+"," + ToX + "," + ToY + ")";
+        string moveText = ((gameCore.CurrentTurn == GameCore.Turn.FIRE)? "Fire":"Ice")+": " + FromX + "," + FromY+" to " + ToX + "," + ToY + "";
         GameObject textInstance = Instantiate(messageText) as GameObject;
         textInstance.transform.SetParent(moveLogContainer);
 

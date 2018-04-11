@@ -32,7 +32,13 @@ public class SplashScreenControler : MonoBehaviour
         SceneManager.LoadScene(loadLevel);
 
     }
-
+    private void Update()
+    {
+        if (Input.anyKey)
+        {
+            SceneManager.LoadScene(loadLevel);
+        }
+    }
     private void FadeIn()
     {
         SplashImage.CrossFadeAlpha(1.0f, 2.0f, false);
