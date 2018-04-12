@@ -17,7 +17,9 @@ namespace GameCore
 			AI ai2 = new AI(AIType.SEEKER, true);
 			playAIMatch(ai1, ai2, true);
 
-			aiCompare(AIType.SEEKER, AIType.MonteSeeker);
+			resetConsole();
+			aiCompare(AIType.SEEKER, AIType.MonteSeeker, 50);
+			resetConsole();
 			printWins();
         }
 		private static void functionForDaryl() {
@@ -96,7 +98,7 @@ namespace GameCore
             AI _1 = new AI(ai1);
             AI _2 = new AI(ai2);
 
-            for (int i = 0; i < 250; i++)
+            for (int i = 0; i < count; i++)
             {
                 AI rand = new AI(AIType.B_RANDOM);
                 AI rand2 = new AI(AIType.RANDOM_PET);
