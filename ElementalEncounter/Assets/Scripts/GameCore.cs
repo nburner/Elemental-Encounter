@@ -33,6 +33,22 @@ public class GameCore : MonoBehaviour
     public AILevel aILevel;
     // private GameCharacter character;
 
+    public int IceCount
+    {
+        get
+        {
+            return IcePieceCount;
+        }
+    }
+
+    public int FireCount
+    {
+        get
+        {
+            return FirePieceCount;
+        }
+    }
+
     public bool GameOver
     {
         get
