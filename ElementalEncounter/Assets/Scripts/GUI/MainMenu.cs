@@ -96,6 +96,9 @@ public class MainMenu : MonoBehaviour
             case "Intermediate":
                 gameCore.aILevel = GameCore.AILevel.Intermediate;
                 break;
+            case "Expert":
+                gameCore.aILevel = GameCore.AILevel.Intermediate;
+                break;
         }
 
         switch (mapText)
