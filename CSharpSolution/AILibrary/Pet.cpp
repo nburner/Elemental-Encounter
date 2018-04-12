@@ -124,9 +124,11 @@ Pet::Pet(int)
 
 void Pet::evaluate(Board& board) const
 {	
-	std::lock_guard<std::mutex> lock(setInsertionMutex);
-	auto insertionResult = seenBoards.insert(board);
-	delete &lock;
+	std::pair<std::set<Board>::iterator, bool> insertionResult;
+	{
+		std::lock_guard<std::mutex> lock(setInsertionMutex);
+		insertionResult = seenBoards.insert(board);
+	}
 
 	if (insertionResult.second) {
 		if (board.gameOver()) {
