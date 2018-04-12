@@ -62,6 +62,8 @@ public class BoardManager : MonoBehaviour
         Debug.Log("Made it to the start function at    " + time);
 
         MainCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
+        MusicControler mc = GameObject.Find("MusicController").GetComponent<MusicControler>();
+        mc.PlayMapMusic(gameCore.Map);
 
         IceTerrain.SetActive(false);
         FireTerrain.SetActive(false);

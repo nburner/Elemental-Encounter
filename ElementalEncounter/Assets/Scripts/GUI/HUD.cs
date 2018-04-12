@@ -28,6 +28,8 @@ public class HUD : MonoBehaviour
 
     public void PlayerConfirmedQuit()
     {
+        MusicControler mc = GameObject.Find("MusicController").GetComponent<MusicControler>();
+        mc.PlayDefaultMusic();
         if (gameCore.isSinglePlayer)
         {
             SceneManager.LoadScene("MainMenu");
