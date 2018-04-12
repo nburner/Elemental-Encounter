@@ -12,7 +12,7 @@ namespace NetworkGame
         #region Private Variables
 
         // Store the PlayerPref Key to avoid typos
-        static string playerNamePrefKey = "PlayerName";
+        static string playerNamePrefKey = "Player";
 
         #endregion
 

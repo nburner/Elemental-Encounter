@@ -199,6 +199,7 @@ public class BoardManager : MonoBehaviour
         Pieces[entry.move.From] = Pieces[entry.move.To];
         CurrentTurnText.GetComponent<Text>().text = "Undo in progress";
         CurrentTurnText.GetComponent<Text>().color = Color.black;
+        
         if (!entry.capture) Pieces[entry.move.To] = null;
         else yield return PlayUndoAnimationBreak(Pieces[entry.move.To], entry.move, entry.capture);
         
@@ -444,9 +445,9 @@ public class BoardManager : MonoBehaviour
         int FromX, FromY, ToY, ToX;
         FromX = move.From.X;
         FromY = move.From.Y;
-        ToX = move.From.X;
-        ToY = move.From.Y;
-        string moveText = ((gameCore.CurrentTurn == GameCore.Turn.FIRE)? "Fire":"Ice")+": " + FromX + "," + FromY+" to " + ToX + "," + ToY + "";
+        ToX = move.To.X;
+        ToY = move.To.Y;
+        string moveText = ((gameCore.CurrentTurn == GameCore.Turn.FIRE)? "Fire":"Ice")+": " + (char)(FromX + 'A') + FromY+" to " + (char)(ToX+'A') + ToY + "";
         GameObject textInstance = Instantiate(messageText) as GameObject;
         textInstance.transform.SetParent(moveLogContainer);
 

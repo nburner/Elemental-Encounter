@@ -82,6 +82,7 @@ namespace NetworkGame
             SetMapChoice();
             SetTurnChoice();
             gameCore.isMasterClient = true;
+            if (PhotonNetwork.playerName == "Player") PhotonNetwork.playerName = "Host";
             PhotonNetwork.CreateRoom(null, new RoomOptions() { MaxPlayers = MaxPlayersPerRoom }, null);
             lc.DisplayHostGamePanel();
         }
@@ -90,6 +91,7 @@ namespace NetworkGame
         {
             SetMapChoice();
             gameCore.isMasterClient = false;
+            if (PhotonNetwork.playerName == "Player") PhotonNetwork.playerName = "Client";
             PhotonNetwork.JoinRandomRoom();
             lc.DisplayJoinGamePanel();
         }

@@ -15,9 +15,12 @@ public class MainMenu : MonoBehaviour
     public GameObject mainMenu;
     public GameObject gameOptions;
     public GameObject optionsPanel;
+    public AudioListener audioListen;
     public ToggleGroup aiToggleGroup;
     public ToggleGroup mapToggleGroup;
     public ToggleGroup turnToggleGroup;
+    public ToggleGroup soundToggleGroup;
+    public ToggleGroup animationToggleGroup;
 
     //private bool startGame;
 
