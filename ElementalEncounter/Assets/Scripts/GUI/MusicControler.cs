@@ -27,7 +27,6 @@ public class MusicControler : MonoBehaviour
         }
         audioSource.volume = PlayerPrefs.GetFloat("MusicVolume");
         slider.value = audioSource.volume;
-        PlayerPrefs.DeleteAll();
 
         if (!audioSource.isPlaying)
         {
