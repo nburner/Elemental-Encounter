@@ -199,7 +199,6 @@ public class BoardManager : MonoBehaviour
         Pieces[entry.move.From] = Pieces[entry.move.To];
         CurrentTurnText.GetComponent<Text>().text = "Undo in progress";
         CurrentTurnText.GetComponent<Text>().color = Color.black;
-        
         if (!entry.capture) Pieces[entry.move.To] = null;
         else yield return PlayUndoAnimationBreak(Pieces[entry.move.To], entry.move, entry.capture);
         
@@ -564,7 +563,7 @@ public class BoardManager : MonoBehaviour
 
 
         var d = Input.GetAxis("Mouse ScrollWheel");
-        if (Input.GetKey(KeyCode.UpArrow) && MainCamera.transform.rotation.eulerAngles.x < 80) {
+        if (Input.GetKey(KeyCode.UpArrow) && MainCamera.transform.rotation.eulerAngles.x < 85) {
             var axis = Vector3.Cross(Vector3.up, MainCamera.transform.position - BoardCenter);            
             MainCamera.transform.RotateAround(BoardCenter, axis.normalized, -.5f);
         }
@@ -576,9 +575,10 @@ public class BoardManager : MonoBehaviour
 
         else if (Input.GetKey(KeyCode.RightArrow)) MainCamera.transform.RotateAround(BoardCenter, Vector3.down, .5f);
 
-        //else if (MainCamera.transform.position.y > 2) MainCamera.transform.position = Vector3.MoveTowards(MainCamera.transform.position, BoardCenter, d * 2.5f);
+        if (((MainCamera.transform.position - BoardCenter).magnitude > 7 && d > 0) || (d < 0 && (MainCamera.transform.position - BoardCenter).magnitude < 16)) MainCamera.transform.position = Vector3.MoveTowards(MainCamera.transform.position, BoardCenter, d * 2.5f);
 
-        while (MainCamera.transform.position.y <= 1) MainCamera.transform.Translate(0, 1, 0);
+        //while (MainCamera.transform.position.y < 2) MainCamera.transform.Translate(0, 1, 0);
+        //while (MainCamera.transform.position.y > 16) MainCamera.transform.Translate(0, 1, 0);
     }
 
     private void LateUpdate()
