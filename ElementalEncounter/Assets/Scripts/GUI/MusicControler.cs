@@ -20,6 +20,15 @@ public class MusicControler : MonoBehaviour
         DontDestroyOnLoad(this);
 
         audioSource = GameObject.Find("MusicController").GetComponent<AudioSource>();
+        if (!PlayerPrefs.HasKey("MusicVolume"))
+        {
+            PlayerPrefs.SetFloat("MusicVolume", slider.value);
+            PlayerPrefs.Save();
+        }
+        audioSource.volume = PlayerPrefs.GetFloat("MusicVolume");
+        slider.value = audioSource.volume;
+        PlayerPrefs.DeleteAll();
+
         if (!audioSource.isPlaying)
         {
             audioSource.clip = mainMenuMusic;
@@ -30,6 +39,8 @@ public class MusicControler : MonoBehaviour
     public void OnVolumeSliderChanged()
     {
         audioSource.volume = slider.value;
+        PlayerPrefs.SetFloat("MusicVolume", slider.value);
+        PlayerPrefs.Save();
     }
 
     public void PlayMapMusic(GameCore.MapChoice map)
