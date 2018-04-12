@@ -32,7 +32,7 @@ public class Piece : MonoBehaviour
         //GetComponent<AudioSource>().time = moveSoundTime;
 
         GetComponent<AudioSource>().UnPause();                 //This starts the sound
-        GetComponent<AudioSource>().pitch = forward ? 1 : -1;
+        GetComponent<AudioSource>().pitch = forward ? 1f : -1f;
         for (int i = 0; i < 140; i++) {
             if (this == null) yield break;
             yield return null;    //This waits for a number of frames (animations go for 100)
@@ -88,21 +88,15 @@ public class Piece : MonoBehaviour
 
                     if (captureChoice == 2)
                     {
-                        selectedPiece.GetComponent<Animation>().Play("Bounce - Left");
-                        bm.SpawnPiece(2, m.To);
-                        Destroy(bm.Pieces[m.To].gameObject, 3f);
+                        selectedPiece.GetComponent<Animation>().Play("Bounce - Left");                        
                     }
                     else if (captureChoice == 3)
                     {
                         selectedPiece.GetComponent<Animation>().Play("Roll - Left");
-                        bm.SpawnPiece(3, m.To);
-                        Destroy(bm.Pieces[m.To].gameObject, 3f);
                     }
                     else
                     {
                         selectedPiece.GetComponent<Animation>().Play("Smash - Left");
-                        bm.SpawnPiece(4, m.To);
-                        Destroy(bm.Pieces[m.To].gameObject, 3f);
                     }
 
                 }
@@ -115,20 +109,14 @@ public class Piece : MonoBehaviour
                     if (captureChoice == 5)
                     {
                         selectedPiece.GetComponent<Animation>().Play("Bounce - Right");
-                        bm.SpawnPiece(5, m.To);
-                        Destroy(bm.Pieces[m.To].gameObject, 3f);
                     }
                     else if (captureChoice == 6)
                     {
                         selectedPiece.GetComponent<Animation>().Play("Roll - Right");
-                        bm.SpawnPiece(6, m.To);
-                        Destroy(bm.Pieces[m.To].gameObject, 3f);
                     }
                     else
                     {
                         selectedPiece.GetComponent<Animation>().Play("Smash - Right");
-                        bm.SpawnPiece(7, m.To);
-                        Destroy(bm.Pieces[m.To].gameObject, 3f);
                     }
                 }
             }
@@ -148,20 +136,14 @@ public class Piece : MonoBehaviour
                     if (captureChoice == 8)
                     {
                         selectedPiece.GetComponent<Animation>().Play("Diagonal - Left");
-                        bm.SpawnPiece(8, m.To);
-                        Destroy(bm.Pieces[m.To].gameObject, 3f);
                     }
                     else if (captureChoice == 9)
                     {
                         selectedPiece.GetComponent<Animation>().Play("Dig - Left");
-                        bm.SpawnPiece(9, m.To);
-                        Destroy(bm.Pieces[m.To].gameObject, 3f);
                     }
                     else
                     {
                         selectedPiece.GetComponent<Animation>().Play("Top - Left");
-                        bm.SpawnPiece(10, m.To);
-                        Destroy(bm.Pieces[m.To].gameObject, 3f);
                     }
                 }
 
@@ -173,23 +155,20 @@ public class Piece : MonoBehaviour
                     if (captureChoice == 11)
                     {
                         selectedPiece.GetComponent<Animation>().Play("Diagonal - Right");
-                        bm.SpawnPiece(11, m.To);
-                        Destroy(bm.Pieces[m.To].gameObject, 3f);
                     }
                     else if (captureChoice == 12)
                     {
                         selectedPiece.GetComponent<Animation>().Play("Dig - Right");
-                        bm.SpawnPiece(12, m.To);
-                        Destroy(bm.Pieces[m.To].gameObject, 3f);
                     }
                     else
                     {
                         selectedPiece.GetComponent<Animation>().Play("Top - Right");
-                        bm.SpawnPiece(13, m.To);
-                        Destroy(bm.Pieces[m.To].gameObject, 3f);
                     }
                 }
             }
+			Piece p = bm.SpawnPiece(captureChoice, m.To);
+			Destroy(bm.Pieces[m.To].gameObject, 3f);
+			bm.PlayCaptureSound(p, captureChoice);
             return captureChoice;
         }
         return -1;
