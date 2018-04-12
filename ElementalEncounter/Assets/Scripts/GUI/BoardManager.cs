@@ -67,13 +67,30 @@ public class BoardManager : MonoBehaviour
        // MusicControler mc = GameObject.Find("MusicController").GetComponent<MusicControler>();
         //mc.PlayMapMusic(gameCore.Map);
 
-       if (capturedFirePieces == null)
-            capturedFirePieces = GameObject.FindGameObjectsWithTag("CapturedFirePiece");
-       if (capturedIcePieces == null)
-            capturedIcePieces = GameObject.FindGameObjectsWithTag("CapturedIcePiece");
+       //if (capturedFirePieces == null)
+       //{
+       //     string capture = "CapturedFirePiece";
+       //     for (int i = 1; i < 17; i++)
+       //     {
+       //         capture = capture + "1";
+       //         capturedIcePieces[i] = GameObject.FindGameObjectsWithTag(capture);
+       //     }
+       //}
 
-        Debug.Log("Ice Array Length = " + capturedIcePieces.Length);
-        Debug.Log("Fire Array Length = " + capturedFirePieces.Length);
+       // if (capturedIcePieces == null)
+       // {
+       //     string capture = "CapturedIcePiece";
+       //     for (int i = 1; i < 17; i++)
+       //     {
+       //         capture = capture + "1";
+       //         capturedIcePieces = GameObject.FindGameObjectsWithTag(capture);
+       //     }
+       // }
+       // if (capturedIcePieces == null)
+       //     capturedIcePieces = GameObject.FindGameObjectsWithTag("CapturedIcePiece");
+
+        //Debug.Log("Ice Array Length = " + capturedIcePieces.Length);
+        //Debug.Log("Fire Array Length = " + capturedFirePieces.Length);
 
 
         IceTerrain.SetActive(false);
@@ -497,14 +514,14 @@ public class BoardManager : MonoBehaviour
             //StartCoroutine(PlayCaptureSound(Pieces[move.To].captureSound, Pieces[move.To].transform.position)); //sound effect
             Destroy(Pieces[move.To].gameObject, 0.4f);
 
-            if (gameCore.CurrentTurn == 0)
-            {
-                capturedIcePieces[gameCore.IceCount - 1].SetActive(true);
-            }
-            else
-            {
-                capturedIcePieces[gameCore.FireCount - 1].SetActive(true);
-            }
+            //if (gameCore.CurrentTurn == 0)
+            //{
+            //    capturedIcePieces[gameCore.IceCount - 1].SetActive(true);
+            //}
+            //else
+            //{
+            //    capturedIcePieces[gameCore.FireCount - 1].SetActive(true);
+            //}
 
         }
         StartCoroutine(Pieces[move.From].PlayMoveSound()); //sound effect
@@ -584,7 +601,7 @@ public class BoardManager : MonoBehaviour
         
     private void Update()
     {
-        //if (UndoQueue.Count > 0 && !UndoInProgress) StartCoroutine(Undo());
+        if (UndoQueue.Count > 0 && !UndoInProgress) StartCoroutine(Undo());
 
         UpdateSelection();
 
