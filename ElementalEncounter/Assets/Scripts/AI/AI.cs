@@ -8,8 +8,11 @@ namespace AI
 
     public enum AIType
 	{
-		B_OFFENSE, B_DEFENSE, B_RANDOM, RANDOM_PET, DARYLS_PET, MEM_PET, TEST, DARYLS_PRUNE, SEEKER, HINTER
-    };
+		B_OFFENSE, B_DEFENSE, B_RANDOM, RANDOM_PET, DARYLS_PET, MEM_PET, TEST, DARYLS_PRUNE, SEEKER, HINTER,
+		L337,
+		MonteCarlo,
+		MonteSeeker
+	};
 
 	class AI : MonoBehaviour
 	{        

@@ -137,6 +137,10 @@ public class BoardManager : MonoBehaviour
         gameCore.Play();
 
         HinterXHinter = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.HINTER, gameCore.MySide == GameCore.Turn.ICE ? AI.Turn.ICE : AI.Turn.FIRE, UpdateHint);
+        foreach (Transform child in moveLogContainer)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
     }
 
     #region Option Buttons
@@ -212,7 +216,11 @@ public class BoardManager : MonoBehaviour
         }
         HinterXHinter.GetMove(gameCore.Pieces);
         hintReady = false;
-
+        int numOfChildren = moveLogContainer.transform.childCount;
+        if (numOfChildren > 0)
+        {
+            Destroy(moveLogContainer.transform.GetChild(numOfChildren - 1).gameObject);
+        }
         if (gameCore.MySide == GameCore.Turn.ICE)
         {
             LastTurn = GameCore.Turn.ICE;
