@@ -155,6 +155,16 @@ move AI::MonteSeeker::operator()(const Board b) const
 				winner = boards[i];
 			}
 		}
+		if (maxWinRatio < 0) {
+			boards = b.validAttackBoards();
+			for (int i = 0; i < boards.size(); i++) {
+				double winRatio = monteCarloScores[boards[i]].first / (double)monteCarloScores[boards[i]].second;
+				if (winRatio > maxWinRatio) {
+					maxWinRatio = winRatio;
+					winner = boards[i];
+				}
+			}
+		}
 		if (verbose) cout << "This move took: " << t.read() << " seconds" << endl;
 		return winner.lastMove;
 	}
@@ -209,6 +219,16 @@ move AI::MonteSeeker::operator()(const Board b) const
 				if (winRatio > maxWinRatio) {
 					maxWinRatio = winRatio;
 					winner = boards[i];
+				}
+			}
+			if (maxWinRatio < 0) {
+				boards = b.validAttackBoards();
+				for (int i = 0; i < boards.size(); i++) {
+					double winRatio = monteCarloScores[boards[i]].first / (double)monteCarloScores[boards[i]].second;
+					if (winRatio > maxWinRatio) {
+						maxWinRatio = winRatio;
+						winner = boards[i];
+					}
 				}
 			}
 			if (verbose) cout << "This move took: " << t.read() << " seconds" << endl;

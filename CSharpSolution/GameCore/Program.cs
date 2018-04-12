@@ -12,8 +12,13 @@ namespace GameCore
 		private static Game game = new Game();
 		private static Dictionary<AIType, int> wins = Enum.GetValues(typeof(AIType)).Cast<AIType>().ToDictionary<AIType, AIType, int>((a) => { return a; }, (a) => { return 0; });
 		static void Main(string[] args) {
-			functionForDaryl();
-			//aiCompare(AIType.SEEKER, AIType.L337);
+			//functionForDaryl();
+			AI ai1 = new AI(AIType.MonteSeeker, true);
+			AI ai2 = new AI(AIType.SEEKER, true);
+			playAIMatch(ai1, ai2, true);
+
+			aiCompare(AIType.SEEKER, AIType.MonteSeeker);
+			printWins();
         }
 		private static void functionForDaryl() {
 			Console.WindowHeight = (int)(Console.LargestWindowHeight / 1.2);
@@ -109,7 +114,7 @@ namespace GameCore
         }
         private static void playAIMatch(AI ai1, AI ai2, bool verbose = true) {
 			using (StreamWriter file = File.AppendText("log.txt")) {
-				Console.SetOut(file);
+				//Console.SetOut(file);
 				game.newGame(ai1, ai2, verbose);
 			}
 			wins[game.Winner == Turn.WHITE ? ai1.Type : ai2.Type]++;

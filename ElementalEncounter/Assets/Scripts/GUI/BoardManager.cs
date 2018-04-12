@@ -465,10 +465,10 @@ public class BoardManager : MonoBehaviour
     {
         ResetAndInitializeBoard();
     }
-    public IEnumerator PlayCaptureSound(AudioClip captureSound, Vector3 position)
+    public void PlayCaptureSound(Piece piece, int captureChoice)
     {
-        for (int i = 0; i < 60; i++) yield return null;    //This waits for a number of frames (animations go for 100)
-        AudioSource.PlayClipAtPoint(captureSound, position);
+		int[] delays = { -1, -1, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60 };        
+		piece.GetComponent<AudioSource>().PlayDelayed(delays[captureChoice]);
     }
 
     //This function is called by the Game Core to tell the GUI that a valid move has been made, and the screen needs to be updated
@@ -487,7 +487,9 @@ public class BoardManager : MonoBehaviour
         StartCoroutine(Pieces[move.From].PlayMoveSound()); //sound effect
 
         int breakAnimation = Piece.playAnimation(Pieces[move.From], move, takingPiece);
-        if (breakAnimation > 0) BreakAnimations.Push(breakAnimation);
+		if (breakAnimation > 0) {
+			BreakAnimations.Push(breakAnimation);
+		}
 
         Pieces[move.From].transform.position = GetTileCenter(move.To); // Getting the center of the tile where the piece is moving
         Pieces[move.From].SetPosition(move.To);
