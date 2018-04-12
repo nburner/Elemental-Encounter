@@ -97,7 +97,7 @@ public class MainMenu : MonoBehaviour
                 gameCore.aILevel = GameCore.AILevel.Intermediate;
                 break;
             case "Expert":
-                gameCore.aILevel = GameCore.AILevel.Intermediate;
+                gameCore.aILevel = GameCore.AILevel.Expert;
                 break;
         }
 

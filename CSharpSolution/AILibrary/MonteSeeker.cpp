@@ -147,22 +147,13 @@ move AI::MonteSeeker::operator()(const Board b) const
 		monteCarloThread.join();
 		while (waitingForCarlo);
 		
-		Board winner; double maxWinRatio = -1;
+		Board winner; double maxWinRatio = -10;
 		for (int i = 0; i < boards.size(); i++) {
 			double winRatio = monteCarloScores[boards[i]].first / (double)monteCarloScores[boards[i]].second;
-			if (winRatio > maxWinRatio && !featureCalculators[THREATENED_UNDEFENDED_B](boards[i])) {
+			winRatio -= featureCalculators[THREATENED_UNDEFENDED_B](boards[i]);
+			if (winRatio > maxWinRatio) {
 				maxWinRatio = winRatio;
 				winner = boards[i];
-			}
-		}
-		if (maxWinRatio < 0) {
-			boards = b.validAttackBoards();
-			for (int i = 0; i < boards.size(); i++) {
-				double winRatio = monteCarloScores[boards[i]].first / (double)monteCarloScores[boards[i]].second;
-				if (winRatio > maxWinRatio) {
-					maxWinRatio = winRatio;
-					winner = boards[i];
-				}
 			}
 		}
 		if (verbose) cout << "This move took: " << t.read() << " seconds" << endl;
@@ -213,22 +204,13 @@ move AI::MonteSeeker::operator()(const Board b) const
 			monteCarloThread.join();
 			while (waitingForCarlo);
 
-			Board winner; double maxWinRatio = -1;
+			Board winner; double maxWinRatio = -10;
 			for (int i = 0; i < boards.size(); i++) {
 				double winRatio = monteCarloScores[boards[i]].first / (double)monteCarloScores[boards[i]].second;
+				winRatio -= featureCalculators[THREATENED_UNDEFENDED_B](boards[i]);
 				if (winRatio > maxWinRatio) {
 					maxWinRatio = winRatio;
 					winner = boards[i];
-				}
-			}
-			if (maxWinRatio < 0) {
-				boards = b.validAttackBoards();
-				for (int i = 0; i < boards.size(); i++) {
-					double winRatio = monteCarloScores[boards[i]].first / (double)monteCarloScores[boards[i]].second;
-					if (winRatio > maxWinRatio) {
-						maxWinRatio = winRatio;
-						winner = boards[i];
-					}
 				}
 			}
 			if (verbose) cout << "This move took: " << t.read() << " seconds" << endl;
