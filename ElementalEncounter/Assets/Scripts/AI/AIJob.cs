@@ -35,7 +35,9 @@ namespace AI
 		public static extern void MonteCarlo(bitboard white, bitboard black, Turn t, out int from, out int to);
 		[DllImport("Assets/Plugins/AILibrary.dll")]
 		public static extern void MonteSeeker(bitboard white, bitboard black, Turn t, out int from, out int to);
-		[DllImport("Assets/Plugins/AILibrary.dll")]
+        [DllImport("Assets/Plugins/AILibrary.dll")]
+        public static extern void HyperSeeker(bitboard white, bitboard black, Turn t, out int from, out int to);
+        [DllImport("Assets/Plugins/AILibrary.dll")]
 		public static extern void L337(bitboard white, bitboard black, Turn t, out int from, out int to);
 		#endregion
 
@@ -93,6 +95,7 @@ namespace AI
 				case AIType.L337: L337(white, black, Color, out from, out to); break;
 				case AIType.MonteCarlo: MonteCarlo(white, black, Color, out from, out to); break;
 				case AIType.MonteSeeker: MonteSeeker(white, black, Color, out from, out to); break;
+				case AIType.HyperSeeker: HyperSeeker(white, black, Color, out from, out to); break;
 				default: break;
             }
 

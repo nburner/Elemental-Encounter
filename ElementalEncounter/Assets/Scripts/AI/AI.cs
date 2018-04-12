@@ -11,8 +11,9 @@ namespace AI
 		B_OFFENSE, B_DEFENSE, B_RANDOM, RANDOM_PET, DARYLS_PET, MEM_PET, TEST, DARYLS_PRUNE, SEEKER, HINTER,
 		L337,
 		MonteCarlo,
-		MonteSeeker
-	};
+		MonteSeeker,
+        HyperSeeker
+    };
 
 	class AI : MonoBehaviour
 	{        
