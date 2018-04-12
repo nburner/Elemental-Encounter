@@ -247,7 +247,7 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 1
+  m_enableVertexGradient: 0
   m_fontColorGradient:
     topLeft: {r: 0.007352948, g: 0.7535496, b: 1, a: 1}
     topRight: {r: 1, g: 1, b: 1, a: 1}
@@ -3034,7 +3034,7 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: e57bda5aae7a0f84bab7b723fc33099f,
+    m_HighlightedSprite: {fileID: 21300000, guid: 1ee4027ab3d472d4fa589288319d3be7,
       type: 3}
     m_PressedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
@@ -3080,7 +3080,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 1ee4027ab3d472d4fa589288319d3be7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 61c97a0cf62edb3409e003696aacd5c3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4335,7 +4335,7 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 1
+  m_enableVertexGradient: 0
   m_fontColorGradient:
     topLeft: {r: 0.007352948, g: 0.7535496, b: 1, a: 1}
     topRight: {r: 1, g: 1, b: 1, a: 1}
@@ -5991,7 +5991,7 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: e57bda5aae7a0f84bab7b723fc33099f,
+    m_HighlightedSprite: {fileID: 21300000, guid: 1ee4027ab3d472d4fa589288319d3be7,
       type: 3}
     m_PressedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
@@ -6037,7 +6037,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 1ee4027ab3d472d4fa589288319d3be7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 61c97a0cf62edb3409e003696aacd5c3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6958,7 +6958,7 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: e57bda5aae7a0f84bab7b723fc33099f,
+    m_HighlightedSprite: {fileID: 21300000, guid: 1ee4027ab3d472d4fa589288319d3be7,
       type: 3}
     m_PressedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
@@ -7004,7 +7004,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 1ee4027ab3d472d4fa589288319d3be7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 61c97a0cf62edb3409e003696aacd5c3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7994,7 +7994,7 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 1
+  m_enableVertexGradient: 0
   m_fontColorGradient:
     topLeft: {r: 0.007352948, g: 0.7535496, b: 1, a: 1}
     topRight: {r: 1, g: 1, b: 1, a: 1}
@@ -8145,7 +8145,7 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: e57bda5aae7a0f84bab7b723fc33099f,
+    m_HighlightedSprite: {fileID: 21300000, guid: 1ee4027ab3d472d4fa589288319d3be7,
       type: 3}
     m_PressedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
@@ -8191,7 +8191,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 1ee4027ab3d472d4fa589288319d3be7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 61c97a0cf62edb3409e003696aacd5c3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8270,7 +8270,7 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 1
+  m_enableVertexGradient: 0
   m_fontColorGradient:
     topLeft: {r: 0.007352948, g: 0.7535496, b: 1, a: 1}
     topRight: {r: 1, g: 1, b: 1, a: 1}
