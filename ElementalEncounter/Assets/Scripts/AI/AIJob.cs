@@ -31,9 +31,15 @@ namespace AI
         public static extern void Seeker(bitboard white, bitboard black, Turn t, out int from, out int to);
         [DllImport("Assets/Plugins/AILibrary.dll")]
         public static extern void Hinter(bitboard white, bitboard black, Turn t, out int from, out int to);
-        #endregion
+		[DllImport("Assets/Plugins/AILibrary.dll")]
+		public static extern void MonteCarlo(bitboard white, bitboard black, Turn t, out int from, out int to);
+		[DllImport("Assets/Plugins/AILibrary.dll")]
+		public static extern void MonteSeeker(bitboard white, bitboard black, Turn t, out int from, out int to);
+		[DllImport("Assets/Plugins/AILibrary.dll")]
+		public static extern void L337(bitboard white, bitboard black, Turn t, out int from, out int to);
+		#endregion
 
-        public bitboard white;
+		public bitboard white;
         public bitboard black;
         public Turn Color;
         public AIType Type;
@@ -84,7 +90,10 @@ namespace AI
                 case AIType.DARYLS_PRUNE: DarylsPrune(white, black, Color, out from, out to); break;
                 case AIType.SEEKER: Seeker(white, black, Color, out from, out to); break;
                 case AIType.HINTER: Hinter(white, black, Color, out from, out to); break;
-                default: break;
+				case AIType.L337: L337(white, black, Color, out from, out to); break;
+				case AIType.MonteCarlo: MonteCarlo(white, black, Color, out from, out to); break;
+				case AIType.MonteSeeker: MonteSeeker(white, black, Color, out from, out to); break;
+				default: break;
             }
 
             Move = new Move(new Coordinate(from % 8, from / 8), new Coordinate(to % 8, to / 8));
