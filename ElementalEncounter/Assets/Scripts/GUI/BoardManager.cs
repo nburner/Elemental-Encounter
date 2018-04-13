@@ -77,21 +77,21 @@ public class BoardManager : MonoBehaviour
 		TopDown.SetActive(true);
 		TopDownHUDButton.gameObject.SetActive(true);
 
-		if (capturedFirePieces == null)
-        {
-            string capture = "CapturedFirePiece";
-            for (int i = 1; i < 17; i++){
-                capturedFirePieces.Add(GameObject.Find(capture + i.ToString()));
-            }
+		
+        string capture = "CapturedFirePiece";
+        for (int i = 1; i < 17; i++){
+             capturedFirePieces.Add(GameObject.Find(capture + i.ToString()));
+            capturedFirePieces[i - 1].SetActive(false);
         }
+        
 
-        if (capturedIcePieces == null)
-        {
-            string capture = "CapturedIcePiece";
-            for (int i = 1; i < 17; i++) {
-                capturedIcePieces.Add(GameObject.Find(capture + i.ToString()));
-            }
+        
+        capture = "CapturedIcePiece";
+        for (int i = 1; i < 17; i++) {
+            capturedIcePieces.Add(GameObject.Find(capture + i.ToString()));
+            capturedIcePieces[i - 1].SetActive(false);
         }
+        
 
         Debug.Log("Ice Array Length = " + capturedIcePieces.Count);
         Debug.Log("Fire Array Length = " + capturedFirePieces.Count);
@@ -242,9 +242,11 @@ public class BoardManager : MonoBehaviour
         PlayUndoAnimationMove(Pieces[entry.move.To], entry.move, entry.capture);
         Pieces[entry.move.To].SetPosition(entry.move.From);
         Pieces[entry.move.From] = Pieces[entry.move.To];
+
         CurrentTurnText.GetComponent<Text>().text = "Undo in progress";
         CurrentTurnText.GetComponent<Text>().color = Color.black;
-        if (!entry.capture) Pieces[entry.move.To] = null;
+
+		if (!entry.capture) Pieces[entry.move.To] = null;
         else yield return PlayUndoAnimationBreak(Pieces[entry.move.To], entry.move, entry.capture);
         
         yield return new WaitWhile(() => Pieces[entry.move.From].GetComponent<Animation>().isPlaying);
@@ -305,42 +307,40 @@ public class BoardManager : MonoBehaviour
     }
     IEnumerator PlayUndoAnimationBreak(Piece selectedPiece, Move m, bool capture)
     {
-        int breakAnimation = BreakAnimations.Pop();
+		string animation;
+		Piece unbreakingPiece;
 
-        Piece unbreakingPiece = SpawnPiece(breakAnimation, m.To);
-        string animation = unbreakingPiece.GetComponent<Animation>().clip.name;
-        unbreakingPiece.GetComponent<Animation>()[animation].speed = -1;
-        unbreakingPiece.GetComponent<Animation>()[animation].time = unbreakingPiece.GetComponent<Animation>()[animation].length;
+		if (gameCore.animations) {
+			int breakAnimation = BreakAnimations.Pop();
 
-        unbreakingPiece.GetComponent<Animation>().Play(animation);
+			unbreakingPiece = SpawnPiece(breakAnimation, m.To);
+			animation = unbreakingPiece.GetComponent<Animation>().clip.name;
+			unbreakingPiece.GetComponent<Animation>()[animation].speed = -1;
+			unbreakingPiece.GetComponent<Animation>()[animation].time = unbreakingPiece.GetComponent<Animation>()[animation].length;
 
-        yield return DestroyAndReplaceBrokenPiece(unbreakingPiece);
-        //SpawnPiece(unbreakingPiece.isIce ? 0 : 1, unbreakingPiece.Position, false);
-    }
-    IEnumerator DestroyAndReplaceBrokenPiece(Piece unbreakingPiece)
-    {
-        yield return new WaitWhile(() => unbreakingPiece.GetComponent<Animation>().isPlaying);
+			unbreakingPiece.GetComponent<Animation>().Play(animation);
+			
+			yield return new WaitWhile(() => unbreakingPiece.GetComponent<Animation>().isPlaying);
 
-        Destroy(unbreakingPiece.gameObject);
-        activePieces.Remove(unbreakingPiece.gameObject);
-                
-        GameObject go = Instantiate(piecePrefabs[unbreakingPiece.isIce ? 0 : 1], GetTileCenter(unbreakingPiece.Position.X, unbreakingPiece.Position.Y + (unbreakingPiece.isIce ? 1 : -1)), Quaternion.identity) as GameObject;
+			Destroy(unbreakingPiece.gameObject);
+			activePieces.Remove(unbreakingPiece.gameObject);
+		}
+
+        GameObject go = Instantiate(piecePrefabs[Pieces[m.From].isIce ? 1 : 0], GetTileCenter(m.To.X, m.To.Y + (Pieces[m.From].isIce ? -1 : 1)), Quaternion.identity) as GameObject;
         go.GetComponent<AudioSource>().mute = !gameCore.sound;
         go.transform.SetParent(transform);
-        Pieces[unbreakingPiece.Position] = go.GetComponent<Piece>();
-        Pieces[unbreakingPiece.Position].SetPosition(unbreakingPiece.Position);
+        Pieces[m.To] = go.GetComponent<Piece>();
+        Pieces[m.To].SetPosition(m.To);
         activePieces.Add(go);
 
-        string animation = go.GetComponent<Animation>().clip.name;
+        animation = go.GetComponent<Animation>().clip.name;
         go.GetComponent<Animation>()[animation].time = go.GetComponent<Animation>()[animation].length;
         go.GetComponent<Animation>()[animation].speed = 1;
         go.GetComponent<Animation>().Play(animation);
 
         yield return null;
         go.GetComponent<Animation>().Stop();
-        Pieces[unbreakingPiece.Position].transform.position = GetTileCenter(unbreakingPiece.Position);
-
-        //for (int i = 0; i < 20; i++) yield return null;
+        Pieces[m.To].transform.position = GetTileCenter(m.To);		        
     }
     #endregion
 
@@ -542,10 +542,10 @@ public class BoardManager : MonoBehaviour
             Destroy(Pieces[move.To].gameObject, 0.4f);
 
             if (gameCore.CurrentTurn == GameCore.Turn.ICE) {
-                capturedIcePieces[gameCore.IceCount].SetActive(true);
+                capturedFirePieces[gameCore.FireCount].SetActive(true);
             }
             else {
-                capturedFirePieces[gameCore.FireCount].SetActive(true);
+                capturedIcePieces[gameCore.IceCount].SetActive(true);
             }
 
         }

@@ -3034,7 +3034,7 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: 1ee4027ab3d472d4fa589288319d3be7,
+    m_HighlightedSprite: {fileID: 21300000, guid: 4717d7a616f394d49a21067d82d40ec8,
       type: 3}
     m_PressedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
@@ -3080,7 +3080,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 61c97a0cf62edb3409e003696aacd5c3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e881dfd0fe16da740b9b6734136fbc17, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5492,6 +5492,7 @@ GameObject:
   - component: {fileID: 1059201409}
   - component: {fileID: 1059201411}
   - component: {fileID: 1059201410}
+  - component: {fileID: 1059201412}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -5523,7 +5524,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1059201408}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
@@ -5550,6 +5551,39 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1059201408}
+--- !u!328 &1059201412
+VideoPlayer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1059201408}
+  m_Enabled: 1
+  m_VideoClip: {fileID: 32900000, guid: c50177f5649b49e4f80f147a41fcb9f9, type: 3}
+  m_TargetCameraAlpha: 1
+  m_TargetCamera3DLayout: 0
+  m_TargetCamera: {fileID: 1353893271}
+  m_TargetTexture: {fileID: 0}
+  m_TimeReference: 0
+  m_TargetMaterialRenderer: {fileID: 0}
+  m_TargetMaterialProperty: _MainTex
+  m_RenderMode: 1
+  m_AspectRatio: 2
+  m_DataSource: 0
+  m_PlaybackSpeed: 1
+  m_AudioOutputMode: 1
+  m_TargetAudioSources:
+  - {fileID: 0}
+  m_DirectAudioVolumes:
+  - 1
+  m_Url: 
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
+  m_PlayOnAwake: 1
+  m_SkipOnDrop: 1
+  m_Looping: 1
+  m_WaitForFirstFrame: 1
+  m_FrameReadyEventEnabled: 0
 --- !u!1 &1059403264
 GameObject:
   m_ObjectHideFlags: 0
@@ -5991,7 +6025,7 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: 1ee4027ab3d472d4fa589288319d3be7,
+    m_HighlightedSprite: {fileID: 21300000, guid: 4717d7a616f394d49a21067d82d40ec8,
       type: 3}
     m_PressedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
@@ -6037,7 +6071,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 61c97a0cf62edb3409e003696aacd5c3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e881dfd0fe16da740b9b6734136fbc17, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6958,7 +6992,7 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: 1ee4027ab3d472d4fa589288319d3be7,
+    m_HighlightedSprite: {fileID: 21300000, guid: 4717d7a616f394d49a21067d82d40ec8,
       type: 3}
     m_PressedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
@@ -7004,7 +7038,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 61c97a0cf62edb3409e003696aacd5c3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e881dfd0fe16da740b9b6734136fbc17, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8152,7 +8186,7 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: 1ee4027ab3d472d4fa589288319d3be7,
+    m_HighlightedSprite: {fileID: 21300000, guid: 4717d7a616f394d49a21067d82d40ec8,
       type: 3}
     m_PressedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
@@ -8198,7 +8232,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 61c97a0cf62edb3409e003696aacd5c3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e881dfd0fe16da740b9b6734136fbc17, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
