@@ -15,6 +15,13 @@ public class MainMenu : MonoBehaviour
     public GameObject mainMenu;
     public GameObject gameOptions;
     public GameObject optionsPanel;
+    public GameObject instructionsPanel;
+    public GameObject generalDescription;
+    public GameObject volumeDescription;
+    public GameObject mapControllsDescription;
+    public GameObject gamePlayDescription;
+    public GameObject nextButton;
+    public GameObject previousButon;
     public AudioListener audioListen;
     public ToggleGroup aiToggleGroup;
     public ToggleGroup mapToggleGroup;
@@ -181,5 +188,55 @@ public class MainMenu : MonoBehaviour
     {
         optionsPanel.SetActive(true);
         mainMenu.SetActive(false);
+    }
+
+    public void ShowInstructions()
+    {
+        mainMenu.SetActive(false);
+        instructionsPanel.SetActive(true);
+    }
+
+    public void ShowNextInstruction()
+    {
+        previousButon.GetComponent<Button>().interactable = true;
+        if (mapControllsDescription.activeSelf) nextButton.GetComponent<Button>().interactable = false;
+
+        if (generalDescription.activeSelf)
+        {
+            generalDescription.SetActive(false);
+            volumeDescription.SetActive(true);
+        }
+        else if (volumeDescription.activeSelf)
+        {
+            volumeDescription.SetActive(false);
+            mapControllsDescription.SetActive(true);
+        }
+        else if (mapControllsDescription.activeSelf)
+        {
+            mapControllsDescription.SetActive(false);
+            gamePlayDescription.SetActive(true);
+        }
+    }
+
+    public void ShowPreviousInstruction()
+    {
+        nextButton.GetComponent<Button>().interactable = true;
+        if (volumeDescription.activeSelf) previousButon.GetComponent<Button>().interactable = false;
+
+        if (gamePlayDescription.activeSelf)
+        {
+            gamePlayDescription.SetActive(false);
+            mapControllsDescription.SetActive(true);
+        }
+        else if (mapControllsDescription.activeSelf)
+        {
+            mapControllsDescription.SetActive(false);
+            volumeDescription.SetActive(true);
+        }
+        else if (volumeDescription.activeSelf)
+        {
+            volumeDescription.SetActive(false);
+            generalDescription.SetActive(true);
+        }
     }
 }
