@@ -13,7 +13,7 @@ PlayerSettings:
   accelerometerFrequency: 60
   companyName: Frozen Flame Productions
   productName: Elemental Encounter
-  defaultCursor: {fileID: 2800000, guid: 10eae235c2156054695b72b850ef30fc, type: 3}
+  defaultCursor: {fileID: 2800000, guid: 8df66511cdb804f4a9bf2f346b7b3a08, type: 3}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
   m_ShowUnitySplashScreen: 1
