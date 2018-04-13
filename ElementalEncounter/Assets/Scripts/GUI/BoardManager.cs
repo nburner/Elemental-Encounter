@@ -77,21 +77,21 @@ public class BoardManager : MonoBehaviour
 		TopDown.SetActive(true);
 		TopDownHUDButton.gameObject.SetActive(true);
 
-		if (capturedFirePieces == null)
-        {
-            string capture = "CapturedFirePiece";
-            for (int i = 1; i < 17; i++){
-                capturedFirePieces.Add(GameObject.Find(capture + i.ToString()));
-            }
+		
+        string capture = "CapturedFirePiece";
+        for (int i = 1; i < 17; i++){
+             capturedFirePieces.Add(GameObject.Find(capture + i.ToString()));
+            capturedFirePieces[i - 1].SetActive(false);
         }
+        
 
-        if (capturedIcePieces == null)
-        {
-            string capture = "CapturedIcePiece";
-            for (int i = 1; i < 17; i++) {
-                capturedIcePieces.Add(GameObject.Find(capture + i.ToString()));
-            }
+        
+        capture = "CapturedIcePiece";
+        for (int i = 1; i < 17; i++) {
+            capturedIcePieces.Add(GameObject.Find(capture + i.ToString()));
+            capturedIcePieces[i - 1].SetActive(false);
         }
+        
 
         Debug.Log("Ice Array Length = " + capturedIcePieces.Count);
         Debug.Log("Fire Array Length = " + capturedFirePieces.Count);
@@ -542,10 +542,10 @@ public class BoardManager : MonoBehaviour
             Destroy(Pieces[move.To].gameObject, 0.4f);
 
             if (gameCore.CurrentTurn == GameCore.Turn.ICE) {
-                capturedIcePieces[gameCore.IceCount].SetActive(true);
+                capturedFirePieces[gameCore.FireCount].SetActive(true);
             }
             else {
-                capturedFirePieces[gameCore.FireCount].SetActive(true);
+                capturedIcePieces[gameCore.IceCount].SetActive(true);
             }
 
         }
