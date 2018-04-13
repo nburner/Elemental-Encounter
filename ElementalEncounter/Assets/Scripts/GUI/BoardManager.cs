@@ -481,6 +481,7 @@ public class BoardManager : MonoBehaviour
         textInstance.GetComponentInChildren<Text>().text = message;
     }
 
+	static int turnCount = 1;
     public void MoveLogtoGUI(Move move)
     {
         int FromX, FromY, ToY, ToX;
@@ -488,7 +489,7 @@ public class BoardManager : MonoBehaviour
         FromY = move.From.Y;
         ToX = move.To.X;
         ToY = move.To.Y;
-        string moveText = ((gameCore.CurrentTurn == GameCore.Turn.FIRE)? "Fire":"Ice")+": " + (char)(FromX + 'A') + FromY+" to " + (char)(ToX+'A') + ToY + "";
+		string moveText = "Turn " + (turnCount++) + ": " + ((gameCore.CurrentTurn == GameCore.Turn.FIRE) ? "Fire" : "Ice") + " - " + (char)(FromX + 'A') + (FromY + 1) + " to " + (char)(ToX + 'A') + (ToY + 1) + "";
         GameObject textInstance = Instantiate(messageText) as GameObject;
         textInstance.transform.SetParent(moveLogContainer);
 

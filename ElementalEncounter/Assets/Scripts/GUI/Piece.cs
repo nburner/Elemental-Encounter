@@ -29,10 +29,13 @@ public class Piece : MonoBehaviour
     private float moveSoundTime = 0f;
     public IEnumerator PlayMoveSound(bool forward = true)
     {
-        //GetComponent<AudioSource>().time = moveSoundTime;
+		if (!isIce) {
+			GetComponent<AudioSource>().time = forward ? 0 : GetComponent<AudioSource>().clip.length;
+			GetComponent<AudioSource>().loop = false;
+		}
 
-        GetComponent<AudioSource>().UnPause();                 //This starts the sound
-        GetComponent<AudioSource>().pitch = forward ? 1f : -1f;
+        GetComponent<AudioSource>().pitch = forward ? 1f : 2f;
+		GetComponent<AudioSource>().UnPause();                 //This starts the sound
         for (int i = 0; i < 140; i++) {
             if (this == null) yield break;
             yield return null;    //This waits for a number of frames (animations go for 100)
