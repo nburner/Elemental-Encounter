@@ -9,6 +9,7 @@ public class SplashScreenControler : MonoBehaviour
     public Image SplashImage;
     public string loadLevel;
     public new GameObject camera;
+    public VideoPlayer videoPlayer2;
 
     public VideoClip[] videos;
 
@@ -25,7 +26,6 @@ public class SplashScreenControler : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
         var videoPlayer1 = camera.GetComponent<UnityEngine.Video.VideoPlayer>();
-        var videoPlayer2 = camera.GetComponent<UnityEngine.Video.VideoPlayer>();
 
         videoPlayer1.renderMode = UnityEngine.Video.VideoRenderMode.CameraNearPlane;
 
