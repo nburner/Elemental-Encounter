@@ -512,6 +512,8 @@ public class BoardManager : MonoBehaviour
         if (Pieces[move.From].Undone) Pieces[move.From].transform.position = GetTileCenter(Pieces[move.From].Position); // Getting the center of the tile where the piece is moving
         Pieces[move.From].Undone = false;
 
+		BoardHighlights.Instance.HideHighlights();
+
         bool takingPiece = Pieces[move.To] != null;
         if (takingPiece)
         {
@@ -552,6 +554,8 @@ public class BoardManager : MonoBehaviour
             CurrentTurnText.GetComponent<Text>().color = (LastTurn == GameCore.Turn.FIRE) ? Color.red : Color.black;
         }
         LastTurn = gameCore.CurrentTurn;
+
+		BoardHighlights.Instance.HighlightPreviousMove(move);
     }
     #endregion
 
@@ -681,7 +685,7 @@ public class BoardManager : MonoBehaviour
     #endregion
 
     #region Hint Stuff
-    bool hintReady = false; Move hintMove;
+    bool hintReady = false, hintShown = false; Move hintMove;
     //Called by the hint ai once the hint has been calculated
     private void UpdateHint(Move move)
     {
@@ -691,6 +695,11 @@ public class BoardManager : MonoBehaviour
     //Called by the button on screen
     public void GetHint()
     {
+		BoardHighlights.Instance.HideHighlights();
+		if (hintShown) {
+			hintShown = false;
+			return;
+		}
         if (isMyTurn) StartCoroutine(showHint());
     }
     //Waits until the hint is ready, then shows it on the board
@@ -700,6 +709,7 @@ public class BoardManager : MonoBehaviour
 
         BoardHighlights.Instance.HighlightHint(hintMove);
         BoardHighlights.Instance.HighlightClickedSpace(hintMove);
+		hintShown = true;
         yield return null;
     }
     #endregion

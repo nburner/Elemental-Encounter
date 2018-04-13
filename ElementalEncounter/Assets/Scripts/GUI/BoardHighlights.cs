@@ -75,7 +75,20 @@ public class BoardHighlights : MonoBehaviour
         clickedSpaceHighlight.transform.position = new Vector3(from.X + 0.5f, 0.0001f, from.Y + 0.5f);
     }
 
-    public void HideHighlights()
+	public void HighlightPreviousMove(Move move) {
+		HideHighlights();
+		baseColor = new Color(1f, 0f, 0f, .4f);
+				
+		GameObject go = GetHighlightObject();
+		go.SetActive(true);
+		go.transform.position = new Vector3(move.To.X + 0.5f, 0.0001f, move.To.Y + 0.5f);
+
+		go = GetHighlightObject();
+		go.SetActive(true);
+		go.transform.position = new Vector3(move.From.X + 0.5f, 0.0001f, move.From.Y + 0.5f);
+	}
+
+	public void HideHighlights()
     {
         clickedSpaceHighlight.SetActive(false);
         foreach (GameObject go in highlights)
