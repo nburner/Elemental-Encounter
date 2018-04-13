@@ -9,6 +9,8 @@ namespace NetworkGame
     [RequireComponent(typeof(InputField))]
     public class RoomNameInputField : MonoBehaviour
     {
+        public InputField input;
+
         #region Private Variables
 
         // Store the PlayerPref Key to avoid typos
@@ -24,14 +26,10 @@ namespace NetworkGame
         void Start()
         {
             string defaultName = "";
-            InputField _inputField = this.GetComponent<InputField>();
-            if (_inputField != null)
+            if (PlayerPrefs.HasKey(playerNamePrefKey))
             {
-                if (PlayerPrefs.HasKey(playerNamePrefKey))
-                {
-                    defaultName = PlayerPrefs.GetString(playerNamePrefKey);
-                    _inputField.text = defaultName;
-                }
+                defaultName = PlayerPrefs.GetString(playerNamePrefKey);
+                input.text = defaultName;
             }
 
             PhotonNetwork.playerName = defaultName;
@@ -45,11 +43,12 @@ namespace NetworkGame
         /// Sets the name of the player, and save it in the PlayerPrefs for future sessions.
         /// </summary>
         /// <param name="value">The name of the Player</param>
-        public void SetPlayerName(string value)
+        public void SetPlayerName()
         {
             // #Important
-            PhotonNetwork.playerName = value + " "; // force a trailing space string in case value is an empty string, else playerName would not be updated.            
-            PlayerPrefs.SetString(playerNamePrefKey, value);
+            PhotonNetwork.playerName = input.text + " "; // force a trailing space string in case value is an empty string, else playerName would not be updated.            
+            PlayerPrefs.SetString(playerNamePrefKey, input.text);
+            PlayerPrefs.Save();
         }
 
         #endregion
