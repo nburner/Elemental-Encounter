@@ -150,7 +150,7 @@ move AI::MonteSeeker::operator()(const Board b) const
 		Board winner; double maxWinRatio = -10;
 		for (int i = 0; i < boards.size(); i++) {
 			double winRatio = monteCarloScores[boards[i]].first / (double)monteCarloScores[boards[i]].second;
-			winRatio -= featureCalculators[THREATENED_UNDEFENDED_B](boards[i]);
+			winRatio -= featureCalculators[THREATENED_UNDEFENDED_B](boards[i]) + featureCalculators[PIECE_ADVANTAGE](boards[i]);
 			if (winRatio > maxWinRatio) {
 				maxWinRatio = winRatio;
 				winner = boards[i];
@@ -207,7 +207,7 @@ move AI::MonteSeeker::operator()(const Board b) const
 			Board winner; double maxWinRatio = -10;
 			for (int i = 0; i < boards.size(); i++) {
 				double winRatio = monteCarloScores[boards[i]].first / (double)monteCarloScores[boards[i]].second;
-				winRatio -= featureCalculators[THREATENED_UNDEFENDED_B](boards[i]);
+				winRatio -= featureCalculators[THREATENED_UNDEFENDED_B](boards[i]) + featureCalculators[PIECE_ADVANTAGE](boards[i]);
 				if (winRatio > maxWinRatio) {
 					maxWinRatio = winRatio;
 					winner = boards[i];

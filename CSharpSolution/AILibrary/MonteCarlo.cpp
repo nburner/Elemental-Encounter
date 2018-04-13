@@ -23,7 +23,8 @@ move AI::MonteCarlo(Board b) {
 	std::map<move, double> avgTurnCount;
 
 	int k = 0;
-	while (t.read() < 5.88) {
+	while (t.read() < 2.5) {
+		#pragma omp parallel for num_threads(6)
 		for (int i = 0; i < boards.size(); i++) {
 			auto board = boards[i];
 			int turnCount = 0;
