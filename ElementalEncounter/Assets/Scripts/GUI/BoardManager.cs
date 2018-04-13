@@ -21,6 +21,8 @@ public class BoardManager : MonoBehaviour
     public GameObject panelContainer;
     public GameObject winMenu;
     public GameObject loseMenu;
+    public GameObject netWinMenu;
+    public GameObject netLossMenu;
     public GameObject CurrentTurnText;
     public GameObject IceTerrain;
     public GameObject FireTerrain;
@@ -66,8 +68,8 @@ public class BoardManager : MonoBehaviour
         Debug.Log("Made it to the start function at    " + time);
 
         MainCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
-        // MusicControler mc = GameObject.Find("MusicController").GetComponent<MusicControler>();
-        //mc.PlayMapMusic(gameCore.Map);
+        MusicControler mc = GameObject.Find("MusicController").GetComponent<MusicControler>();
+        mc.PlayMapMusic(gameCore.Map);
 
         //if (capturedFirePieces == null)
         //{
@@ -155,6 +157,7 @@ public class BoardManager : MonoBehaviour
     {
         UndoQueue = new Queue<UndoEntry>();
         BreakAnimations = new Stack<int>();
+        turnCount = 1;
 
         foreach (GameObject go in activePieces)
         {
@@ -227,10 +230,15 @@ public class BoardManager : MonoBehaviour
         UndoInProgress = true;
         UndoEntry entry = UndoQueue.Dequeue();
 
+        int numOfChildren = moveLogContainer.transform.childCount;
+        if (numOfChildren > 0)
+        {
+            Destroy(moveLogContainer.transform.GetChild(numOfChildren - 1).gameObject);
+        }
+        turnCount--;
+
         if (Pieces[entry.move.To].Undone) Pieces[entry.move.To].transform.position = GetTileCenter(Pieces[entry.move.To].Position); // Getting the center of the tile where the piece is moving
         Pieces[entry.move.To].Undone = true;
-
-        //StartCoroutine(Pieces[move.From].PlayMoveSound()); //sound effect
 
         PlayUndoAnimationMove(Pieces[entry.move.To], entry.move, entry.capture);
         Pieces[entry.move.To].SetPosition(entry.move.From);
@@ -250,11 +258,7 @@ public class BoardManager : MonoBehaviour
         }
         HinterXHinter.GetMove(gameCore.Pieces);
         hintReady = false;
-        int numOfChildren = moveLogContainer.transform.childCount;
-        if (numOfChildren > 0)
-        {
-            Destroy(moveLogContainer.transform.GetChild(numOfChildren - 1).gameObject);
-        }
+        
         if (gameCore.MySide == GameCore.Turn.ICE)
         {
             LastTurn = GameCore.Turn.ICE;
@@ -356,7 +360,7 @@ public class BoardManager : MonoBehaviour
         }
 
         BoardHighlights.Instance.HideHighlights();
-        timerCount = 60f;
+        timerCount = 180f;
         Timer.SetActive(false);
         selectedPiece = null;
     }
@@ -418,8 +422,20 @@ public class BoardManager : MonoBehaviour
     //This function is called by the Game Core to tell the GUI that the game is over
     public void EndGame()
     {
-        if (LastTurn != gameCore.MySide) StartCoroutine(ShowsAfterSeconds(2, loseMenu));
-        else StartCoroutine(ShowsAfterSeconds(2, winMenu));
+        if (!gameCore.isSinglePlayer) networkLogic.OnMatchFinished();
+
+        if (LastTurn != gameCore.MySide)
+        {
+            if (gameCore.isSinglePlayer) StartCoroutine(ShowsAfterSeconds(2, loseMenu));
+            else StartCoroutine(ShowsAfterSeconds(2, netLossMenu));
+        }
+        else
+        {
+            if (gameCore.isSinglePlayer) StartCoroutine(ShowsAfterSeconds(2, winMenu));
+            else StartCoroutine(ShowsAfterSeconds(2, netWinMenu));
+        }
+
+        Timer.SetActive(false);
         isMyTurn = false;
     }
     //delays the Menu
@@ -502,8 +518,8 @@ public class BoardManager : MonoBehaviour
     }
     public void PlayCaptureSound(Piece piece, int captureChoice)
     {
-		int[] delays = { -1, -1, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60 };        
-		piece.GetComponent<AudioSource>().PlayDelayed(delays[captureChoice]);
+		float[] delays = { -1, -1, 60, 50, 75, 60, 50, 75, 70, 60, 80, 70, 60, 80 };        
+        if(captureChoice > 1 && captureChoice < delays.Length) piece.GetComponent<AudioSource>().PlayDelayed(delays[captureChoice]/60f);
     }
 
     //This function is called by the Game Core to tell the GUI that a valid move has been made, and the screen needs to be updated
@@ -516,7 +532,6 @@ public class BoardManager : MonoBehaviour
         if (takingPiece)
         {
             activePieces.Remove(Pieces[move.To].gameObject);
-            //StartCoroutine(PlayCaptureSound(Pieces[move.To].captureSound, Pieces[move.To].transform.position)); //sound effect
             Destroy(Pieces[move.To].gameObject, 0.4f);
 
             //if (gameCore.CurrentTurn == 0)
@@ -530,10 +545,10 @@ public class BoardManager : MonoBehaviour
 
         }
         StartCoroutine(Pieces[move.From].PlayMoveSound()); //sound effect
-
-        int breakAnimation = Piece.playAnimation(Pieces[move.From], move, takingPiece);
+        int breakAnimation = Piece.playAnimation(Pieces[move.From], move, takingPiece, false);
 		if (breakAnimation > 0) {
 			BreakAnimations.Push(breakAnimation);
+            PlayCaptureSound(Pieces[move.To], breakAnimation); //sound effect
 		}
 
         Pieces[move.From].transform.position = GetTileCenter(move.To); // Getting the center of the tile where the piece is moving

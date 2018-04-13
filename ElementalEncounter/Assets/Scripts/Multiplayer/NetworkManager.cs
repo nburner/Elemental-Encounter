@@ -71,7 +71,11 @@ namespace NetworkGame
         public override void OnLeftRoom()
         {
             SceneManager.LoadScene("Game_Lobby");
+        }
 
+        public void OnMatchFinished()
+        {
+            PhotonNetwork.room.IsOpen = false;
         }
 
         public void LeaveRoom()
