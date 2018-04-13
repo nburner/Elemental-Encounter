@@ -554,7 +554,6 @@ RectTransform:
   m_Children:
   - {fileID: 485593013}
   - {fileID: 43431184}
-  - {fileID: 1286342029}
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6058,6 +6057,7 @@ RectTransform:
   - {fileID: 1160620780}
   - {fileID: 258789084}
   - {fileID: 1770395972}
+  - {fileID: 1286342029}
   m_Father: {fileID: 14021013}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -18348,6 +18348,7 @@ GameObject:
   - component: {fileID: 1286342032}
   - component: {fileID: 1286342031}
   - component: {fileID: 1286342030}
+  - component: {fileID: 1286342034}
   m_Layer: 5
   m_Name: MovesLog
   m_TagString: Untagged
@@ -18366,12 +18367,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 86715799}
-  m_Father: {fileID: 14021013}
-  m_RootOrder: 2
+  m_Father: {fileID: 485593013}
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -15, y: -100}
+  m_AnchoredPosition: {x: -15, y: -100.25}
   m_SizeDelta: {x: 185, y: 250}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1286342030
@@ -18450,6 +18451,18 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.ScrollRect+ScrollRectEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &1286342034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1286342028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69a857379f9ce3e4691054fbe3f99fea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isOver: 0
 --- !u!4 &1291286023 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4000012197449570, guid: 01d2dd5255c308a4db25dbb77d9f65ea,
@@ -19311,6 +19324,7 @@ GameObject:
   - component: {fileID: 1371668985}
   - component: {fileID: 1371668984}
   - component: {fileID: 1371668987}
+  - component: {fileID: 1371668988}
   m_Layer: 5
   m_Name: Chat
   m_TagString: Untagged
@@ -19413,6 +19427,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 1
+--- !u!114 &1371668988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1371668982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69a857379f9ce3e4691054fbe3f99fea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isOver: 0
 --- !u!4 &1378345275 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4000011665570582, guid: fa4b3ce95996450429271fdda2402f31,

@@ -53,8 +53,10 @@ public class BoardManager : MonoBehaviour
     private GameCore.Turn LastTurn;
     private NetworkGame.NetworkManager networkLogic;
     private Vector3 BoardCenter = new Vector3(4f, 0, 4f);
-    private GameObject[] capturedFirePieces;
-    private GameObject[] capturedIcePieces;
+    private List<GameObject> capturedFirePieces = new List<GameObject>();
+    private List<GameObject> capturedIcePieces = new List<GameObject>();
+    private string playerName;
+    private string playerOpponent;
     #endregion 
     #endregion
 
@@ -64,30 +66,28 @@ public class BoardManager : MonoBehaviour
         Debug.Log("Made it to the start function at    " + time);
 
         MainCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
-       // MusicControler mc = GameObject.Find("MusicController").GetComponent<MusicControler>();
+        // MusicControler mc = GameObject.Find("MusicController").GetComponent<MusicControler>();
         //mc.PlayMapMusic(gameCore.Map);
 
-       //if (capturedFirePieces == null)
-       //{
-       //     string capture = "CapturedFirePiece";
-       //     for (int i = 1; i < 17; i++)
-       //     {
-       //         capture = capture + "1";
-       //         capturedIcePieces[i] = GameObject.FindGameObjectsWithTag(capture);
-       //     }
-       //}
+        //if (capturedFirePieces == null)
+        //{
+        //    string capture = "CapturedFirePiece";
+        //    for (int i = 1; i < 17; i++)
+        //    {
+        //        capture = capture + "1";
+        //        capturedIcePieces.Add(GameObject.Find(capture));
+        //    }
+        //}
 
-       // if (capturedIcePieces == null)
-       // {
-       //     string capture = "CapturedIcePiece";
-       //     for (int i = 1; i < 17; i++)
-       //     {
-       //         capture = capture + "1";
-       //         capturedIcePieces = GameObject.FindGameObjectsWithTag(capture);
-       //     }
-       // }
-       // if (capturedIcePieces == null)
-       //     capturedIcePieces = GameObject.FindGameObjectsWithTag("CapturedIcePiece");
+        //if (capturedIcePieces == null)
+        //{
+        //    string capture = "CapturedIcePiece";
+        //    for (int i = 1; i < 17; i++)
+        //    {
+        //        capture = capture + "1";
+        //        capturedIcePieces.Add(GameObject.Find(capture));
+        //    }
+        //}
 
         //Debug.Log("Ice Array Length = " + capturedIcePieces.Length);
         //Debug.Log("Fire Array Length = " + capturedFirePieces.Length);
@@ -115,6 +115,8 @@ public class BoardManager : MonoBehaviour
             networkTimer = Timer.GetComponent<Text>();
             UndoButton.SetActive(false);
             ChatPanel.SetActive(true);
+            playerName = PhotonNetwork.playerName;
+            playerOpponent = PhotonNetwork.otherPlayers[0].NickName;
             if (!gameCore.isMasterClient)
             {
                 WhatIsMySide();
@@ -122,6 +124,8 @@ public class BoardManager : MonoBehaviour
         }
         else
         {
+            playerName = (gameCore.MySide==GameCore.Turn.FIRE)?"Fire":"Ice";
+            playerOpponent = "Computer"; 
             ChangeSide();
         }
         time = DateTime.Now.ToString("h:mm:ss tt");
@@ -254,14 +258,14 @@ public class BoardManager : MonoBehaviour
         if (gameCore.MySide == GameCore.Turn.ICE)
         {
             LastTurn = GameCore.Turn.ICE;
-            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Waiting for opponent" : "Ice Turn";
+            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Waiting for "+playerOpponent : playerName;
             CurrentTurnText.GetComponent<Text>().color = (LastTurn == GameCore.Turn.FIRE) ? Color.black : Color.blue;
             LastTurn = GameCore.Turn.FIRE;
         }
         else
         {
             LastTurn = GameCore.Turn.ICE;
-            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Waiting for opponent";
+            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? playerName : "Waiting for "+playerOpponent;
             CurrentTurnText.GetComponent<Text>().color = (LastTurn == GameCore.Turn.FIRE) ? Color.red : Color.black;
             LastTurn = GameCore.Turn.FIRE;
         }
@@ -385,14 +389,14 @@ public class BoardManager : MonoBehaviour
         if (gameCore.MySide == GameCore.Turn.ICE)
         {
             LastTurn = GameCore.Turn.ICE;
-            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Waiting for opponent" : "Ice Turn";
+            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Waiting for " + playerOpponent : playerName;
             CurrentTurnText.GetComponent<Text>().color = (LastTurn == GameCore.Turn.FIRE) ? Color.black : Color.blue;
             LastTurn = GameCore.Turn.FIRE;
         }
         else
         {
             LastTurn = GameCore.Turn.ICE;
-            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Waiting for opponent";
+            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? playerName : "Waiting for " + playerOpponent;
             CurrentTurnText.GetComponent<Text>().color = (LastTurn == GameCore.Turn.FIRE) ? Color.red : Color.black;
             LastTurn = GameCore.Turn.FIRE;
         }
@@ -462,11 +466,11 @@ public class BoardManager : MonoBehaviour
     {
         InputField inputFieldBox = GameObject.Find("MessageInput").GetComponent<InputField>();
         if (inputFieldBox.text == "") return;
-        networkLogic.SendMessageChat(((PhotonNetwork.isMasterClient)? "Host:  ":"Client:  ") + inputFieldBox.text);
+        networkLogic.SendMessageChat(((PhotonNetwork.isMasterClient)? playerName+":  ": playerOpponent+":  ") + inputFieldBox.text);
         GameObject textInstance = Instantiate(messageText) as GameObject;
         textInstance.transform.SetParent(chatMessageContainer);
 
-        textInstance.GetComponentInChildren<Text>().text = ((PhotonNetwork.isMasterClient) ? "Host:  " : "Client:  ") + inputFieldBox.text;
+        textInstance.GetComponentInChildren<Text>().text = ((PhotonNetwork.isMasterClient) ? playerName + ":  " : playerOpponent + ":  ") + inputFieldBox.text;
         inputFieldBox.text = "";
     }
     public void ReceiveMessage(string message)
@@ -538,12 +542,12 @@ public class BoardManager : MonoBehaviour
         MoveLogtoGUI(move);
         if (gameCore.MySide == GameCore.Turn.ICE)
         {
-            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Waiting for opponent" : "Ice Turn";
+            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Waiting for " + playerOpponent : playerName;
             CurrentTurnText.GetComponent<Text>().color = (LastTurn == GameCore.Turn.FIRE) ? Color.black : Color.blue;
         }
         else
         {
-            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? "Fire Turn" : "Waiting for opponent";
+            CurrentTurnText.GetComponent<Text>().text = (LastTurn == GameCore.Turn.FIRE) ? playerName : "Waiting for " + playerOpponent;
             CurrentTurnText.GetComponent<Text>().color = (LastTurn == GameCore.Turn.FIRE) ? Color.red : Color.black;
         }
         LastTurn = gameCore.CurrentTurn;
@@ -604,7 +608,7 @@ public class BoardManager : MonoBehaviour
         if (UndoQueue.Count > 0 && !UndoInProgress) StartCoroutine(Undo());
 
         UpdateSelection();
-
+        
         if (Input.GetMouseButtonDown(0) && cursorLocation != null && isMyTurn && !panelContainer.activeInHierarchy && !UndoInProgress)
         {
             if (selectedPiece == null) SelectPiece(cursorLocation);
@@ -625,7 +629,10 @@ public class BoardManager : MonoBehaviour
 
         else if (Input.GetKey(KeyCode.RightArrow)) MainCamera.transform.RotateAround(BoardCenter, Vector3.down, .5f);
 
-        if (((MainCamera.transform.position - BoardCenter).magnitude > 7 && d > 0) || (d < 0 && (MainCamera.transform.position - BoardCenter).magnitude < 16)) MainCamera.transform.position = Vector3.MoveTowards(MainCamera.transform.position, BoardCenter, d * 2.5f);
+        if ((((MainCamera.transform.position - BoardCenter).magnitude > 7 && d > 0) || (d < 0 && (MainCamera.transform.position - BoardCenter).magnitude < 16)) && 
+            !moveLogContainer.GetComponentInParent<ScrollableBox>().isOver && 
+            (gameCore.isSinglePlayer || !chatMessageContainer.GetComponentInParent<ScrollableBox>().isOver))
+            MainCamera.transform.position = Vector3.MoveTowards(MainCamera.transform.position, BoardCenter, d * 2.5f);
 
         //while (MainCamera.transform.position.y < 2) MainCamera.transform.Translate(0, 1, 0);
         //while (MainCamera.transform.position.y > 16) MainCamera.transform.Translate(0, 1, 0);

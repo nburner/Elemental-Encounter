@@ -11,34 +11,35 @@ namespace AI
     public class AIJob
     {
         #region DLL Imports
-        [DllImport("Assets/Plugins/AILibrary.dll")]
+
+        [DllImport("AILibrary.dll")]
         public static extern void BasicRandom(bitboard white, bitboard black, Turn t, out int from, out int to);
-        [DllImport("Assets/Plugins/AILibrary.dll")]
+        [DllImport("AILibrary.dll")]
         public static extern void BasicDefense(bitboard white, bitboard black, Turn t, out int from, out int to);
-        [DllImport("Assets/Plugins/AILibrary.dll")]
+        [DllImport("AILibrary.dll")]
         public static extern void BasicOffense(bitboard white, bitboard black, Turn t, out int from, out int to);
-        [DllImport("Assets/Plugins/AILibrary.dll")]
+        [DllImport("AILibrary.dll")]
         public static extern void DarylsPet(bitboard white, bitboard black, Turn t, out int from, out int to);
-        [DllImport("Assets/Plugins/AILibrary.dll")]
+        [DllImport("AILibrary.dll")]
         public static extern void MemPet(bitboard white, bitboard black, Turn t, out int from, out int to, int id = 0);
-        [DllImport("Assets/Plugins/AILibrary.dll")]
+        [DllImport("AILibrary.dll")]
         public static extern void RandomPet(bitboard white, bitboard black, Turn t, out int from, out int to);
-        [DllImport("Assets/Plugins/AILibrary.dll")]
+        [DllImport("AILibrary.dll")]
         public static extern void Test(bitboard white, bitboard black, Turn t, out int from, out int to);
-        [DllImport("Assets/Plugins/AILibrary.dll")]
+        [DllImport("AILibrary.dll")]
         public static extern void DarylsPrune(bitboard white, bitboard black, Turn t, out int from, out int to);
-        [DllImport("Assets/Plugins/AILibrary.dll")]
+        [DllImport("AILibrary.dll")]
         public static extern void Seeker(bitboard white, bitboard black, Turn t, out int from, out int to);
-        [DllImport("Assets/Plugins/AILibrary.dll")]
+        [DllImport("AILibrary.dll")]
         public static extern void Hinter(bitboard white, bitboard black, Turn t, out int from, out int to);
-		[DllImport("Assets/Plugins/AILibrary.dll")]
-		public static extern void MonteCarlo(bitboard white, bitboard black, Turn t, out int from, out int to);
-		[DllImport("Assets/Plugins/AILibrary.dll")]
-		public static extern void MonteSeeker(bitboard white, bitboard black, Turn t, out int from, out int to);
-        [DllImport("Assets/Plugins/AILibrary.dll")]
+        [DllImport("AILibrary.dll")]
+        public static extern void MonteCarlo(bitboard white, bitboard black, Turn t, out int from, out int to);
+        [DllImport("AILibrary.dll")]
+        public static extern void MonteSeeker(bitboard white, bitboard black, Turn t, out int from, out int to);
+        [DllImport("AILibrary.dll")]
         public static extern void HyperSeeker(bitboard white, bitboard black, Turn t, out int from, out int to);
-        [DllImport("Assets/Plugins/AILibrary.dll")]
-		public static extern void L337(bitboard white, bitboard black, Turn t, out int from, out int to);
+        [DllImport("AILibrary.dll")]
+        public static extern void L337(bitboard white, bitboard black, Turn t, out int from, out int to);
 		#endregion
 
 		public bitboard white;
