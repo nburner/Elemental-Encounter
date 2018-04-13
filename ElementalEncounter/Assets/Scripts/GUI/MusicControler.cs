@@ -15,10 +15,18 @@ public class MusicControler : MonoBehaviour
     public Button volumeButton;
 
     private AudioSource audioSource;
+    private GameCore gameCore;
 
     // Use this for initialization
     private void Awake()
     {
+        GameObject core = GameObject.Find("GameCore");
+        if (core == null)
+        {
+            gameCore = new GameObject("GameCore").AddComponent<GameCore>();
+        }
+        else gameCore = core.GetComponent<GameCore>();
+
         DontDestroyOnLoad(this);
 
         audioSource = GameObject.Find("MusicController").GetComponent<AudioSource>();
@@ -34,7 +42,9 @@ public class MusicControler : MonoBehaviour
         if (!audioSource.isPlaying)
         {
             audioSource.clip = mainMenuMusic;
+            audioSource.time = gameCore.MainMenuAudioStartTime < 2 ? 0 : gameCore.MainMenuAudioStartTime - 2;
             audioSource.Play();
+            gameCore.MainMenuAudioStartTime = 0;
         }
     }
 

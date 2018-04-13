@@ -32,6 +32,7 @@ public class GameCore : MonoBehaviour
     public BoardManager boardManager { get; set; }
     public AILevel aILevel;
     // private GameCharacter character;
+    public float MainMenuAudioStartTime = 0;
 
     public int IceCount
     {

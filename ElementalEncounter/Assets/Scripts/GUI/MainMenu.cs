@@ -28,6 +28,7 @@ public class MainMenu : MonoBehaviour
     public ToggleGroup turnToggleGroup;
     public ToggleGroup soundToggleGroup;
     public ToggleGroup animationToggleGroup;
+    public Toggle animationToggle;
 
     //private bool startGame;
 
@@ -51,6 +52,8 @@ public class MainMenu : MonoBehaviour
             gameCore = new GameObject("GameCore").AddComponent<GameCore>();
         }
         else gameCore = core.GetComponent<GameCore>();
+
+        gameCore.animations = true;
     }
 
     public void singlePlayerButtonClick()
@@ -186,6 +189,7 @@ public class MainMenu : MonoBehaviour
         gameOptions.SetActive(false);
         quitPanel.SetActive(false);
         optionsPanel.SetActive(false);
+        instructionsPanel.SetActive(false);
     }
     public void ShowOptions()
     {
@@ -241,5 +245,10 @@ public class MainMenu : MonoBehaviour
             volumeDescription.SetActive(false);
             generalDescription.SetActive(true);
         }
+    }
+
+    public void OnAnimationToggleChange()
+    {
+        gameCore.animations = !animationToggle.enabled;
     }
 }

@@ -9,9 +9,17 @@ public class SplashScreenControler : MonoBehaviour
     public Image SplashImage;
     public string loadLevel;
     public new GameObject camera;
-    public VideoPlayer videoPlayer2;
+    private GameCore gameCore;
 
-    public VideoClip[] videos;
+    public void Awake()
+    {
+        GameObject core = GameObject.Find("GameCore");
+        if (core == null)
+        {
+            gameCore = new GameObject("GameCore").AddComponent<GameCore>();
+        }
+        else gameCore = core.GetComponent<GameCore>();
+    }
 
     IEnumerator Start()
     {
@@ -24,34 +32,27 @@ public class SplashScreenControler : MonoBehaviour
         yield return new WaitForSeconds(2f);
         FadeOut();
         yield return new WaitForSeconds(2f);
-
+        camera.GetComponent<AudioSource>().Play();
         var videoPlayer1 = camera.GetComponent<UnityEngine.Video.VideoPlayer>();
 
         videoPlayer1.renderMode = UnityEngine.Video.VideoRenderMode.CameraNearPlane;
 
         videoPlayer1.Play();
 
-        yield return new WaitForSeconds(15f);
+        yield return new WaitForSeconds(14f);
 
-        videoPlayer1.Stop();
-        videoPlayer1 = null;
-
-        videoPlayer2.renderMode = VideoRenderMode.CameraNearPlane;
-
-        videoPlayer2.Play();
-
-        
-
-        
-
- 
-
+        gameCore.MainMenuAudioStartTime = camera.GetComponent<AudioSource>().time;
+        //camera.GetComponent<AudioSource>().Stop();
+        SceneManager.LoadScene(loadLevel);
     }
 
     private void Update()
     {
         if (Input.anyKey)
         {
+            camera = GameObject.Find("Main Camera");
+            gameCore.MainMenuAudioStartTime = camera.GetComponent<AudioSource>().time;
+            //camera.GetComponent<AudioSource>().Stop();
             SceneManager.LoadScene(loadLevel);
         }
     }

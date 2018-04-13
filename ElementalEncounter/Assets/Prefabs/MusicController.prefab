@@ -137,3 +137,9 @@ MonoBehaviour:
   fireMapMusic: {fileID: 8300000, guid: 2005e8474ca276b41a575eada1113503, type: 3}
   clashMapMusic: {fileID: 8300000, guid: cb00baa976046444cb5ca4215621af6e, type: 3}
   slider: {fileID: 0}
+  image:
+  - {fileID: 21300000, guid: 6a14c2640a6719e4ba6bfffcd6d11906, type: 3}
+  - {fileID: 21300000, guid: e1440e279f042ee4bb68b79264e286c0, type: 3}
+  - {fileID: 21300000, guid: e601391390ba71349835a4b92833556d, type: 3}
+  - {fileID: 21300000, guid: d33bcfb01757a894a984a80ecfa79d35, type: 3}
+  volumeButton: {fileID: 0}
