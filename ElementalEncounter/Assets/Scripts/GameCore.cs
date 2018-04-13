@@ -13,7 +13,7 @@ class LogEntry
 public class GameCore : MonoBehaviour
 {
     public enum Turn { ICE, FIRE };
-    public enum AILevel { Intermediate, Easy, Expert };
+    public enum AILevel { Intermediate, Beginner, Novice, Expert };
     public enum MapChoice { ICE, FIRE, CLASH };
 
     public bool isSinglePlayer;
@@ -86,8 +86,9 @@ public class GameCore : MonoBehaviour
         if (ai != null) Destroy(ai);
         if (isSinglePlayer) {
             if (aILevel == AILevel.Expert) ai = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.HyperSeeker, MySide == Turn.ICE ? AI.Turn.FIRE : AI.Turn.ICE, UpdateBoard);
-            if (aILevel == AILevel.Intermediate) ai = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.MonteSeeker, MySide == Turn.ICE ? AI.Turn.FIRE : AI.Turn.ICE, UpdateBoard);
-            if (aILevel == AILevel.Easy) ai = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.MonteCarlo, MySide == Turn.ICE ? AI.Turn.FIRE : AI.Turn.ICE, UpdateBoard);
+            if (aILevel == AILevel.Intermediate) ai = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.SEEKER, MySide == Turn.ICE ? AI.Turn.FIRE : AI.Turn.ICE, UpdateBoard);
+            if (aILevel == AILevel.Novice) ai = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.DARYLS_PET, MySide == Turn.ICE ? AI.Turn.FIRE : AI.Turn.ICE, UpdateBoard);
+            if (aILevel == AILevel.Beginner) ai = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.MonteCarlo, MySide == Turn.ICE ? AI.Turn.FIRE : AI.Turn.ICE, UpdateBoard);
         }
 
         CurrentTurn = Turn.ICE;

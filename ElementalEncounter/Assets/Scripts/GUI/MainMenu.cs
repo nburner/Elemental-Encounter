@@ -98,9 +98,12 @@ public class MainMenu : MonoBehaviour
         switch (aiText)
         {
             case "Easy":
-                gameCore.aILevel = GameCore.AILevel.Easy;
+                gameCore.aILevel = GameCore.AILevel.Beginner;
                 break;
-            case "Intermediate":
+			case "Novice":
+				gameCore.aILevel = GameCore.AILevel.Novice;
+				break;
+			case "Intermediate":
                 gameCore.aILevel = GameCore.AILevel.Intermediate;
                 break;
             case "Expert":
