@@ -2,12 +2,15 @@
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEngine.Video;
 
 public class SplashScreenControler : MonoBehaviour
 {
     public Image SplashImage;
     public string loadLevel;
     public new GameObject camera;
+
+    public VideoClip[] videos;
 
     IEnumerator Start()
     {
@@ -21,17 +24,30 @@ public class SplashScreenControler : MonoBehaviour
         FadeOut();
         yield return new WaitForSeconds(2f);
 
-        var videoPlayer = camera.GetComponent<UnityEngine.Video.VideoPlayer>();
+        var videoPlayer1 = camera.GetComponent<UnityEngine.Video.VideoPlayer>();
+        var videoPlayer2 = camera.GetComponent<UnityEngine.Video.VideoPlayer>();
 
-        videoPlayer.renderMode = UnityEngine.Video.VideoRenderMode.CameraNearPlane;
+        videoPlayer1.renderMode = UnityEngine.Video.VideoRenderMode.CameraNearPlane;
 
-        videoPlayer.Play();
+        videoPlayer1.Play();
 
         yield return new WaitForSeconds(15f);
 
-        SceneManager.LoadScene(loadLevel);
+        videoPlayer1.Stop();
+        videoPlayer1 = null;
+
+        videoPlayer2.renderMode = VideoRenderMode.CameraNearPlane;
+
+        videoPlayer2.Play();
+
+        
+
+        
+
+ 
 
     }
+
     private void Update()
     {
         if (Input.anyKey)
