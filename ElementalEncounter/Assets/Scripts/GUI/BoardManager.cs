@@ -71,29 +71,30 @@ public class BoardManager : MonoBehaviour
         MusicControler mc = GameObject.Find("MusicController").GetComponent<MusicControler>();
         mc.PlayMapMusic(gameCore.Map);
 
-        //if (capturedFirePieces == null)
-        //{
-        //    string capture = "CapturedFirePiece";
-        //    for (int i = 1; i < 17; i++)
-        //    {
-        //        capture = capture + "1";
-        //        capturedIcePieces.Add(GameObject.Find(capture));
-        //    }
-        //}
+		TopDownHUDButton = GameObject.Find("HideMiniMap_Button").GetComponent<Button>();
+		TopDown = MainCamera.GetComponentInChildren<RawImage>(true).gameObject;
 
-        //if (capturedIcePieces == null)
-        //{
-        //    string capture = "CapturedIcePiece";
-        //    for (int i = 1; i < 17; i++)
-        //    {
-        //        capture = capture + "1";
-        //        capturedIcePieces.Add(GameObject.Find(capture));
-        //    }
-        //}
+		TopDown.SetActive(true);
+		TopDownHUDButton.gameObject.SetActive(true);
 
-        //Debug.Log("Ice Array Length = " + capturedIcePieces.Length);
-        //Debug.Log("Fire Array Length = " + capturedFirePieces.Length);
+		if (capturedFirePieces == null)
+        {
+            string capture = "CapturedFirePiece";
+            for (int i = 1; i < 17; i++){
+                capturedFirePieces.Add(GameObject.Find(capture + i.ToString()));
+            }
+        }
 
+        if (capturedIcePieces == null)
+        {
+            string capture = "CapturedIcePiece";
+            for (int i = 1; i < 17; i++) {
+                capturedIcePieces.Add(GameObject.Find(capture + i.ToString()));
+            }
+        }
+
+        Debug.Log("Ice Array Length = " + capturedIcePieces.Count);
+        Debug.Log("Fire Array Length = " + capturedFirePieces.Count);
 
         IceTerrain.SetActive(false);
         FireTerrain.SetActive(false);
@@ -188,15 +189,13 @@ public class BoardManager : MonoBehaviour
         for (int i = 0; i < activePieces.Count; i++) if (activePieces[i] != null) activePieces[i].GetComponent<AudioSource>().mute = !gameCore.sound;
     }
     GameObject TopDown = null;
-    public void HideTopDownButtonClick()
+    Button TopDownHUDButton = null;
+	public void HideTopDownButtonClick()
     {
-        Text buttonText = GameObject.Find("HideMiniMap_Button").GetComponent<Button>().GetComponentInChildren<Text>();
-        if(TopDown == null) TopDown = MainCamera.GetComponentInChildren<RawImage>(true).gameObject;
-
         TopDown.SetActive(!TopDown.activeSelf);
-        buttonText.text = (TopDown.activeSelf) ? "Hide Map" : "Show Map";
-        //if (TopDown.activeSelf) buttonText.text = "Hide Map";
-        //else buttonText.text = "Show Map";
+		TopDownHUDButton.gameObject.SetActive(TopDown.activeSelf);
+
+		TopDownHUDButton.GetComponent<Text>().text = TopDown.activeSelf ? "Hide Map" : "Show Map";
     }
     
     public void ResetCameraButtonClick()
@@ -252,7 +251,14 @@ public class BoardManager : MonoBehaviour
         
         UndoInProgress = false;
 
-        if (HinterXHinter == null)
+		if (gameCore.CurrentTurn == GameCore.Turn.ICE) {
+			capturedIcePieces[gameCore.IceCount - 1].SetActive(false);
+		}
+		else {
+			capturedFirePieces[gameCore.FireCount - 1].SetActive(false);
+		}
+
+		if (HinterXHinter == null)
         {
             HinterXHinter = gameObject.AddComponent<AI.AI>().Initialize(AI.AIType.HINTER, gameCore.MySide == GameCore.Turn.ICE ? AI.Turn.ICE : AI.Turn.FIRE, UpdateHint);
         }
@@ -358,8 +364,7 @@ public class BoardManager : MonoBehaviour
             //Move constructor throws on invalid move
             Debug.Log(e.Message);
         }
-
-        BoardHighlights.Instance.HideHighlights();
+		        
         timerCount = 180f;
         Timer.SetActive(false);
         selectedPiece = null;
@@ -536,14 +541,12 @@ public class BoardManager : MonoBehaviour
             activePieces.Remove(Pieces[move.To].gameObject);
             Destroy(Pieces[move.To].gameObject, 0.4f);
 
-            //if (gameCore.CurrentTurn == 0)
-            //{
-            //    capturedIcePieces[gameCore.IceCount - 1].SetActive(true);
-            //}
-            //else
-            //{
-            //    capturedIcePieces[gameCore.FireCount - 1].SetActive(true);
-            //}
+            if (gameCore.CurrentTurn == GameCore.Turn.ICE) {
+                capturedIcePieces[gameCore.IceCount].SetActive(true);
+            }
+            else {
+                capturedFirePieces[gameCore.FireCount].SetActive(true);
+            }
 
         }
         StartCoroutine(Pieces[move.From].PlayMoveSound()); //sound effect
@@ -649,7 +652,7 @@ public class BoardManager : MonoBehaviour
 
         else if (Input.GetKey(KeyCode.RightArrow)) MainCamera.transform.RotateAround(BoardCenter, Vector3.down, .5f);
 
-        if ((((MainCamera.transform.position - BoardCenter).magnitude > 7 && d > 0) || (d < 0 && (MainCamera.transform.position - BoardCenter).magnitude < 16)) && 
+        if ((((MainCamera.transform.position - BoardCenter).magnitude > 7 && d > 0) || (d < 0 && (MainCamera.transform.position - BoardCenter).magnitude < 12)) && 
             !moveLogContainer.GetComponentInParent<ScrollableBox>().isOver && 
             (gameCore.isSinglePlayer || !chatMessageContainer.GetComponentInParent<ScrollableBox>().isOver))
             MainCamera.transform.position = Vector3.MoveTowards(MainCamera.transform.position, BoardCenter, d * 2.5f);
