@@ -54,7 +54,9 @@ namespace NetworkGame
 
         void Start()
         {
-            gameCore = GameObject.Find("GameCore").GetComponent<GameCore>();
+            GameObject core = GameObject.Find("GameCore"); 
+            if(core == null) gameCore = new GameObject("GameCore").AddComponent<GameCore>();
+            else gameCore = core.GetComponent<GameCore>();
             gameCore.isSinglePlayer = false;
             Connect();
         }
