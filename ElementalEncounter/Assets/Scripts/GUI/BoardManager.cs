@@ -34,6 +34,7 @@ public class BoardManager : MonoBehaviour
     public GameObject mapPanel;
     public GameObject timeOutPanel;
     public GameObject moveLogPanel;
+    public InputField inputField;
     public Text timeOutText;
     public Transform chatMessageContainer;
     public Transform moveLogContainer;
@@ -491,11 +492,11 @@ public class BoardManager : MonoBehaviour
     {
         InputField inputFieldBox = GameObject.Find("MessageInput").GetComponent<InputField>();
         if (inputFieldBox.text == "") return;
-        networkLogic.SendMessageChat(((PhotonNetwork.isMasterClient)? playerName+":  ": playerOpponent+":  ") + inputFieldBox.text);
+        networkLogic.SendMessageChat(playerName+":  " + inputFieldBox.text);
         GameObject textInstance = Instantiate(messageText) as GameObject;
         textInstance.transform.SetParent(chatMessageContainer);
 
-        textInstance.GetComponentInChildren<Text>().text = ((PhotonNetwork.isMasterClient) ? playerName + ":  " : playerOpponent + ":  ") + inputFieldBox.text;
+        textInstance.GetComponentInChildren<Text>().text = playerName + ":  " + inputFieldBox.text;
         inputFieldBox.text = "";
     }
     public void ReceiveMessage(string message)
@@ -644,17 +645,17 @@ public class BoardManager : MonoBehaviour
 
 
         var d = Input.GetAxis("Mouse ScrollWheel");
-        if (Input.GetKey(KeyCode.UpArrow) && MainCamera.transform.rotation.eulerAngles.x < 85) {
+        if (Input.GetKey(KeyCode.UpArrow) && MainCamera.transform.rotation.eulerAngles.x < 85 && !inputField.isFocused) {
             var axis = Vector3.Cross(Vector3.up, MainCamera.transform.position - BoardCenter);            
             MainCamera.transform.RotateAround(BoardCenter, axis.normalized, -.5f);
         }
-        else if (Input.GetKey(KeyCode.DownArrow) && MainCamera.transform.rotation.eulerAngles.x > 10) {
+        else if (Input.GetKey(KeyCode.DownArrow) && MainCamera.transform.rotation.eulerAngles.x > 10 && !inputField.isFocused) {
             var axis = Vector3.Cross(Vector3.up, MainCamera.transform.position - BoardCenter);
             MainCamera.transform.RotateAround(BoardCenter, axis.normalized, .5f);
         }
-        if (Input.GetKey(KeyCode.LeftArrow)) MainCamera.transform.RotateAround(BoardCenter, Vector3.up, .5f);
+        if (Input.GetKey(KeyCode.LeftArrow) && !inputField.isFocused) MainCamera.transform.RotateAround(BoardCenter, Vector3.up, .5f);
 
-        else if (Input.GetKey(KeyCode.RightArrow)) MainCamera.transform.RotateAround(BoardCenter, Vector3.down, .5f);
+        else if (Input.GetKey(KeyCode.RightArrow) && !inputField.isFocused) MainCamera.transform.RotateAround(BoardCenter, Vector3.down, .5f);
 
         if ((((MainCamera.transform.position - BoardCenter).magnitude > 7 && d > 0) || (d < 0 && (MainCamera.transform.position - BoardCenter).magnitude < 12)) && 
             !moveLogContainer.GetComponentInParent<ScrollableBox>().isOver && 
