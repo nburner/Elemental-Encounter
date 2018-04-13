@@ -25,10 +25,10 @@ public class BoardHighlights : MonoBehaviour
     private Color baseColor;
     public void Update()
     {
-        clickedSpaceHighlight.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(.9f, .9f, .9f, .5f), new Color(.5f,.5f,.5f,.5f), Mathf.PingPong(Time.time, 1));
+		clickedSpaceHighlight.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(.9f, .9f, .9f, .85f), new Color(.1f, 1f, .1f, .4f), Mathf.PingPong(Time.time, 1));
         for (int i = 0; i < highlights.Count; i++)
         {
-            highlights[i].GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(1,1,1, .5f), baseColor, Mathf.PingPong(Time.time, 1));
+			highlights[i].GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(1, 1, 1, .85f), baseColor, Mathf.PingPong(Time.time, 1));
         }
     }
 
