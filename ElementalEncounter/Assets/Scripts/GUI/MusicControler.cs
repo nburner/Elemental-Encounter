@@ -11,6 +11,8 @@ public class MusicControler : MonoBehaviour
     public AudioClip fireMapMusic;
     public AudioClip clashMapMusic;
     public Slider slider;
+    public Sprite[] image;
+    public Button volumeButton;
 
     private AudioSource audioSource;
 
@@ -27,6 +29,7 @@ public class MusicControler : MonoBehaviour
         }
         audioSource.volume = PlayerPrefs.GetFloat("MusicVolume");
         slider.value = audioSource.volume;
+        ChangeIcon();
 
         if (!audioSource.isPlaying)
         {
@@ -40,6 +43,27 @@ public class MusicControler : MonoBehaviour
         audioSource.volume = slider.value;
         PlayerPrefs.SetFloat("MusicVolume", slider.value);
         PlayerPrefs.Save();
+        ChangeIcon();
+    }
+
+    private void ChangeIcon()
+    {
+        if (slider.value == 0)
+        {
+            volumeButton.image.sprite = image[0];
+        }
+        else if (slider.value > 0 && slider.value < 0.3f)
+        {
+            volumeButton.image.sprite = image[1];
+        }
+        else if (slider.value > 0.3f && slider.value < 0.7f)
+        {
+            volumeButton.image.sprite = image[2];
+        }
+        else if (slider.value > 0.7)
+        {
+            volumeButton.image.sprite = image[3];
+        }
     }
 
     public void PlayMapMusic(GameCore.MapChoice map)
